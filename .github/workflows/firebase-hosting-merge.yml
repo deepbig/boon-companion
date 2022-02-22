@@ -25,4 +25,5 @@ jobs:
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
           firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BOON_COMPANION }}'
+          channelId: live
           projectId: boon-companion
