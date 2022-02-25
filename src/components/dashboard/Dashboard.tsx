@@ -1,14 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Container, Grid, Paper, Box } from '@mui/material';
 import Title from 'components/title/Title';
 import { useTheme } from '@mui/material/styles';
 import Copyright from 'components/copyright/Copyright';
 import ActivityHistory from 'components/activityHistory/ActivityHistory';
+import JoinedGroup from 'components/joinedGroup/JoinedGroup';
+import ActivityGoal from 'components/activityGoal/ActivityGoal';
+import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
 
 function Dashboard() {
   const theme = useTheme();
+  const [openActivity, setOpenActivity] = useState(false);
+
+  const handleCloseActivityForm = () => {
+    setOpenActivity(false);
+  };
+
+  const handleOpenActivityForm = () => {
+    setOpenActivity(true);
+  };
+
   return (
-    <Container maxWidth={false} sx={{ mt: 4, mb: 4 }}>
+    <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid container direction='row' spacing={3}>
         <Grid item xs={12}>
           <Grid container spacing={3}>
@@ -22,7 +35,9 @@ function Dashboard() {
                   flexDirection: 'column',
                 }}
               >
-                <Title>Activity History</Title>
+                <Title buttonFunction={handleOpenActivityForm}>
+                  Activity History
+                </Title>
                 <Box
                   sx={{
                     display: 'flex',
@@ -31,6 +46,10 @@ function Dashboard() {
                   }}
                 >
                   <ActivityHistory />
+                  <ActivityAddForm
+                    open={openActivity}
+                    handleClose={handleCloseActivityForm}
+                  />
                   {/* TODO - Need to create dummy card for this section */}
                 </Box>
               </Paper>
@@ -43,6 +62,7 @@ function Dashboard() {
               p: 2,
               display: 'flex',
               flexDirection: 'column',
+              minHeight: 187,
               [theme.breakpoints.up('lg')]: {
                 maxHeight: 632,
               },
@@ -52,7 +72,7 @@ function Dashboard() {
             elevation={4}
           >
             <Title>Joined Group</Title>
-            {/* <JoinedGrop /> */}
+            <JoinedGroup />
           </Paper>
         </Grid>
         <Grid item xs={12} md={6}>
@@ -61,6 +81,7 @@ function Dashboard() {
               p: 2,
               display: 'flex',
               flexDirection: 'column',
+              minHeight: 187,
               [theme.breakpoints.up('lg')]: {
                 maxHeight: 632,
               },
@@ -69,8 +90,14 @@ function Dashboard() {
             }}
             elevation={4}
           >
-            <Title>Activity Goal</Title>
-            {/* <ActivityGoal /> */}
+            <Title
+              buttonFunction={() => {
+                alert('Need to develop Activity Goal Form');
+              }}
+            >
+              Activity Goal
+            </Title>
+            <ActivityGoal />
           </Paper>
         </Grid>
       </Grid>
