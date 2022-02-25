@@ -3,6 +3,7 @@ import { Container, Grid, Paper, Box } from '@mui/material';
 import Title from 'components/title/Title';
 import { useTheme } from '@mui/material/styles';
 import Copyright from 'components/copyright/Copyright';
+import ActivityHistory from 'components/activityHistory/ActivityHistory';
 
 function Dashboard() {
   const theme = useTheme();
@@ -29,6 +30,7 @@ function Dashboard() {
                     overflow: 'hidden',
                   }}
                 >
+                  <ActivityHistory />
                   {/* TODO - Need to create dummy card for this section */}
                 </Box>
               </Paper>

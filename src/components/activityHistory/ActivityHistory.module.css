@@ -1,0 +1,132 @@
+:root {
+  --square-size: 15px;
+  --square-gap: 5px;
+  --week-width: calc(var(--square-size) + var(--square-gap));
+}
+
+.months {
+  grid-area: months;
+  font-size: 8px;
+  padding-left: 30px;
+}
+.days {
+  grid-area: days;
+  font-size: 8px;
+}
+.squares {
+  grid-area: squares;
+}
+
+.graph {
+  display: inline-grid;
+  grid-template-areas:
+    'empty months'
+    'days squares';
+  grid-template-columns: auto 1fr;
+  grid-gap: 10px;
+}
+
+.months {
+  display: grid;
+  grid-template-columns:
+    calc(var(--week-width) * 4) /* Jan */
+    calc(var(--week-width) * 4) /* Feb */
+    calc(var(--week-width) * 4) /* Mar */
+    calc(var(--week-width) * 5) /* Apr */
+    calc(var(--week-width) * 4) /* May */
+    calc(var(--week-width) * 4) /* Jun */
+    calc(var(--week-width) * 5) /* Jul */
+    calc(var(--week-width) * 4) /* Aug */
+    calc(var(--week-width) * 4) /* Sep */
+    calc(var(--week-width) * 5) /* Oct */
+    calc(var(--week-width) * 4) /* Nov */
+    calc(var(--week-width) * 5) /* Dec */;
+}
+
+.days,
+.squares {
+  display: grid;
+  grid-gap: var(--square-gap);
+  grid-template-rows: repeat(7, var(--square-size));
+}
+
+.squares {
+  grid-auto-flow: column;
+  grid-auto-columns: var(--square-size);
+}
+
+.explain {
+  display: grid;
+  /* grid-template-columns: auto 1fr; */
+  grid-template-rows: repeat(1, var(--square-size));
+  grid-gap: var(--square-gap);
+  grid-auto-columns: var(--square-size);
+  grid-auto-flow: column;
+  padding: 3px 5px;
+}
+
+/* Other styling */
+
+body {
+  font-family: Arial;
+  font-size: 12px;
+  line-height: 1;
+}
+
+.title {
+  font-family: 'Share Tech Mono', monospace, Arial !important;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0px;
+  padding-left: 10px;
+}
+
+.graph {
+  margin-right: 3%;
+}
+
+.days li:nth-child(odd) {
+  visibility: hidden;
+}
+
+.squares div[data-level='0'] {
+  background-color: #ebedf0;
+}
+
+.squares div[data-level='1'] {
+  background-color: #9be9a8;
+}
+
+.squares div[data-level='2'] {
+  background-color: #40c463;
+}
+
+.squares div[data-level='3'] {
+  background-color: #30a14e;
+}
+
+.squares div[data-level='4'] {
+  background-color: #216e39;
+}
+
+.explain div[data-level='0'] {
+  background-color: #ebedf0;
+}
+
+.explain div[data-level='1'] {
+  background-color: #9be9a8;
+}
+
+.explain div[data-level='2'] {
+  background-color: #40c463;
+}
+
+.explain div[data-level='3'] {
+  background-color: #30a14e;
+}
+
+.explain div[data-level='4'] {
+  background-color: #30a14e;
+}
