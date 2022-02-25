@@ -6,7 +6,7 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 
 interface ActivityAddFormProps {
   open: boolean;
