@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   DialogTitle,
   TextField,
 } from '@mui/material';
@@ -22,7 +21,7 @@ const currentDate = () => {
 };
 
 function ActivityAddForm(props: ActivityAddFormProps) {
-  const [date, setDate] = useState<Date | null>(null);
+  //   const [date, setDate] = useState<Date | null>(null);
   const maxDate = currentDate();
 
   return (
