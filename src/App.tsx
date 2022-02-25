@@ -10,6 +10,12 @@ function App() {
     palette: {
       mode: 'light',
     },
+    typography: {
+      guideline: {
+        color: 'gray',
+        display: 'block',
+      },
+    },
   });
 
   return (
