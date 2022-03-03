@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
-import { Navigate, Routes, Route } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { onAuthChange } from 'db/repository/auth';
 import LandingPage from 'pages/LandingPage';
 import DashboardPage from 'pages/DashboardPage';
 
@@ -18,11 +19,19 @@ function App() {
     },
   });
 
+  const navigate = useNavigate();
+  useEffect(() => {
+    onAuthChange((user: any) => {
+      user ? navigate('/dashboard') : navigate('/landing');
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Routes>
-        <Route path='/' element={<Navigate to='/landing' />} />
+        <Route path='/' element={<></>} />
         <Route path='/landing' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage />} />
       </Routes>

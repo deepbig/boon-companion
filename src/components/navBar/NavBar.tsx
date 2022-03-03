@@ -11,13 +11,13 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
-  Button,
-  Avatar,
   Badge,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
+import Login from 'components/login/Login';
+import Profile from 'components/profile/Profile';
 
 function MenuListItems(props: any) {
   const navigate = useNavigate();
@@ -132,15 +132,7 @@ export default function NavBar({ selectedName }: { selectedName: string }) {
             {selectedName}
           </Typography>
 
-          {selectedName ? (
-            <IconButton sx={{ p: 0 }}>
-              <Avatar alt='Anonymous' src='/anonymous_user_avatar.png' />
-            </IconButton>
-          ) : (
-            <Button variant='outlined' color='inherit'>
-              Sign In
-            </Button>
-          )}
+          {selectedName ? <Profile /> : <Login />}
         </Toolbar>
       </AppBar>
       {selectedName ? (
