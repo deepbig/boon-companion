@@ -193,9 +193,21 @@ function CreateGroup() {
                       value={value}
                       onChange={onChange}
                       required
-                      defaultValue=''
                     >
-                      <MenuItem value={1}>Hiking</MenuItem>
+                      <MenuItem value={'CJfuhhDeXzpRZ7LNkBvU'}>Music</MenuItem>
+                      <MenuItem value={'FNCAp9QHwe8axZSdllsH'}>
+                        Blood Donation
+                      </MenuItem>
+                      <MenuItem value={'SsarIj1Dwxa0w7SYrAgw'}>
+                        Reading
+                      </MenuItem>
+                      <MenuItem value={'ZBKkpMnGALbPCaxxk9Rx'}>
+                        Marathon
+                      </MenuItem>
+                      <MenuItem value={'fjoCDJHxLrKTVk1W2DYH'}>
+                        Trekking
+                      </MenuItem>
+                      <MenuItem value={'qPojVAHDj3W0Wv4kGZPz'}>Hiking</MenuItem>
                     </Select>
                   )}
                 />
