@@ -1,21 +1,21 @@
-import React, { useEffect } from "react";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { CssBaseline } from "@mui/material";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import { onAuthChange } from "db/repository/auth";
-import LandingPage from "pages/LandingPage";
-import DashboardPage from "pages/DashboardPage";
-import CreateGroupPage from "pages/CreateGroupPage";
+import React, { useEffect } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { onAuthChange } from 'db/repository/auth';
+import LandingPage from 'pages/LandingPage';
+import DashboardPage from 'pages/DashboardPage';
+import CreateGroupPage from 'pages/CreateGroupPage';
 
 function App() {
   const theme = createTheme({
     palette: {
-      mode: "light",
+      mode: 'light',
     },
     typography: {
       guideline: {
-        color: "gray",
-        display: "block",
+        color: 'gray',
+        display: 'block',
       },
     },
   });
@@ -23,7 +23,7 @@ function App() {
   const navigate = useNavigate();
   useEffect(() => {
     onAuthChange((user: any) => {
-      user ? navigate("/dashboard") : navigate("/landing");
+      user ? navigate('/dashboard') : navigate('/landing');
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -32,10 +32,10 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Routes>
-        <Route path="/" element={<></>} />
-        <Route path="/landing" element={<LandingPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/group" element={<CreateGroupPage />} />
+        <Route path='/' element={<></>} />
+        <Route path='/landing' element={<LandingPage />} />
+        <Route path='/dashboard' element={<DashboardPage />} />
+        <Route path='/group' element={<CreateGroupPage />} />
       </Routes>
     </ThemeProvider>
   );

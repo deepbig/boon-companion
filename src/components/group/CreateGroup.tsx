@@ -13,10 +13,10 @@ import {
   Button,
   Paper,
   useTheme,
-} from "@mui/material";
-import { useForm, Controller } from "react-hook-form";
-import db from "../../db";
-import { collection, addDoc } from "firebase/firestore";
+} from '@mui/material';
+import { useForm, Controller } from 'react-hook-form';
+import db from '../../db';
+import { collection, addDoc } from 'firebase/firestore';
 
 type CreateGroupFormData = {
   name: string;
@@ -35,7 +35,7 @@ function CreateGroup() {
 
   const { control, handleSubmit } = useForm<CreateGroupFormData>();
 
-  const groupsRef = collection(db, "groups");
+  const groupsRef = collection(db, 'groups');
 
   const onSubmit = handleSubmit(async (data) => {
     await addDoc(groupsRef, data);
@@ -58,18 +58,18 @@ function CreateGroup() {
   };
 
   return (
-    <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
+    <Container maxWidth='md' sx={{ mt: 4, mb: 4 }}>
       <Paper
         sx={{
           p: 2,
-          display: "flex",
-          flexDirection: "column",
+          display: 'flex',
+          flexDirection: 'column',
           minHeight: 187,
-          [theme.breakpoints.up("lg")]: {
+          [theme.breakpoints.up('lg')]: {
             maxHeight: 632,
           },
-          overflow: "hidden",
-          overflowY: "auto",
+          overflow: 'hidden',
+          overflowY: 'auto',
         }}
         elevation={4}
       >
@@ -78,13 +78,13 @@ function CreateGroup() {
             <Grid item xs={4} spacing={4}>
               <FormControl fullWidth>
                 <Controller
-                  name="name"
+                  name='name'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <TextField
-                      id="name"
-                      label="Name"
-                      variant="standard"
+                      id='name'
+                      label='Name'
+                      variant='standard'
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -98,13 +98,13 @@ function CreateGroup() {
             <Grid item xs={4} spacing={6}>
               <FormControl fullWidth>
                 <Controller
-                  name="title"
+                  name='title'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <TextField
-                      id="title"
-                      label="Title"
-                      variant="standard"
+                      id='title'
+                      label='Title'
+                      variant='standard'
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -117,16 +117,16 @@ function CreateGroup() {
 
             <Grid item xs={4} spacing={4}>
               <FormControl fullWidth>
-                <InputLabel id="age-label">Age</InputLabel>
+                <InputLabel id='age-label'>Age</InputLabel>
                 <Controller
-                  name="age"
+                  name='age'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <Select
-                      id="age"
-                      labelId="age-label"
-                      type="number"
-                      label="Age"
+                      id='age'
+                      labelId='age-label'
+                      type='number'
+                      label='Age'
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -143,33 +143,33 @@ function CreateGroup() {
 
             <Grid item xs={5} spacing={4}>
               <FormControl fullWidth>
-                <FormLabel id="gender-label">Gender</FormLabel>
+                <FormLabel id='gender-label'>Gender</FormLabel>
                 <Controller
-                  name="gender"
+                  name='gender'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <RadioGroup
                       row
-                      aria-labelledby="gender-label"
-                      id="gender"
+                      aria-labelledby='gender-label'
+                      id='gender'
                       name={name}
                       value={value}
                       onChange={onChange}
                     >
                       <FormControlLabel
-                        value="female"
+                        value='female'
                         control={<Radio />}
-                        label="Female"
+                        label='Female'
                       />
                       <FormControlLabel
-                        value="male"
+                        value='male'
                         control={<Radio />}
-                        label="Male"
+                        label='Male'
                       />
                       <FormControlLabel
-                        value="both"
+                        value='both'
                         control={<Radio />}
-                        label="Both"
+                        label='Both'
                       />
                     </RadioGroup>
                   )}
@@ -179,23 +179,23 @@ function CreateGroup() {
 
             <Grid item xs={7}>
               <FormControl fullWidth>
-                <InputLabel id="interest-label">Interest</InputLabel>
+                <InputLabel id='interest-label'>Interest</InputLabel>
                 <Controller
-                  name="interestId"
+                  name='interestId'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <Select
-                      labelId="interest-label"
-                      id="interest"
-                      type="number"
-                      label="Interest"
+                      labelId='interest-label'
+                      id='interest'
+                      type='number'
+                      label='Interest'
                       name={name}
                       value={value}
                       onChange={onChange}
                       required
-                      defaultValue=""
+                      defaultValue=''
                     >
-                      <MenuItem value={1}>Hiking</MenuItem>                      
+                      <MenuItem value={1}>Hiking</MenuItem>
                     </Select>
                   )}
                 />
@@ -204,16 +204,16 @@ function CreateGroup() {
 
             <Grid item xs={4} spacing={6}>
               <FormControl fullWidth>
-                <InputLabel id="peer-rating-label">Peer Rating</InputLabel>
+                <InputLabel id='peer-rating-label'>Peer Rating</InputLabel>
                 <Controller
-                  name="peerRating"
+                  name='peerRating'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <Select
-                      labelId="peer-rating-label"
-                      id="peer-rating"
-                      type="number"
-                      label="PeerRating"
+                      labelId='peer-rating-label'
+                      id='peer-rating'
+                      type='number'
+                      label='PeerRating'
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -229,18 +229,18 @@ function CreateGroup() {
             </Grid>
             <Grid item xs={4} spacing={6}>
               <FormControl fullWidth>
-                <InputLabel id="hostile-rating-label">
+                <InputLabel id='hostile-rating-label'>
                   Hostile Rating
                 </InputLabel>
                 <Controller
-                  name="hostileRating"
+                  name='hostileRating'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <Select
-                      labelId="hostile-rating-label"
-                      id="hostile-rating"
-                      type="number"
-                      label="HostileRating"
+                      labelId='hostile-rating-label'
+                      id='hostile-rating'
+                      type='number'
+                      label='HostileRating'
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -256,18 +256,18 @@ function CreateGroup() {
             </Grid>
             <Grid item xs={4} spacing={6}>
               <FormControl fullWidth>
-                <InputLabel id="level-of-experience-label">
+                <InputLabel id='level-of-experience-label'>
                   Level of Experience
                 </InputLabel>
                 <Controller
-                  name="levelOfExperience"
+                  name='levelOfExperience'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <Select
-                      labelId="level-of-experience-label"
-                      id="level-of-experience"
-                      type="number"
-                      label="LevelOfExperience"
+                      labelId='level-of-experience-label'
+                      id='level-of-experience'
+                      type='number'
+                      label='LevelOfExperience'
                       name={name}
                       value={value}
                       onChange={onChange}
@@ -284,12 +284,12 @@ function CreateGroup() {
             <Grid item xs={12}>
               <FormControl fullWidth>
                 <Controller
-                  name="description"
+                  name='description'
                   control={control}
                   render={({ field: { name, value, onChange } }) => (
                     <TextField
-                      id="group-description"
-                      label="Description"
+                      id='group-description'
+                      label='Description'
                       multiline
                       rows={4}
                       name={name}
@@ -301,7 +301,7 @@ function CreateGroup() {
               </FormControl>
             </Grid>
             <Grid item xs={2}>
-              <Button variant="contained" id="submit" type="submit">
+              <Button variant='contained' id='submit' type='submit'>
                 Submit
               </Button>
             </Grid>
