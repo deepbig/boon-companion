@@ -5,6 +5,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { onAuthChange } from 'db/repository/auth';
 import LandingPage from 'pages/LandingPage';
 import DashboardPage from 'pages/DashboardPage';
+import CreateGroupPage from 'pages/CreateGroupPage';
 
 function App() {
   const theme = createTheme({
@@ -34,6 +35,7 @@ function App() {
         <Route path='/' element={<></>} />
         <Route path='/landing' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage />} />
+        <Route path='/group' element={<CreateGroupPage />} />
       </Routes>
     </ThemeProvider>
   );

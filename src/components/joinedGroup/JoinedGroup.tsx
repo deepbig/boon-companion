@@ -1,7 +1,9 @@
 import { Typography, Box, Button } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 function JoinedGroup() {
+  const navigate = useNavigate();
   return (
     <>
       <Box m={2}>
@@ -13,7 +15,9 @@ function JoinedGroup() {
         <Button variant='contained' sx={{ width: 160, mr: 2 }}>
           Join a Group
         </Button>
-        <Button variant='contained'>Create a Group</Button>
+        <Button variant='contained' onClick={() => navigate(`/group`)}>
+          Create a Group
+        </Button>
       </Box>
     </>
   );
