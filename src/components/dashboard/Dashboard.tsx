@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container, Grid, Paper, Box } from '@mui/material';
 import Title from 'components/title/Title';
 import { useTheme } from '@mui/material/styles';
@@ -7,10 +7,44 @@ import ActivityHistory from 'components/activityHistory/ActivityHistory';
 import JoinedGroup from 'components/joinedGroup/JoinedGroup';
 import ActivityGoal from 'components/activityGoal/ActivityGoal';
 import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
+import { getProfanityList, setProfanityList } from 'modules/profanity';
+import { useAppDispatch, useAppSelector } from 'hooks';
 
 function Dashboard() {
   const theme = useTheme();
   const [openActivity, setOpenActivity] = useState(false);
+  const profanityList = useAppSelector(getProfanityList);
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    if (profanityList.length <= 0) {
+      const fetchProfanityWords = async () => {
+        await fetch('./list.txt')
+          .then((res) => res.text())
+          .then((txt) => {
+            dispatch(setProfanityList(txt.split('\n')));
+          });
+      };
+      fetchProfanityWords();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profanityList]);
+
+  // Example function: Use the following function format to find profanity words from user's text message
+  // const checkProfanityWords = (user_string_input: string) => {
+  //   const words = user_string_input.split(' ');
+  //   let result = false;
+  //   for (let word of words) {
+  //     console.log(word);
+  //     if (profanityList.indexOf(word) > -1) {
+  //       result = true;
+  //       console.log('test?');
+  //       break;
+  //     }
+  //   }
+  //   console.log('result: ', result);
+  //   return result;
+  // };
 
   const handleCloseActivityForm = () => {
     setOpenActivity(false);
@@ -38,6 +72,7 @@ function Dashboard() {
                 <Title buttonFunction={handleOpenActivityForm}>
                   Activity History
                 </Title>
+
                 <Box
                   sx={{
                     display: 'flex',
