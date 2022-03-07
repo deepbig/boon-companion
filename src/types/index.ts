@@ -6,9 +6,15 @@ export enum PageName {
 }
 
 export type UserData = {
-    id: string;
-    name: string;
-} | null;
+    displayName: string;
+    email: string;
+    photoURL: string;
+    gender: string;
+    hostileRating: number;
+    levelOfExperience: number;
+    peerRating: number;
+    interest: string[];
+} | null | string; // string is error container
 
 export interface ActivityData {
     id?: string;
