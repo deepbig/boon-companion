@@ -2,7 +2,7 @@ import React, { useState, forwardRef } from 'react';
 // import { useAppSelector, useAppDispatch } from 'hooks';
 import { Box, BoxProps, Tooltip } from '@mui/material';
 import styles from './ActivityHistory.module.css';
-import { ActivityData, UserActivityData } from 'types';
+import { UserActivityData } from 'types';
 import { getActivities } from 'db/repository/activityHistory'
 
 const Item = forwardRef((props: BoxProps, ref) => {

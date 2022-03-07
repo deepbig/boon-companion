@@ -1,6 +1,6 @@
 import db from "..";
 import { collection, addDoc, query, getDocs } from 'firebase/firestore';
-import { ActivityData, UserActivityData } from "types";
+import { UserActivityData } from "types";
 ;
 const COLLECTION_NAME = "user_interest_activity";
 
