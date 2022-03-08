@@ -13,30 +13,26 @@ export type UserData = {
     hostileRating: number;
     levelOfExperience: number;
     peerRating: number;
-    interests: [];
+    interests: string[];
 } | null;
 
 export interface ActivityData {
     id?: string;
-    category: string;
+    interest: string; // category
+    description: string; // note
     date: any;
-    level: number;
-    note: string;
-    values: number;
-};
-export interface UserActivityData {
-    id?: string;
-    description: string;
-    date: any;
-    performance: number;
-    duration: string;
-    values: number;
+    duration: number; // mins
+    performance: number; // values (optional: any value is possible);
 };
 
-export type CategoryData = {
-    category?: string;
-    subcategories?: string[];
-} | null;
+export interface ActivityAddFormData {
+    interest: string;
+    date: string;
+    description: string;
+    duration: number;
+    performance: number;
+    uid: string;
+}
 
 declare module '@mui/material/styles' {
     interface TypographyVariants {

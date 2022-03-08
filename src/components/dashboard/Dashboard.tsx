@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Grid, Paper, Box } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Paper,
+  Box,
+  Typography,
+  Backdrop,
+  CircularProgress,
+} from '@mui/material';
 import Title from 'components/title/Title';
 import { useTheme } from '@mui/material/styles';
 import Copyright from 'components/copyright/Copyright';
@@ -11,11 +19,13 @@ import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { getUser } from 'modules/user';
 import InterestAddForm from 'components/addInterest/InterestAddForm';
+import { getSelectedInterest, setSelectedInterest } from 'modules/interests';
 
 function Dashboard() {
   const theme = useTheme();
   const [openActivity, setOpenActivity] = useState(false);
   const [openInterest, setOpenInterest] = useState(false);
+  const selectedInterest = useAppSelector(getSelectedInterest);
   const profanityList = useAppSelector(getProfanityList);
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
@@ -35,11 +45,15 @@ function Dashboard() {
   }, [profanityList]);
 
   useEffect(() => {
-    if (user && user.interests?.length <= 0) {
-      setOpenInterest(true);
-    } else {
-      setOpenInterest(false);
+    if (user && !selectedInterest) {
+      if (user.interests?.length <= 0) {
+        setOpenInterest(true);
+      } else {
+        dispatch(setSelectedInterest(user.interests[0]));
+        setOpenInterest(false);
+      }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
@@ -80,6 +94,11 @@ function Dashboard() {
       <Grid container direction='row' spacing={3}>
         <Grid item xs={12}>
           <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Typography component='h2' variant='h6' align='center'>
+                Interest: {selectedInterest}
+              </Typography>
+            </Grid>
             {/* Activity History */}
             <Grid item xs={12}>
               <Paper
@@ -158,6 +177,12 @@ function Dashboard() {
         </Grid>
       </Grid>
       <Copyright sx={{ pt: 4 }} />
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
+        open={!user}
+      >
+        <CircularProgress color='inherit' />
+      </Backdrop>
     </Container>
   );
 }
