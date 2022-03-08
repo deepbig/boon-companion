@@ -9,11 +9,15 @@ import ActivityGoal from 'components/activityGoal/ActivityGoal';
 import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
 import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
+import { getUser } from 'modules/user';
+import InterestAddForm from 'components/addInterest/InterestAddForm';
 
 function Dashboard() {
   const theme = useTheme();
   const [openActivity, setOpenActivity] = useState(false);
+  const [openInterest, setOpenInterest] = useState(false);
   const profanityList = useAppSelector(getProfanityList);
+  const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -29,6 +33,15 @@ function Dashboard() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profanityList]);
+
+  useEffect(() => {
+    if (user && user.interests?.length <= 0) {
+      setOpenInterest(true);
+    } else {
+      setOpenInterest(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
 
   // Example function: Use the following function format to find profanity words from user's text message
   // const checkProfanityWords = (user_string_input: string) => {
@@ -56,6 +69,14 @@ function Dashboard() {
 
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
+      {openInterest ? (
+        <InterestAddForm
+          open={openInterest}
+          isFirst={true}
+          handleClose={handleCloseActivityForm}
+        />
+      ) : null}
+
       <Grid container direction='row' spacing={3}>
         <Grid item xs={12}>
           <Grid container spacing={3}>
