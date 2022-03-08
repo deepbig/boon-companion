@@ -33,8 +33,9 @@ function displayvalues(): Array<UserActivityData> {
 
 function ActivityHistory() {
   const [selectedYear] = useState(null); // setSelectedYear는 filter 기능 추가 후 적용.
-
-  const drawBoxes = (activities: ActivityData[]) => {
+  const drawBoxes = (activities: UserActivityData[]) => {
+    let activity: UserActivityData[] = displayvalues();
+    console.log(activity);
     let rows = [];
     const end = selectedYear ? new Date(selectedYear + 1, 0, 1) : new Date();
     const start = selectedYear

@@ -55,7 +55,6 @@ function ActivityAddForm(props: ActivityAddFormProps) {
   //   const [date, setDate] = useState<Date | null>(null);
 
   const maxDate = currentDate();
-
   return (
     <Dialog open={props.open}>
       <DialogTitle sx={{ textAlign: 'center' }}>Activity Add Form</DialogTitle>
@@ -71,6 +70,7 @@ function ActivityAddForm(props: ActivityAddFormProps) {
           variant='standard'
           defaultValue={maxDate}
           inputProps={{ min: '1900-01-01', max: maxDate }}
+          onChange={setTextValue}
         />
         <TextField
           margin='dense'
@@ -80,6 +80,7 @@ function ActivityAddForm(props: ActivityAddFormProps) {
           multiline
           maxRows={5}
           variant='standard'
+          onChange={setTextValue}
         />
         <TextField
           required
@@ -89,6 +90,7 @@ function ActivityAddForm(props: ActivityAddFormProps) {
           type='number'
           fullWidth
           variant='standard'
+          onChange={setTextValue}
         />
         <TextField
           required
@@ -98,10 +100,11 @@ function ActivityAddForm(props: ActivityAddFormProps) {
           type='number'
           fullWidth
           variant='standard'
+          onChange={setTextValue}
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={props.handleClose} variant='contained'>
+        <Button onClick={saveValues} variant='contained'>
           Add
         </Button>
         <Button onClick={props.handleClose} variant='contained'>

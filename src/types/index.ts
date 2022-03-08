@@ -24,6 +24,14 @@ export interface ActivityData {
     note: string;
     values: number;
 };
+export interface UserActivityData {
+    id?: string;
+    description: string;
+    date: any;
+    performance: number;
+    duration: string;
+    values: number;
+};
 
 export type CategoryData = {
     category?: string;
