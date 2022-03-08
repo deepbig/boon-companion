@@ -2,7 +2,8 @@ import React, { useState, forwardRef } from 'react';
 // import { useAppSelector, useAppDispatch } from 'hooks';
 import { Box, BoxProps, Tooltip } from '@mui/material';
 import styles from './ActivityHistory.module.css';
-import { ActivityData } from 'types';
+import { UserActivityData } from 'types';
+import { getActivities } from 'db/repository/activityHistory';
 
 const Item = forwardRef((props: BoxProps, ref) => {
   const { sx, ...other } = props;
@@ -18,6 +19,17 @@ const Item = forwardRef((props: BoxProps, ref) => {
     />
   );
 });
+
+let userDataArry: Array<any> = [];
+function displayvalues(): Array<UserActivityData> {
+  getActivities().then((data) => {
+    // eslint-disable-next-line array-callback-return
+    data.map((values, i) => {
+      userDataArry.push(values);
+    });
+  });
+  return userDataArry as Array<UserActivityData>;
+}
 
 function ActivityHistory() {
   const [selectedYear] = useState(null); // setSelectedYear는 filter 기능 추가 후 적용.
@@ -42,8 +54,8 @@ function ActivityHistory() {
               title={
                 <span style={{ whiteSpace: 'pre-line' }}>
                   {activities[count].date.toDate().toDateString() +
-                    (activities[count]?.note
-                      ? `\nNote: ${activities[count].note}`
+                    (activities[count]?.description
+                      ? `\nNote: ${activities[count].description}`
                       : '') +
                     (activities[count]?.values
                       ? `\nDuration: ${activities[count].values}`
@@ -59,7 +71,7 @@ function ActivityHistory() {
                 data-toggle='tooltip'
                 data-placement='bottom'
                 data-animation='false'
-                data-level={activities[count++].level}
+                data-level={activities[count++].performance}
               />
             </Tooltip>
           )

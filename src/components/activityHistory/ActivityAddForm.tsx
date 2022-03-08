@@ -7,6 +7,7 @@ import {
   TextField,
 } from '@mui/material';
 import React from 'react';
+import { saveActivity } from 'db/repository/activityHistory';
 
 interface ActivityAddFormProps {
   open: boolean;
@@ -19,9 +20,40 @@ const currentDate = () => {
     dateObj.getMonth() + 1
   }-${dateObj.getDate() < 10 ? '0' : ''}${dateObj.getDate()}`;
 };
-
+let updateActivity = { description: '', duration: '', values: '', date: '' };
+const setTextValue = (event: any) => {
+  if (event.target.id === 'description') {
+    updateActivity.description = event.target.value;
+  }
+  if (event.target.id === 'duration') {
+    updateActivity.duration = event.target.value;
+  }
+  if (event.target.id === 'values') {
+    updateActivity.values = event.target.value;
+  }
+  if (event.target.id === 'date') {
+    updateActivity.date = event.target.value;
+  }
+};
+// function popUpClose(props: ActivityAddFormProps) {
+//   props.handleClose();
+// }
+function saveValues() {
+  if (
+    updateActivity.description !== '' &&
+    updateActivity.values !== '' &&
+    updateActivity.duration !== '' &&
+    updateActivity.date !== ''
+  ) {
+    saveActivity(updateActivity);
+    alert('activity record saved');
+  } else {
+    alert('select all values');
+  }
+}
 function ActivityAddForm(props: ActivityAddFormProps) {
   //   const [date, setDate] = useState<Date | null>(null);
+
   const maxDate = currentDate();
 
   return (
