@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   Container,
   Grid,
@@ -16,7 +17,7 @@ import {
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import db from '../../db';
-import { collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
 
 type CreateGroupFormData = {
   name: string;
@@ -30,9 +31,14 @@ type CreateGroupFormData = {
   description: string;
 };
 
+type Interest = {
+  id: string;
+  title: string;
+};
+
 function CreateGroup() {
   const theme = useTheme();
-
+  const [interests, setInterests] = useState<Interest[]>([]);
   const { control, handleSubmit } = useForm<CreateGroupFormData>();
 
   const groupsRef = collection(db, 'groups');
@@ -56,6 +62,19 @@ function CreateGroup() {
     }
     return options;
   };
+
+  useEffect(() => {
+    const getInterests = async () => {
+      const data = await getDocs(groupsRef);
+      const intrsts: Interest[] = [];
+      data.docs.map((doc) =>
+        intrsts.push({ title: doc.data().title, id: doc.id })
+      );
+      setInterests(intrsts);
+    };
+
+    getInterests();
+  }, []);
 
   return (
     <Container maxWidth='md' sx={{ mt: 4, mb: 4 }}>
@@ -194,20 +213,11 @@ function CreateGroup() {
                       onChange={onChange}
                       required
                     >
-                      <MenuItem value={'CJfuhhDeXzpRZ7LNkBvU'}>Music</MenuItem>
-                      <MenuItem value={'FNCAp9QHwe8axZSdllsH'}>
-                        Blood Donation
-                      </MenuItem>
-                      <MenuItem value={'SsarIj1Dwxa0w7SYrAgw'}>
-                        Reading
-                      </MenuItem>
-                      <MenuItem value={'ZBKkpMnGALbPCaxxk9Rx'}>
-                        Marathon
-                      </MenuItem>
-                      <MenuItem value={'fjoCDJHxLrKTVk1W2DYH'}>
-                        Trekking
-                      </MenuItem>
-                      <MenuItem value={'qPojVAHDj3W0Wv4kGZPz'}>Hiking</MenuItem>
+                      {interests.map((interest) => (
+                        <MenuItem value={interest.id}>
+                          {interest.title}
+                        </MenuItem>
+                      ))}
                     </Select>
                   )}
                 />
