@@ -25,7 +25,7 @@ function ActivityAddForm(props: ActivityAddFormProps) {
   const maxDate = currentDate();
 
   return (
-    <Dialog open={props.open} onClose={props.handleClose}>
+    <Dialog open={props.open}>
       <DialogTitle sx={{ textAlign: 'center' }}>Activity Add Form</DialogTitle>
       <DialogContent>
         <TextField

@@ -1,5 +1,5 @@
 import db from "..";
-import { collection, doc, getDoc, setDoc, getDocs, query } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc, getDocs, query, updateDoc, arrayUnion } from 'firebase/firestore';
 import { UserData } from 'types';
 const COLLECTION_NAME = "users";
 
@@ -10,7 +10,6 @@ export const getAllUsers = async (): Promise<Array<UserData>> => {
     const data: Array<any> = [];
 
     usersSnapshot.docs.forEach((_data) => {
-        console.log(_data);
         data.push({ ..._data.data() });
     })
 
@@ -34,12 +33,32 @@ export const getLoggedInUser = async (user: { uid: string; displayName: any; ema
                 hostileRating: 0,
                 levelOfExperience: 0,
                 peerRating: 0,
-                interest: [],
+                interests: [],
             });
         } catch (e) {
-            return "error generated during saving user data" as UserData;
+            // need to handle error case.
+            return null as UserData;
         }
         const newDocSnap = await getDoc(docRef);
         return newDocSnap.data() as UserData;
     }
+}
+
+export const getUser = async (uid: string): Promise<UserData> => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    const docSnap = await getDoc(docRef);
+
+    if (docSnap.exists()) {
+        return docSnap.data() as UserData;
+    } else {
+        alert('user does not exist!');
+        return null;
+    }
+}
+
+export const addUserInterest = async (uid: string, interest: string) => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    await updateDoc(docRef, {
+        interests: arrayUnion(interest)
+    });
 }

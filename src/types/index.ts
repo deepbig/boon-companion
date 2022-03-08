@@ -13,8 +13,8 @@ export type UserData = {
     hostileRating: number;
     levelOfExperience: number;
     peerRating: number;
-    interest: string[];
-} | null | string; // string is error container
+    interests: [];
+} | null;
 
 export interface ActivityData {
     id?: string;
