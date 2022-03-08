@@ -3,7 +3,7 @@ import React, { useState, forwardRef } from 'react';
 import { Box, BoxProps, Tooltip } from '@mui/material';
 import styles from './ActivityHistory.module.css';
 import { UserActivityData } from 'types';
-import { getActivities } from 'db/repository/activityHistory'
+import { getActivities } from 'db/repository/activityHistory';
 
 const Item = forwardRef((props: BoxProps, ref) => {
   const { sx, ...other } = props;
@@ -20,13 +20,13 @@ const Item = forwardRef((props: BoxProps, ref) => {
   );
 });
 
-let userDataArry = new Array;
+let userDataArry: Array<any> = [];
 function displayvalues(): Array<UserActivityData> {
-  getActivities().then(data => {
+  getActivities().then((data) => {
+    // eslint-disable-next-line array-callback-return
     data.map((values, i) => {
       userDataArry.push(values);
-    })
-
+    });
   });
   return userDataArry as Array<UserActivityData>;
 }
@@ -48,54 +48,53 @@ function ActivityHistory() {
     let count: number = 0;
     for (let d = start; d < end; d.setDate(d.getDate() + 1)) {
       activities[count]?.date?.toDate().getTime() >= d.getTime() &&
-        activities[count]?.date?.toDate().getTime() < d.getTime() + 86400000
+      activities[count]?.date?.toDate().getTime() < d.getTime() + 86400000
         ? rows.push(
-          <Tooltip
-            key={`tooltip-${++index}`}
-            title={
-              <span style={{ whiteSpace: 'pre-line' }}>
-                {activities[count].date.toDate().toDateString() +
-                  (activities[count]?.description
-                    ? `\nNote: ${activities[count].description}`
-                    : '') +
-                  (activities[count]?.values
-                    ? `\nDuration: ${activities[count].values}`
-                    : '')}
-              </span>
-            }
-            placement='top'
-            followCursor
-            arrow
-          >
-            <Item
-              key={++index}
-              data-toggle='tooltip'
-              data-placement='bottom'
-              data-animation='false'
-              data-level={activities[count++].performance}
-            />
-          </Tooltip>
-        )
+            <Tooltip
+              key={`tooltip-${++index}`}
+              title={
+                <span style={{ whiteSpace: 'pre-line' }}>
+                  {activities[count].date.toDate().toDateString() +
+                    (activities[count]?.description
+                      ? `\nNote: ${activities[count].description}`
+                      : '') +
+                    (activities[count]?.values
+                      ? `\nDuration: ${activities[count].values}`
+                      : '')}
+                </span>
+              }
+              placement='top'
+              followCursor
+              arrow
+            >
+              <Item
+                key={++index}
+                data-toggle='tooltip'
+                data-placement='bottom'
+                data-animation='false'
+                data-level={activities[count++].performance}
+              />
+            </Tooltip>
+          )
         : rows.push(
-          <Tooltip
-            key={`tooltip-${++index}`}
-            title={d.toDateString()}
-            placement='top'
-            followCursor
-            arrow
-          >
-            <Item
-              key={++index}
-              data-toggle='tooltip'
-              data-placement='bottom'
-              data-animation='false'
-              data-level={0}
-            />
-          </Tooltip>
-        );
+            <Tooltip
+              key={`tooltip-${++index}`}
+              title={d.toDateString()}
+              placement='top'
+              followCursor
+              arrow
+            >
+              <Item
+                key={++index}
+                data-toggle='tooltip'
+                data-placement='bottom'
+                data-animation='false'
+                data-level={0}
+              />
+            </Tooltip>
+          );
     }
     return rows;
-
   };
 
   return (

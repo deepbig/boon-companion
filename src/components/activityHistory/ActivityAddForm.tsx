@@ -6,8 +6,8 @@ import {
   DialogTitle,
   TextField,
 } from '@mui/material';
-import  React, {useState} from 'react';
-import {saveActivity} from 'db/repository/activityHistory';
+import React from 'react';
+import { saveActivity } from 'db/repository/activityHistory';
 
 interface ActivityAddFormProps {
   open: boolean;
@@ -34,24 +34,26 @@ const setTextValue = (event: any) => {
   if (event.target.id === 'date') {
     updateActivity.date = event.target.value;
   }
-}
-function popUpClose(props : ActivityAddFormProps){
-    props.handleClose();
-
-}
-function saveValues(){
-  if(updateActivity.description !=='' && updateActivity.values !=='' && updateActivity.duration !=='' && updateActivity.date !== ''){
-  saveActivity(updateActivity);
-  alert('activity record saved');
-  }
-  else{
+};
+// function popUpClose(props: ActivityAddFormProps) {
+//   props.handleClose();
+// }
+function saveValues() {
+  if (
+    updateActivity.description !== '' &&
+    updateActivity.values !== '' &&
+    updateActivity.duration !== '' &&
+    updateActivity.date !== ''
+  ) {
+    saveActivity(updateActivity);
+    alert('activity record saved');
+  } else {
     alert('select all values');
   }
-   
 }
 function ActivityAddForm(props: ActivityAddFormProps) {
   //   const [date, setDate] = useState<Date | null>(null);
-  
+
   const maxDate = currentDate();
   return (
     <Dialog open={props.open} onClose={props.handleClose}>
