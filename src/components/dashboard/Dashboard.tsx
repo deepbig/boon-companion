@@ -10,7 +10,6 @@ import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
 import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { getUser } from 'modules/user';
-import { UserData } from 'types';
 import InterestAddForm from 'components/addInterest/InterestAddForm';
 
 function Dashboard() {
