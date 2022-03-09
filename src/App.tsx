@@ -5,9 +5,12 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { onAuthChange } from 'db/repository/auth';
 import LandingPage from 'pages/LandingPage';
 import DashboardPage from 'pages/DashboardPage';
-import CreateGroupPage from 'pages/CreateGroupPage';
+import { useAppDispatch } from 'hooks';
+import { setUser } from 'modules/user';
+import { getLoggedInUser } from 'db/repository/user';
 
 function App() {
+  const dispatch = useAppDispatch();
   const theme = createTheme({
     palette: {
       mode: 'light',
@@ -22,8 +25,14 @@ function App() {
 
   const navigate = useNavigate();
   useEffect(() => {
-    onAuthChange((user: any) => {
-      user ? navigate('/dashboard') : navigate('/landing');
+    onAuthChange(async (user: any) => {
+      if (user) {
+        navigate('/dashboard');
+        dispatch(setUser(await getLoggedInUser(user)));
+      } else {
+        navigate('/landing');
+        dispatch(setUser(null));
+      }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -35,7 +44,6 @@ function App() {
         <Route path='/' element={<></>} />
         <Route path='/landing' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage />} />
-        <Route path='/group' element={<CreateGroupPage />} />
       </Routes>
     </ThemeProvider>
   );
