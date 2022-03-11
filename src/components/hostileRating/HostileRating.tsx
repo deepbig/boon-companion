@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Container, Grid, Paper, Box } from '@mui/material';
+import  { useEffect, useState } from 'react';
+import { Grid, Paper } from '@mui/material';
 import Title from 'components/title/Title';
 import { useTheme } from '@mui/material/styles';
 import { getProfanityList, setProfanityList } from 'modules/profanity';
@@ -9,7 +9,6 @@ import { getFirestore } from "firebase/firestore"
 
 function HostileRating(){
   const theme = useTheme();
-  const [openActivity, setOpenActivity] = useState(false);
   const profanityList = useAppSelector(getProfanityList);
   const dispatch = useAppDispatch();
   const db = getFirestore();
@@ -84,7 +83,7 @@ function HostileRating(){
 			        Hostile Rating
             </Title>
            <p>Number of bad words used : {hostileRating}</p>
-           {/* <button onClick={(e) => checkProfanityWords("mf")}>check</button> */}
+           <button onClick={(e) => checkProfanityWords("mf")}>check</button>
           </Paper>
         </Grid>
         </>

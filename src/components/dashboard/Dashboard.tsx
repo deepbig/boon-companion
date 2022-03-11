@@ -27,7 +27,7 @@ function Dashboard() {
   const [openActivity, setOpenActivity] = useState(false);
   const [openInterest, setOpenInterest] = useState(false);
   const selectedInterest = useAppSelector(getSelectedInterest);
-  const profanityList = useAppSelector(getProfanityList);
+  //const profanityList = useAppSelector(getProfanityList);
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
   
