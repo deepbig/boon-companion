@@ -1,8 +1,14 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useEffect } from 'react';
 // import { useAppSelector, useAppDispatch } from 'hooks';
 import { Box, BoxProps, Tooltip } from '@mui/material';
 import styles from './ActivityHistory.module.css';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { getActivities, setActivityList } from 'modules/activity';
+import * as activity from 'db/repository/activity';
 import { ActivityData } from 'types';
+import { getSelectedInterest } from 'modules/interests';
+// import { UserActivityData } from 'types';
+// import { getActivities } from 'db/repository/activity';
 
 const Item = forwardRef((props: BoxProps, ref) => {
   const { sx, ...other } = props;
@@ -20,7 +26,22 @@ const Item = forwardRef((props: BoxProps, ref) => {
 });
 
 function ActivityHistory() {
+  const activities = useAppSelector(getActivities);
+  const selectedInterest = useAppSelector(getSelectedInterest);
+  const dispatch = useAppDispatch();
   const [selectedYear] = useState(null); // setSelectedYear는 filter 기능 추가 후 적용.
+
+  useEffect(() => {
+    if (selectedInterest) {
+      fetchActivities(selectedInterest);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedInterest]);
+
+  const fetchActivities = async (selectedInterest: string) => {
+    const _activities = await activity.current(selectedInterest);
+    dispatch(setActivityList(_activities));
+  };
 
   const drawBoxes = (activities: ActivityData[]) => {
     let rows = [];
@@ -34,52 +55,67 @@ function ActivityHistory() {
     let index: number = -1;
     let count: number = 0;
     for (let d = start; d < end; d.setDate(d.getDate() + 1)) {
-      activities[count]?.date?.toDate().getTime() >= d.getTime() &&
-      activities[count]?.date?.toDate().getTime() < d.getTime() + 86400000
-        ? rows.push(
-            <Tooltip
-              key={`tooltip-${++index}`}
-              title={
-                <span style={{ whiteSpace: 'pre-line' }}>
-                  {activities[count].date.toDate().toDateString() +
-                    (activities[count]?.note
-                      ? `\nNote: ${activities[count].note}`
-                      : '') +
-                    (activities[count]?.values
-                      ? `\nDuration: ${activities[count].values}`
-                      : '')}
-                </span>
-              }
-              placement='top'
-              followCursor
-              arrow
-            >
-              <Item
-                key={++index}
-                data-toggle='tooltip'
-                data-placement='bottom'
-                data-animation='false'
-                data-level={activities[count++].level}
-              />
-            </Tooltip>
-          )
-        : rows.push(
-            <Tooltip
-              key={`tooltip-${++index}`}
-              title={d.toDateString()}
-              placement='top'
-              followCursor
-              arrow
-            >
-              <Item
-                key={++index}
-                data-toggle='tooltip'
-                data-placement='bottom'
-                data-animation='false'
-                data-level={0}
-              />
-            </Tooltip>
-          );
+      // date이 같을 경우
+      if (
+        activities[count]?.date?.toDate().getTime() >= d.getTime() &&
+        activities[count]?.date?.toDate().getTime() < d.getTime() + 86400000
+      ) {
+        let duration = 0;
+        let activityCount = 0;
+        let description = '';
+        let date = activities[count].date.toDate().toDateString();
+        do {
+          activityCount++;
+          description += activities[count].description
+            ? `${activities[count].description}\n`
+            : '';
+          duration += activities[count++].duration;
+        } while (
+          activities[count]?.date?.toDate().getTime() >= d.getTime() &&
+          activities[count]?.date?.toDate().getTime() < d.getTime() + 86400000
+        );
+
+        rows.push(
+          <Tooltip
+            key={`tooltip-${++index}`}
+            title={
+              <span style={{ whiteSpace: 'pre-line' }}>
+                {date +
+                  `\nNote: ${description} Duration: ${duration} \nActivity Count: ${activityCount}`}
+              </span>
+            }
+            placement='top'
+            followCursor
+            arrow
+          >
+            <Item
+              key={++index}
+              data-toggle='tooltip'
+              data-placement='bottom'
+              data-animation='false'
+              data-level={duration / 60 <= 4 ? Math.floor(duration / 60) : 4}
+            />
+          </Tooltip>
+        );
+      } else {
+        rows.push(
+          <Tooltip
+            key={`tooltip-${++index}`}
+            title={d.toDateString()}
+            placement='top'
+            followCursor
+            arrow
+          >
+            <Item
+              key={++index}
+              data-toggle='tooltip'
+              data-placement='bottom'
+              data-animation='false'
+              data-level={0}
+            />
+          </Tooltip>
+        );
+      }
     }
     return rows;
   };
@@ -110,8 +146,7 @@ function ActivityHistory() {
           <li>Fri</li>
           <li>Sat</li>
         </ul>
-
-        <ul className={styles.squares}>{drawBoxes([])}</ul>
+        <ul className={styles.squares}>{drawBoxes(activities)}</ul>
       </div>
       <Box sx={{ display: 'flex', flexDirection: 'row-reverse', pt: 2, pr: 1 }}>
         More
