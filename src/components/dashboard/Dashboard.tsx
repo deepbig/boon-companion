@@ -9,58 +9,14 @@ import ActivityGoal from 'components/activityGoal/ActivityGoal';
 import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
 import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { doc, getDoc } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore"
+import HostileRating from 'components/hostileRating/HostileRating';
 
 function Dashboard() {
   const theme = useTheme();
   const [openActivity, setOpenActivity] = useState(false);
   const profanityList = useAppSelector(getProfanityList);
   const dispatch = useAppDispatch();
-  const db = getFirestore();
-  let cus;
-  useEffect(() => {
-    if (profanityList.length <= 0) {
-      const fetchProfanityWords = async () => {
-        await fetch('./list.txt')
-          .then((res) => res.text())
-          .then((txt) => {
-            dispatch(setProfanityList(txt.split('\n')));
-          });
-      };
-      fetchProfanityWords();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profanityList]);
-
-  //Example function: Use the following function format to find profanity words from user's text message
-  const checkProfanityWords = (user_string_input: string) => {
-    const words = user_string_input.split(' ');
-    let result = false;
-    for (let word of words) {
-      console.log(word);
-      if (profanityList.indexOf(word) > -1) {
-        result = true;
-        console.log('test?');
-        break;
-      }
-    }
-    console.log('result: ', result);
-    return result;
-  };
-
-  const getHostileRating=async () =>{
-      const docRef = doc(db, "users", "pL5toeBR7uQpa9tvv60T88iY8Ww2");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-      console.log("Document data:", docSnap.data());
-      cus= docSnap.data().hostileRating;
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
-  }
-  getHostileRating();
+  
   const handleCloseActivityForm = () => {
     setOpenActivity(false);
   };
@@ -150,27 +106,7 @@ function Dashboard() {
             <ActivityGoal />
           </Paper>
         </Grid>
-        <Grid item xs={12} md={6}>
-          <Paper
-            sx={{
-              p: 2,
-              display: 'flex',
-              flexDirection: 'column',
-              minHeight: 187,
-              [theme.breakpoints.up('lg')]: {
-                maxHeight: 632,
-              },
-              overflow: 'hidden',
-              overflowY: 'auto',
-            }}
-            elevation={4}
-          >
-            <Title>
-			        Hostile Rating
-            </Title>
-           <p>Number of bad words used : {cus}</p>
-          </Paper>
-        </Grid>
+        <HostileRating/>
       </Grid>
       <Copyright sx={{ pt: 4 }} />
     </Container>

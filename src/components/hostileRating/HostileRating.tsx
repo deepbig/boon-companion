@@ -4,7 +4,7 @@ import Title from 'components/title/Title';
 import { useTheme } from '@mui/material/styles';
 import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { doc, getDoc,setDoc } from "firebase/firestore";
+import { doc, getDoc,updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore"
 
 function HostileRating(){
@@ -14,7 +14,6 @@ function HostileRating(){
   const dispatch = useAppDispatch();
   const db = getFirestore();
   var [hostileRating,setHostileRating]=useState(0); 
-  var [count,setCount]=useState(0); 
 
   useEffect(() => {
     if (profanityList.length <= 0) {
@@ -26,46 +25,45 @@ function HostileRating(){
           });
       };
       fetchProfanityWords();
+      getHostileRating();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profanityList]);
 
+  async function getHostileRating (){
+  const docRef = doc(db, "users", "bwc0k0IM9SUUjhWoI4LMF6JLzbM2");
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+  setHostileRating(docSnap.data().hostileRating);
+  } else {
+    // doc.data() will be undefined in this case
+    console.log("No such document!");
+  }
+}
 
-  
   //Example function: Use the following function format to find profanity words from user's text message
- const checkProfanityWords = (user_string_input: string) => {
+  function checkProfanityWords (user_string_input:string) {
     const words = user_string_input.split(' ');
     let result = 0;
     for (let word of words) {
       if (profanityList.indexOf(word+"\r") > -1) {
         result++;
       }
-      
     }
-    return result;
+    result=result+hostileRating;
+    setHostileRating(result);
+    addData(result);
   };
+  
+ async function addData(result:number){
+    const dbRef = doc(db, "users", "bwc0k0IM9SUUjhWoI4LMF6JLzbM2");
+    await updateDoc(dbRef, {
+       hostileRating: result
+    } );
 
-
-  const getHostileRating=async () =>{
-      const docRef = doc(db, "users", "pL5toeBR7uQpa9tvv60T88iY8Ww2");
-    const docSnap = await getDoc(docRef);
-    if (docSnap.exists()) {
-    setHostileRating(docSnap.data().hostileRating);
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-    }
-    return hostileRating;
   }
-  getHostileRating();
-  setCount(checkProfanityWords("fuck off mf"));
-  console.log(count);
-  if(count > 0){
-    setHostileRating(count+hostileRating);
-   }
-   console.log(hostileRating);
-
     return(
+      
         <>
 <Grid item xs={12} md={6}>
           <Paper
@@ -86,6 +84,7 @@ function HostileRating(){
 			        Hostile Rating
             </Title>
            <p>Number of bad words used : {hostileRating}</p>
+           {/* <button onClick={(e) => checkProfanityWords("mf")}>check</button> */}
           </Paper>
         </Grid>
         </>
