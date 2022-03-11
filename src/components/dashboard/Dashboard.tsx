@@ -15,7 +15,6 @@ import ActivityHistory from 'components/activityHistory/ActivityHistory';
 import JoinedGroup from 'components/joinedGroup/JoinedGroup';
 import ActivityGoal from 'components/activityGoal/ActivityGoal';
 import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
-import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import HostileRating from 'components/hostileRating/HostileRating';
 import { getUser } from 'modules/user';
