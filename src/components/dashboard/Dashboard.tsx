@@ -10,6 +10,9 @@ import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
 import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import HostileRating from 'components/hostileRating/HostileRating';
+import { getUser } from 'modules/user';
+import InterestAddForm from 'components/addInterest/InterestAddForm';
+import { getSelectedInterest, setSelectedInterest } from 'modules/interests';
 
 function Dashboard() {
   const theme = useTheme();
@@ -17,6 +20,19 @@ function Dashboard() {
   const profanityList = useAppSelector(getProfanityList);
   const dispatch = useAppDispatch();
   
+  useEffect(() => {
+    if (user && !selectedInterest) {
+      if (user.interests?.length <= 0) {
+        setOpenInterest(true);
+      } else {
+        dispatch(setSelectedInterest(user.interests[0]));
+        setOpenInterest(false);
+      }
+    }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [user]);
+
   const handleCloseActivityForm = () => {
     setOpenActivity(false);
   };
