@@ -18,7 +18,7 @@ Hongsuk Ryu<br/>
 
 # Sprint 1
 ## Story Point: Forecast and Rationale 
-### The forecast for the first sprint includes: 
+### The forecast for the first sprint includes: 41
 
 
 ### Rationale
