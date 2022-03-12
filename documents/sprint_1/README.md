@@ -39,6 +39,8 @@ Hongsuk Ryu<br/>
 
 
 ## Tests
+13 test cases: https://github.com/deepbig/boon-companion/blob/main/src/db/repository/db.test.ts
+![Test Passes screenshot](./test_cases_pass_evidence.png)
 
 
 ## Mob Programming Video
