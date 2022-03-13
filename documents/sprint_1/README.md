@@ -22,6 +22,19 @@ Hongsuk Ryu<br/>
 
 
 ### Rationale
+**Story:** As a user, I want to sign up / log into the application.
+**Rationale:** To access the application, a user needs some credential to recognize.So signing up is the first step in obtaining credentials and kicking off any other functionalities to be built.Once the user has obtained sufficient credentials,they can start using the application's features. This is our reason for selecting the story in the first sprint.
+**Story:** As a user, I want to create my profile.
+**Rationale:** Once the user is able to login, the next important feature is to collect the basic user information and store it for further use (like finding similar users based on age, gender).
+**Story:** As a user, I want to post my daily activities.
+**Rationale:** By implementing this feature, the user profile will be much more reactive, and the filtering and mapping will increase.
+And it is part of user profile creation.
+**Story:** As a user, I want to see all my previous activities.
+**Rationale:** By implementing this story, the user can see milestones. And it is also part of user profile creation.
+
+In this sprint, we completely focused on allowing users to signup/login and create user profiles, which is basic and one of the important functionalities of the application.
+
+
 
 
 ## Kanban Board: Product Backlog
