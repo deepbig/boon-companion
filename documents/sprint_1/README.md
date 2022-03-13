@@ -46,9 +46,14 @@ In this sprint, we completely focused on allowing users to signup/login and crea
 
 
 ## Burndown Chart
+![burndown](https://user-images.githubusercontent.com/99055144/158067427-6327f2b1-cdd3-4ec3-aab5-d4975512e23d.PNG)
 
 
 ## Daily Scrums
+We are using powerup called "Daily Updates" in trello for daily scrums. Pleas find the below exported exile from daily updates for a day in the sprint your refernce.
+https://kennesawedu-my.sharepoint.com/personal/mgouni_students_kennesaw_edu/_layouts/15/Doc.aspx?sourcedoc=%7BA8B30BF8-9F10-4499-A216-3FE312B5E324%7D&file=daily%20update%202022-03-11.xlsx&action=default&mobileredirect=true&CT=1647185871627&OR=ItemsView
+![Screenshot (13)](https://user-images.githubusercontent.com/99055144/158067410-f9af2ca2-45f8-4bc5-8c13-9513a60269cc.png)
+
 
 
 ## Tests
@@ -57,8 +62,10 @@ In this sprint, we completely focused on allowing users to signup/login and crea
 
 
 ## Mob Programming Video
+https://kennesawedu-my.sharepoint.com/:v:/g/personal/mgouni_students_kennesaw_edu/EdFXeubaNo1Bu6tX9RAZavQBAFIqE6JsXVgfKAMi6VJfng
 
 
 ## Sprint Review Video
+https://kennesawedu-my.sharepoint.com/personal/mgouni_students_kennesaw_edu/_layouts/15/onedrive.aspx?id=%2Fpersonal%2Fmgouni%5Fstudents%5Fkennesaw%5Fedu%2FDocuments%2FRecordings%2FSprint%201%20Weekly%20update%20%2D%2DWeb%20Service%20Engineering%2D20220311%5F193102%2DMeeting%20Recording%2Emp4&parent=%2Fpersonal%2Fmgouni%5Fstudents%5Fkennesaw%5Fedu%2FDocuments%2FRecordings
 
 
