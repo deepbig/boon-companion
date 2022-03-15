@@ -15,8 +15,8 @@ import ActivityHistory from 'components/activityHistory/ActivityHistory';
 import JoinedGroup from 'components/joinedGroup/JoinedGroup';
 import ActivityGoal from 'components/activityGoal/ActivityGoal';
 import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
-import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
+import HostileRating from 'components/hostileRating/HostileRating';
 import { getUser } from 'modules/user';
 import InterestAddForm from 'components/addInterest/InterestAddForm';
 import { getSelectedInterest, setSelectedInterest } from 'modules/interests';
@@ -26,24 +26,10 @@ function Dashboard() {
   const [openActivity, setOpenActivity] = useState(false);
   const [openInterest, setOpenInterest] = useState(false);
   const selectedInterest = useAppSelector(getSelectedInterest);
-  const profanityList = useAppSelector(getProfanityList);
+  //const profanityList = useAppSelector(getProfanityList);
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    if (profanityList.length <= 0) {
-      const fetchProfanityWords = async () => {
-        await fetch('./list.txt')
-          .then((res) => res.text())
-          .then((txt) => {
-            dispatch(setProfanityList(txt.split('\n')));
-          });
-      };
-      fetchProfanityWords();
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profanityList]);
-
+  
   useEffect(() => {
     if (user && !selectedInterest) {
       if (user.interests?.length <= 0) {
@@ -175,6 +161,7 @@ function Dashboard() {
             <ActivityGoal />
           </Paper>
         </Grid>
+        <HostileRating/>
       </Grid>
       <Copyright sx={{ pt: 4 }} />
       <Backdrop
