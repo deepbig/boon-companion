@@ -58,6 +58,7 @@ https://kennesawedu-my.sharepoint.com/personal/mgouni_students_kennesaw_edu/_lay
 
 ## Tests
 13 test cases: https://github.com/deepbig/boon-companion/blob/main/src/db/repository/db.test.ts
+To leran the firestore test cases, you first need to enable [Firebase Local Emulator Suite](https://firebase.google.com/docs/emulator-suite).
 ![Test Passes screenshot](./test_cases_pass_evidence.png)
 
 
