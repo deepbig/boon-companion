@@ -32,8 +32,10 @@ export const getLoggedInUser = async (user: { uid: string; displayName: any; ema
                 gender: null,
                 hostileRating: 0,
                 levelOfExperience: 0,
-                peerRating: 0,
+                peerRating: 10,
                 interests: [],
+                groups: [],
+                age: null,
             });
         } catch (e) {
             // need to handle error case.
@@ -60,5 +62,12 @@ export const addUserInterest = async (uid: string, interest: string) => {
     const docRef = doc(db, COLLECTION_NAME, uid);
     await updateDoc(docRef, {
         interests: arrayUnion(interest)
+    });
+}
+
+export const addUserGroup = async (uid: string, group: string) => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    await updateDoc(docRef, {
+        groups: arrayUnion(group)
     });
 }
