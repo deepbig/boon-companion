@@ -10,22 +10,25 @@ function JoinedGroup() {
   const [openCreateGroup, setOpenCreateGroup] = useState(false);
   const [openJoinGroup, setOpenJoinGroup] = useState(false);
 
-  const handleClickOpenCreateGroup = () => {
-    setOpenCreateGroup(true);
-  };
-
-  const handleCloseCreateGroup = (event: any, reason: any) => {
-    if (reason !== 'backdropClick') {
-      setOpenCreateGroup(false);
-    }
-  };
-
   const handleClickOpenJoinGroup = () => {
     setOpenJoinGroup(true);
   };
 
   const handleCloseJoinGroup = () => {
     setOpenJoinGroup(false);
+  };
+
+function JoinedGroup() {
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event: any, reason: any) => {
+    if (reason !== 'backdropClick') {
+      setOpen(false);
+    }
   };
 
   return (
@@ -48,10 +51,11 @@ function JoinedGroup() {
         </Button>
         <JoinGroup open={openJoinGroup} handleClose={handleCloseJoinGroup} />
 
-        <Button variant='contained' onClick={handleClickOpenCreateGroup}>
+        <Button variant='contained' onClick={handleClickOpen}>
           Create a Group
         </Button>
-        <CreateGroup open={openCreateGroup} onClose={handleCloseCreateGroup} />
+        <CreateGroup open={open} onClose={handleClose} />
+
       </Box>
     </>
   );
