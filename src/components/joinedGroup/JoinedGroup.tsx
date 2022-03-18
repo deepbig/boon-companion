@@ -7,7 +7,7 @@ import { getUser } from 'modules/user';
 
 function JoinedGroup() {
   const user = useAppSelector(getUser);
-  const [openCreateGroup, setOpenCreateGroup] = useState(false);
+  const [open, setOpen] = useState(false);
   const [openJoinGroup, setOpenJoinGroup] = useState(false);
 
   const handleClickOpenJoinGroup = () => {
@@ -17,9 +17,6 @@ function JoinedGroup() {
   const handleCloseJoinGroup = () => {
     setOpenJoinGroup(false);
   };
-
-function JoinedGroup() {
-  const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,7 +52,6 @@ function JoinedGroup() {
           Create a Group
         </Button>
         <CreateGroup open={open} onClose={handleClose} />
-
       </Box>
     </>
   );
