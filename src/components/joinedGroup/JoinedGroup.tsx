@@ -1,9 +1,20 @@
 import { Typography, Box, Button } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
-import React from 'react';
+import { useState } from 'react';
+import CreateGroup from 'components/group/CreateGroup';
 
 function JoinedGroup() {
-  const navigate = useNavigate();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event: any, reason: any) => {
+    if (reason !== 'backdropClick') {
+      setOpen(false);
+    }
+  };
+
   return (
     <>
       <Box m={2}>
@@ -15,9 +26,10 @@ function JoinedGroup() {
         <Button variant='contained' sx={{ width: 160, mr: 2 }}>
           Join a Group
         </Button>
-        <Button variant='contained' onClick={() => navigate(`/group`)}>
+        <Button variant='contained' onClick={handleClickOpen}>
           Create a Group
         </Button>
+        <CreateGroup open={open} onClose={handleClose} />
       </Box>
     </>
   );
