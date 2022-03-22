@@ -15,6 +15,8 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  Slider,
+  Typography,
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import db from '../../db';
@@ -27,11 +29,23 @@ import { UserData } from 'types';
 type CreateGroupFormData = {
   name: string;
   title: string;
+  gender: string;
+  interest: string;
+  age: number[];
+  peerRating: number[];
+  hostileRating: number[];
+  levelOfExperience: number[];
+  description: string;
+};
+
+type NewGroupData = {
+  name: string;
+  title: string;
   minAge: number;
   maxAge: number;
   gender: string;
-  owner: string;
   interest: string;
+  owner: string;
   peerRatingMin: number;
   peerRatingMax: number;
   hostileRatingMin: number;
@@ -49,6 +63,11 @@ type CreatGroupProps = {
 function CreateGroup({ open, onClose }: CreatGroupProps) {
   const [user, setUser] = useState<UserData>();
 
+  const [age, setAge] = useState<number[]>([0, 100]);
+  const [peerRating, setPeerRating] = useState<number[]>([0, 10]);
+  const [levelOfExperience, setLevelOfExperience] = useState<number[]>([0, 10]);
+  const [hostileRating, setHostileRating] = useState<number[]>([0, 10]);
+
   const { control, reset, handleSubmit } = useForm<CreateGroupFormData>();
 
   const groupsRef = collection(db, 'groups');
@@ -63,43 +82,107 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         photoURL: '',
       });
       setUser(user);
+      setAge([user?.age || 0, 100]);
+      setPeerRating([user?.peerRating || 0, 10]);
+      setLevelOfExperience([user?.levelOfExperience || 0, 10]);
+      setHostileRating([0, user?.hostileRating || 0]);
     };
     getUser();
   }, []);
 
-  const onSubmit = handleSubmit(async (data) => {
-    data.minAge = user?.age || 0;
-    data.owner = user?.email || '';
-    data.hostileRatingMin = user?.hostileRating || 0;
-    data.peerRatingMin = user?.peerRating || 0;
-    data.levelOfExperienceMin = user?.levelOfExperience || 0;
-
-    data.gender = data.gender || user?.gender || '';
-    data.maxAge = data.maxAge || data.minAge;
-    data.interest = data.interest || user?.interests[0] || '';
-    data.hostileRatingMax = data.hostileRatingMax || data.hostileRatingMin;
-    data.peerRatingMax = data.peerRatingMax || data.peerRatingMin;
-    data.levelOfExperienceMax =
-      data.levelOfExperienceMax || data.levelOfExperienceMin;
-    reset();
-    onClose(null, null);
-    await addDoc(groupsRef, data);
-  });
-
-  const getAges = (min: number) => {
-    const ages: number[] = [];
-    for (var i = 0; i <= 10; i++) {
-      ages.push(min + i);
+  const onAgeChange = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
     }
-    return ages;
+
+    if (newValue[0] <= age[0]) {
+      setAge([age[0], newValue[1]]);
+    }
+    
   };
 
-  const getOptions = (min: number, max: number) => {
-    const options: number[] = [];
-    for (var i = min; i <= max; i++) {
-      options.push(i);
+  const onPeerRatingChange = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
     }
-    return options;
+
+    if (newValue[0] <= peerRating[0]) {
+      setPeerRating([peerRating[0], newValue[1]]);
+    }
+  };
+
+  const onLevelOfExperienceChange = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (newValue[0] <= levelOfExperience[0]) {
+      setLevelOfExperience([levelOfExperience[0], newValue[1]]);
+    }
+  };
+
+  const onHostileRatingChange = (
+    event: Event,
+    newValue: number | number[],
+    activeThumb: number
+  ) => {
+    if (!Array.isArray(newValue)) {
+      return;
+    }
+
+    if (newValue[1] >= hostileRating[1]) {
+      setHostileRating([newValue[0], hostileRating[1]]);
+    }
+  };
+
+  const onSubmit = handleSubmit(async (data) => {
+    console.log(data);
+    const newGroupData: NewGroupData = {
+      name: data.name,
+      title: data.title,
+      gender: data.gender || user?.gender || '',
+      interest: data.interest || user?.interests[0] || '',
+      owner: user?.email || '',
+      minAge: (data.age && data.age[0]) || age[0],
+      maxAge: (data.age && data.age[1]) || age[1],
+      peerRatingMin: (data.peerRating && data.peerRating[0]) || peerRating[0],
+      peerRatingMax: (data.peerRating && data.peerRating[1]) || peerRating[1],
+      hostileRatingMin:
+        (data.hostileRating && data.hostileRating[0]) || hostileRating[0],
+      hostileRatingMax:
+        (data.hostileRating && data.hostileRating[1]) || hostileRating[1],
+      levelOfExperienceMin:
+        (data.levelOfExperience && data.levelOfExperience[0]) ||
+        levelOfExperience[0],
+      levelOfExperienceMax:
+        (data.levelOfExperience && data.levelOfExperience[1]) ||
+        levelOfExperience[1],
+      description: data.description || '',
+    };
+    console.log(newGroupData);
+    resetData();
+    onClose(null, null);
+    await addDoc(groupsRef, newGroupData);
+  });
+
+  const resetData = () => {
+    setAge([user?.age || 0, 100]);
+    setPeerRating([user?.peerRating || 0, 10]);
+    setLevelOfExperience([user?.levelOfExperience || 0, 10]);
+    setHostileRating([0, user?.hostileRating || 0]);
+    reset();
   };
 
   return (
@@ -109,7 +192,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         <form id='create-group-form' onSubmit={onSubmit}>
           <Container maxWidth='md' sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={4}>
-              <Grid item xs={4} spacing={4}>
+              <Grid item xs={6} spacing={4} style={{ paddingLeft: 20 }}>
                 <FormControl fullWidth>
                   <Controller
                     name='name'
@@ -129,7 +212,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={4} spacing={6}>
+              <Grid item xs={6} spacing={4}>
                 <FormControl fullWidth>
                   <Controller
                     name='title'
@@ -149,36 +232,8 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={4} spacing={4}>
-                <FormControl fullWidth>
-                  <InputLabel id='age-label'>Age</InputLabel>
-                  <Controller
-                    name='maxAge'
-                    control={control}
-                    render={({ field: { name, value, onChange } }) => (
-                      <Select
-                        id='maxAge'
-                        labelId='age-label'
-                        type='number'
-                        label='Age'
-                        name={name}
-                        value={value}
-                        onChange={onChange}
-                        defaultValue={user?.age}
-                        required
-                      >
-                        {user &&
-                          getAges(user.age).map((r) => (
-                            <MenuItem value={r}>{r}</MenuItem>
-                          ))}
-                      </Select>
-                    )}
-                  />
-                </FormControl>
-              </Grid>
-
-              <Grid item xs={5} spacing={4}>
-                <FormControl fullWidth>
+              <Grid item xs={7} spacing={4} style={{ paddingLeft: 20 }}>
+                <FormControl>
                   <FormLabel id='gender-label'>Gender</FormLabel>
                   <Controller
                     name='gender'
@@ -216,7 +271,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={7}>
+              <Grid item xs={5} spacing={4} style={{ paddingLeft: 0 }}>
                 <FormControl fullWidth>
                   <InputLabel id='interest-label'>Interest</InputLabel>
                   <Controller
@@ -244,100 +299,142 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={4} spacing={6}>
+              <Grid item xs={6} spacing={4}>
                 <FormControl fullWidth>
-                  <InputLabel id='peer-rating-label'>Peer Rating</InputLabel>
+                  <Typography id='age-label' gutterBottom>
+                    Age
+                  </Typography>
                   <Controller
-                    name='peerRatingMax'
+                    name='age'
                     control={control}
-                    render={({ field: { name, value, onChange } }) => (
-                      <Select
-                        labelId='peer-rating-label'
-                        id='peer-rating'
-                        type='number'
-                        label='PeerRating'
+                    render={({ field: { name } }) => (
+                      <Slider
+                        id='age'
                         name={name}
-                        value={value}
-                        onChange={onChange}
-                        defaultValue={user?.peerRating}
-                        required
-                      >
-                        {getOptions(
-                          user?.peerRating || 0,
-                          (user?.peerRating || 0) + 2
-                        ).map((r) => (
-                          <MenuItem value={r}>{r}</MenuItem>
-                        ))}
-                      </Select>
+                        max={100}
+                        value={age}
+                        valueLabelDisplay='auto'
+                        onChange={onAgeChange}
+                        disableSwap
+                        marks={[
+                          {
+                            value: age[0],
+                            label: age[0],
+                          },
+                          {
+                            value: age[1],
+                            label: age[1],
+                          },
+                        ]}
+                      />
                     )}
                   />
                 </FormControl>
               </Grid>
 
-              <Grid item xs={4} spacing={6}>
+              <Grid item xs={6} spacing={4}>
                 <FormControl fullWidth>
-                  <InputLabel id='hostile-rating-label'>
+                  <Typography id='peer-rating-label' gutterBottom>
+                    Peer Rating
+                  </Typography>
+                  <Controller
+                    name='peerRating'
+                    control={control}
+                    render={({ field: { name } }) => (
+                      <Slider
+                        id='peerRating'
+                        name={name}
+                        max={10}
+                        value={peerRating}
+                        valueLabelDisplay='auto'
+                        onChange={onPeerRatingChange}
+                        disableSwap
+                        step={0.1}
+                        marks={[
+                          {
+                            value: peerRating[0],
+                            label: peerRating[0],
+                          },
+                          {
+                            value: peerRating[1],
+                            label: peerRating[1],
+                          },
+                        ]}
+                      />
+                    )}
+                  />
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={6} spacing={4}>
+                <FormControl fullWidth>
+                  <Typography id='hostile-rating-label' gutterBottom>
                     Hostile Rating
-                  </InputLabel>
+                  </Typography>
                   <Controller
-                    name='hostileRatingMax'
+                    name='hostileRating'
                     control={control}
-                    render={({ field: { name, value, onChange } }) => (
-                      <Select
-                        labelId='hostile-rating-label'
-                        id='hostile-rating'
-                        type='number'
-                        label='HostileRating'
+                    render={({ field: { name } }) => (
+                      <Slider
+                        id='hostileRating'
                         name={name}
-                        value={value}
-                        onChange={onChange}
-                        defaultValue={user?.hostileRating}
-                        required
-                      >
-                        {getOptions(
-                          user?.hostileRating || 0,
-                          (user?.hostileRating || 0) + 2
-                        ).map((r) => (
-                          <MenuItem value={r}>{r}</MenuItem>
-                        ))}
-                      </Select>
+                        max={10}
+                        value={hostileRating}
+                        valueLabelDisplay='auto'
+                        onChange={onHostileRatingChange}
+                        disableSwap
+                        step={0.1}
+                        marks={[
+                          {
+                            value: hostileRating[0],
+                            label: hostileRating[0],
+                          },
+                          {
+                            value: hostileRating[1],
+                            label: hostileRating[1],
+                          },
+                        ]}
+                      />
                     )}
                   />
                 </FormControl>
               </Grid>
 
-              <Grid item xs={4} spacing={6}>
+              <Grid item xs={6} spacing={4}>
                 <FormControl fullWidth>
-                  <InputLabel id='level-of-experience-label'>
+                  <Typography id='level-of-experience-label' gutterBottom>
                     Level of Experience
-                  </InputLabel>
+                  </Typography>
                   <Controller
-                    name='levelOfExperienceMax'
+                    name='levelOfExperience'
                     control={control}
-                    render={({ field: { name, value, onChange } }) => (
-                      <Select
-                        labelId='level-of-experience-label'
-                        id='level-of-experience'
-                        type='number'
-                        label='LevelOfExperience'
+                    render={({ field: { name } }) => (
+                      <Slider
+                        id='levelOfExperience'
                         name={name}
-                        value={value}
-                        onChange={onChange}
-                        defaultValue={user?.levelOfExperience}
-                        required
-                      >
-                        {getOptions(
-                          user?.levelOfExperience || 0,
-                          (user?.levelOfExperience || 0) + 3
-                        ).map((r) => (
-                          <MenuItem value={r}>{r}</MenuItem>
-                        ))}
-                      </Select>
+                        max={10}
+                        value={levelOfExperience}
+                        valueLabelDisplay='auto'
+                        onChange={onLevelOfExperienceChange}
+                        disableSwap
+                        step={0.1}
+                        marks={[
+                          {
+                            value: levelOfExperience[0],
+                            label: levelOfExperience[0],
+                          },
+                          {
+                            value: levelOfExperience[1],
+                            label: levelOfExperience[1],
+                          },
+                        ]}
+                      />
                     )}
                   />
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+
+              <Grid item xs={12} spacing={4} style={{ paddingLeft: 20 }}>
                 <FormControl fullWidth>
                   <Controller
                     name='description'
@@ -364,7 +461,13 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         <Button variant='contained' type='submit' form='create-group-form'>
           Submit
         </Button>
-        <Button variant='contained' onClick={() => onClose(null, null)}>
+        <Button
+          variant='contained'
+          onClick={() => {
+            resetData();
+            onClose(null, null);
+          }}
+        >
           Cancel
         </Button>
       </DialogActions>
