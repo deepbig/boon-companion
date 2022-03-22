@@ -16,6 +16,7 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
+import GroupIcon from '@mui/icons-material/Group';
 import Login from 'components/login/Login';
 import Profile from 'components/profile/Profile';
 
@@ -35,7 +36,16 @@ function MenuListItems(props: any) {
           </Badge>
         </ListItemIcon>
         {props.open ? <ListItemText primary='Dashboard' /> : null}
-      </ListItem>      
+      </ListItem>
+
+      <ListItem button onClick={() => navigate(`/group`)} sx={{ height: 72 }}>
+        <ListItemIcon>
+          <Badge badgeContent={''}>
+            <GroupIcon />
+          </Badge>
+        </ListItemIcon>
+        {props.open ? <ListItemText primary='group' /> : null}
+      </ListItem>
     </div>
   );
 }

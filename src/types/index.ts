@@ -1,7 +1,8 @@
 export enum PageName {
     LANDING = '',
     SIGIN = '',
-    DASHBOARD = 'Dashboard',   
+    DASHBOARD = 'Dashboard',  
+    GROUP = 'Group', 
 }
 
 export type UserData = {
