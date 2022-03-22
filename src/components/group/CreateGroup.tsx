@@ -119,7 +119,6 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
   };
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     const newGroupData: GroupData = {
       name: data.name,
       title: data.title,
@@ -142,7 +141,6 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         levelOfExperience[1],
       description: data.description || '',
     };
-    console.log(newGroupData);
     resetData();
     onClose(null, null);
     await addDoc(groupsRef, newGroupData);
