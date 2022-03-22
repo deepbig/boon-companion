@@ -102,7 +102,6 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
     if (newValue[0] <= age[0]) {
       setAge([age[0], newValue[1]]);
     }
-    
   };
 
   const onPeerRatingChange = (
