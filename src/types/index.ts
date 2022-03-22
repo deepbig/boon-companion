@@ -16,6 +16,37 @@ export type UserData = {
     interests: string[];
 } | null;
 
+export type CreateGroupFormData = {
+  name: string;
+  title: string;
+  gender: string;
+  interest: string;
+  age: number[];
+  peerRating: number[];
+  hostileRating: number[];
+  levelOfExperience: number[];
+  description: string;
+};
+
+export type GroupData = {
+  name: string;
+  title: string;
+  minAge: number;
+  maxAge: number;
+  gender: string;
+  interest: string;
+  owner: string;
+  peerRatingMin: number;
+  peerRatingMax: number;
+  hostileRatingMin: number;
+  hostileRatingMax: number;
+  levelOfExperienceMin: number;
+  levelOfExperienceMax: number;
+  description: string;
+};
+
+
+
 export interface ActivityData {
     id?: string;
     interest: string; // category

@@ -24,36 +24,8 @@ import { auth } from 'db';
 import { collection, addDoc } from 'firebase/firestore';
 import { getLoggedInUser } from 'db/repository/user';
 import { useState, useEffect } from 'react';
-import { UserData } from 'types';
+import { UserData, CreateGroupFormData, GroupData } from 'types';
 
-type CreateGroupFormData = {
-  name: string;
-  title: string;
-  gender: string;
-  interest: string;
-  age: number[];
-  peerRating: number[];
-  hostileRating: number[];
-  levelOfExperience: number[];
-  description: string;
-};
-
-type NewGroupData = {
-  name: string;
-  title: string;
-  minAge: number;
-  maxAge: number;
-  gender: string;
-  interest: string;
-  owner: string;
-  peerRatingMin: number;
-  peerRatingMax: number;
-  hostileRatingMin: number;
-  hostileRatingMax: number;
-  levelOfExperienceMin: number;
-  levelOfExperienceMax: number;
-  description: string;
-};
 
 type CreatGroupProps = {
   open: boolean;
@@ -148,7 +120,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
 
   const onSubmit = handleSubmit(async (data) => {
     console.log(data);
-    const newGroupData: NewGroupData = {
+    const newGroupData: GroupData = {
       name: data.name,
       title: data.title,
       gender: data.gender || user?.gender || '',
