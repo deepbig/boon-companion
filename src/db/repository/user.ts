@@ -1,5 +1,5 @@
 import db from "..";
-import { collection, doc, getDoc, setDoc, getDocs, query, updateDoc, arrayUnion } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc, getDocs, query, updateDoc, arrayUnion, deleteDoc   } from 'firebase/firestore';
 import { UserData } from 'types';
 const COLLECTION_NAME = "users";
 
@@ -61,4 +61,9 @@ export const addUserInterest = async (uid: string, interest: string) => {
     await updateDoc(docRef, {
         interests: arrayUnion(interest)
     });
+}
+
+export const deleteUser = async (uid: any) => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    await deleteDoc(docRef);
 }
