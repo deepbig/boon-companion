@@ -1,5 +1,5 @@
 import db from "..";
-import { collection, doc, getDoc, setDoc, getDocs, query, updateDoc, arrayUnion, deleteDoc   } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc, getDocs, query, updateDoc, arrayUnion, deleteDoc } from 'firebase/firestore';
 import { UserData } from 'types';
 const COLLECTION_NAME = "users";
 
@@ -32,8 +32,10 @@ export const getLoggedInUser = async (user: { uid: string; displayName: any; ema
                 gender: null,
                 hostileRating: 0,
                 levelOfExperience: 0,
-                peerRating: 0,
+                peerRating: 10,
                 interests: [],
+                groups: [],
+                age: null,
             });
         } catch (e) {
             // need to handle error case.
@@ -60,6 +62,13 @@ export const addUserInterest = async (uid: string, interest: string) => {
     const docRef = doc(db, COLLECTION_NAME, uid);
     await updateDoc(docRef, {
         interests: arrayUnion(interest)
+    });
+}
+
+export const addUserGroup = async (uid: string, group: string) => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    await updateDoc(docRef, {
+        groups: arrayUnion(group)
     });
 }
 
