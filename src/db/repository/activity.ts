@@ -1,7 +1,6 @@
 import db, { auth } from "..";
-import { collection, addDoc, query, getDocs, where, orderBy, Timestamp, doc, getDoc } from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, where, orderBy, Timestamp, doc, getDoc, deleteDoc } from 'firebase/firestore';
 import { ActivityAddFormData, ActivityData } from "types";
-;
 const COLLECTION_NAME = "user_interest_activity";
 
 // retrieve current (1 year) activities
@@ -42,36 +41,24 @@ export const saveActivity = async (values: ActivityAddFormData): Promise<Activit
   const newDocRef = doc(db, COLLECTION_NAME, docRef.id);
   const docSnap = await getDoc(newDocRef);
   if (docSnap.exists()) {
+    console.log(docSnap.id);
     return docSnap.data() as ActivityData;
   } else {
     return null;
   }
 }
-
-// async function saveActivity(updateActivity: any) {
-//   try {
-//     const docRef = await addDoc(collection(db, COLLECTION_NAME), {
-//       date: updateActivity.date,
-//       description: updateActivity.description,
-//       performance: updateActivity.values,
-//       duration: updateActivity.duration
-//     });
-//     console.log("Document written with ID: ", docRef.id);
-//   } catch (e) {
-//     console.error("Error adding document: ", e);
-//   }
-// }
-
-// export const getActivities = async (): Promise<Array<UserActivityData>> => {
-//   const q = query(collection(db, COLLECTION_NAME));
-
-//   const usersSnapshot = await getDocs(q);
-//   const data: Array<any> = [];
-
-//   usersSnapshot.docs.forEach((_data) => {
-//     data.push({ ..._data.data() });
-//   })
-
-//   return usersSnapshot.docs.length > 0 ? data as Array<UserActivityData> : [];
-// }
-// export { saveActivity };
+// deleting activities by using user activity collection id
+export const deleteActivities = async (uid: any) => {
+  const docRef = doc(db, COLLECTION_NAME, uid);
+  await deleteDoc(docRef);
+}
+// retriving all activites of current user
+export const getCurrentUserActivityId = async (uid: any) => {
+  const q = query(collection(db, COLLECTION_NAME), where("uid", "==", uid));
+  const activitiesSnapshot = await getDocs(q);
+  const data: Array<any> = [];
+   activitiesSnapshot.docs.forEach((_data) => {
+      data.push({ id: _data.id });
+      deleteActivities(_data.id);
+    });
+}
