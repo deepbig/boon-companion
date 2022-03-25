@@ -29,22 +29,6 @@ export type CreateGroupFormData = {
   description: string;
 };
 
-export type GroupData = {
-  name: string;
-  title: string;
-  minAge: number;
-  maxAge: number;
-  gender: string;
-  interest: string;
-  owner: string;
-  peerRatingMin: number;
-  peerRatingMax: number;
-  hostileRatingMin: number;
-  hostileRatingMax: number;
-  levelOfExperienceMin: number;
-  levelOfExperienceMax: number;
-  description: string;
-};
 
 
 
@@ -91,6 +75,7 @@ export interface GroupData {
     levelOfExperienceMin: number;
     levelOfExperienceMax: number;
 }
+
 
 declare module '@mui/material/styles' {
     interface TypographyVariants {
