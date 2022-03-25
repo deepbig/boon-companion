@@ -3,7 +3,6 @@ import userReducer from './user';
 import activityReducer from './activity';
 import profanityReducer from './profanity';
 import interestReducer from './interests';
-import groupReducer from './group';
 
 export const store = configureStore({
     reducer: {
@@ -11,7 +10,6 @@ export const store = configureStore({
         activity: activityReducer,
         profanity: profanityReducer,
         interest: interestReducer,
-        group: groupReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
     devTools: process.env.NODE_ENV !== 'production',
