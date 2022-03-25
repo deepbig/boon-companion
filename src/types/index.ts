@@ -1,7 +1,7 @@
 export enum PageName {
     LANDING = '',
     SIGIN = '',
-    DASHBOARD = 'Dashboard',   
+    DASHBOARD = 'Dashboard',
 }
 
 export type UserData = {
@@ -44,7 +44,15 @@ export interface GroupSearchFormData {
     levelOfExperience: number[];
 }
 
+export interface MemberData {
+    uid: string,
+    displayName: string;
+    email: string;
+    photoURL: string;
+}
+
 export interface GroupData {
+    id: string;
     name: string;
     title: string;
     description: string;
@@ -59,6 +67,7 @@ export interface GroupData {
     hostileRatingMax: number;
     levelOfExperienceMin: number;
     levelOfExperienceMax: number;
+    members: MemberData[];
 }
 
 declare module '@mui/material/styles' {

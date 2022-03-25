@@ -46,7 +46,7 @@ export const getLoggedInUser = async (user: { uid: string; displayName: any; ema
     }
 }
 
-export const getUser = async (uid: string): Promise<UserData> => {
+export const getUserFromDB = async (uid: string): Promise<UserData> => {
     const docRef = doc(db, COLLECTION_NAME, uid);
     const docSnap = await getDoc(docRef);
 

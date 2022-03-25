@@ -1,13 +1,15 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from './index';
-import { UserData } from 'types/index';
+import { GroupData, UserData } from 'types/index';
 
 export interface userState {
     user: UserData;
+    joinedGroup: GroupData[];
 };
 
 const initialState: userState = {
-    user: null
+    user: null,
+    joinedGroup: [],
 };
 
 export const userSlice = createSlice({
@@ -16,10 +18,14 @@ export const userSlice = createSlice({
     reducers: {
         setUser: (state, action: PayloadAction<UserData>) => {
             state.user = action.payload;
+        },
+        setJoinedGroup: (state, action: PayloadAction<GroupData[]>) => {
+            state.joinedGroup = action.payload;
         }
     }
 })
 
-export const { setUser } = userSlice.actions;
+export const { setUser, setJoinedGroup } = userSlice.actions;
 export const getUser = (state: RootState) => state.user.user;
+export const getJoinedGroup = (state: RootState) => state.user.joinedGroup;
 export default userSlice.reducer;
