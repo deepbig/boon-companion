@@ -67,6 +67,7 @@ function SearchResultGroup(props: SearchResultGroupFormProps) {
         photoURL: `${user?.photoURL}`,
       };
       await joinGroupAsMember(member, selected);
+      //@ts-ignore
       await addUserGroup(currentUser.uid, selected.id);
       const newUser = await getUserFromDB(currentUser.uid);
       if (newUser) {

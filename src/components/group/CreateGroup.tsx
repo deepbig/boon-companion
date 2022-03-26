@@ -140,6 +140,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         (data.levelOfExperience && data.levelOfExperience[1]) ||
         levelOfExperience[1],
       description: data.description || '',
+      members: []
     };
     resetData();
     onClose(null, null);

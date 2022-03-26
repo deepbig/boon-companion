@@ -26,6 +26,7 @@ export const getGroupsByCriteria = async (criteria: GroupSearchFormData, uid: st
 }
 
 export const joinGroupAsMember = async (memberData: MemberData, group: GroupData) => {
+    //@ts-ignore
     const docRef = doc(db, COLLECTION_NAME, group.id);
     await updateDoc(docRef, {
         members: arrayUnion(memberData)

@@ -64,7 +64,7 @@ export interface MemberData {
 }
 
 export interface GroupData {
-    id: string;
+    id?: string;
     name: string;
     title: string;
     description: string;
