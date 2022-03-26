@@ -26,6 +26,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import SearchResultGroup from './SearchResultGroup';
 import { getGroupsByCriteria } from 'db/repository/group';
 import { setGroupList } from 'modules/group';
+import { auth } from 'db';
 
 interface JoinGroupFormProps {
   open: boolean;
@@ -38,6 +39,7 @@ function valuetext(value: number) {
 
 function JoinGroup(props: JoinGroupFormProps) {
   const user = useAppSelector(getUser);
+  const currentUser = auth.currentUser;
   const dispatch = useAppDispatch();
   const [openMessage, setOpenMessage] = useState(false);
   const [message, setMessage] = useState('');
@@ -164,22 +166,26 @@ function JoinGroup(props: JoinGroupFormProps) {
   );
 
   const handleSubmit = async () => {
-    setBackdrop(true);
-    const groupResult = await getGroupsByCriteria(criteria);
-    if (groupResult.length === 0) {
-      setMessage(
-        'There are no available matching groups. Please modify your criteria to find a group.'
-      );
-      setOpenMessage(true);
+    if (currentUser) {
+      setBackdrop(true);
+      const groupResult = await getGroupsByCriteria(criteria, currentUser.uid);
+      if (groupResult.length === 0) {
+        setMessage(
+          'There are no available matching groups. Please modify your criteria to find a group.'
+        );
+        setOpenMessage(true);
+      }
+      dispatch(setGroupList(groupResult));
+      setBackdrop(false);
+      setOpenResult(true);
+    } else {
+      alert('User is not logged in.');
     }
-    dispatch(setGroupList(groupResult));
-    setBackdrop(false);
-    setOpenResult(true);
-    // api call
   };
 
   const handleCloseResult = (isSelected: boolean) => {
     setOpenResult(false);
+    dispatch(setGroupList([]));
     // reset result
     if (isSelected) {
       props.handleClose();
@@ -314,7 +320,6 @@ function JoinGroup(props: JoinGroupFormProps) {
               />
             </Grid>
           </Grid>
-          {/* need to develop range field for age, peer rating, hostileRating, level of experience. */}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmit} variant='contained'>
@@ -338,7 +343,9 @@ function JoinGroup(props: JoinGroupFormProps) {
         message={message}
         action={actionMessage}
       />
-      <SearchResultGroup open={openResult} handleClose={handleCloseResult} />
+      {openResult ? (
+        <SearchResultGroup open={openResult} handleClose={handleCloseResult} />
+      ) : null}
     </>
   );
 }
