@@ -30,9 +30,6 @@ export type CreateGroupFormData = {
   description: string;
 };
 
-
-
-
 export interface ActivityData {
     id?: string;
     interest: string; // category
@@ -60,7 +57,15 @@ export interface GroupSearchFormData {
     levelOfExperience: number[];
 }
 
+export interface MemberData {
+    uid: string,
+    displayName: string;
+    email: string;
+    photoURL: string;
+}
+
 export interface GroupData {
+    id?: string;
     name: string;
     title: string;
     description: string;
@@ -75,6 +80,7 @@ export interface GroupData {
     hostileRatingMax: number;
     levelOfExperienceMin: number;
     levelOfExperienceMax: number;
+    members: MemberData[];
 }
 
 
