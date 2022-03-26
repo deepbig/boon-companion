@@ -17,6 +17,17 @@ export type UserData = {
     groups: string[];
 } | null;
 
+export type CreateGroupFormData = {
+  name: string;
+  title: string;
+  gender: string;
+  interest: string;
+  age: number[];
+  peerRating: number[];
+  hostileRating: number[];
+  levelOfExperience: number[];
+  description: string;
+};
 
 export interface ActivityData {
     id?: string;
@@ -70,6 +81,7 @@ export interface GroupData {
     levelOfExperienceMax: number;
     members: MemberData[];
 }
+
 
 declare module '@mui/material/styles' {
     interface TypographyVariants {
