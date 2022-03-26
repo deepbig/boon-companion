@@ -17,6 +17,7 @@ export type UserData = {
     groups: string[];
 } | null;
 
+
 export interface ActivityData {
     id?: string;
     interest: string; // category
