@@ -1,6 +1,4 @@
 import { useEffect, useState } from 'react';
-import { Grid, Paper } from '@mui/material';
-import Title from 'components/title/Title';
 import { useTheme } from '@mui/material/styles';
 import { getProfanityList, setProfanityList } from 'modules/profanity';
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -8,8 +6,7 @@ import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { getFirestore } from "firebase/firestore";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
-function HostileRating() {
-  const theme = useTheme();
+function HostileRating(cussword: any) {
   const profanityList = useAppSelector(getProfanityList);
   const dispatch = useAppDispatch();
   const db = getFirestore();
@@ -22,11 +19,12 @@ function HostileRating() {
         await fetch('./list.txt')
           .then((res) => res.text())
           .then((txt) => {
-            dispatch(setProfanityList(txt.split('\n')));
+            dispatch(setProfanityList(txt.toString().split('\n')));
           });
       };
       fetchProfanityWords();
       getHostileRating();
+      checkProfanityWords(cussword)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [profanityList]);
@@ -56,7 +54,7 @@ function HostileRating() {
 
   //Example function: Use the following function format to find profanity words from user's text message
   function checkProfanityWords(user_string_input: string) {
-    const words = user_string_input.split(' ');
+    const words = user_string_input.toString().split(' ');
     let result = 0;
     for (let word of words) {
       if (profanityList.indexOf(word + "\r") > -1) {
@@ -67,7 +65,7 @@ function HostileRating() {
     setHostileRating(result);
     addData(result);
   };
-
+  
   async function addData(result: number) {
     const auth = getAuth();
     onAuthStateChanged(auth, async (user) => {
@@ -91,28 +89,7 @@ function HostileRating() {
   return (
 
     <>
-      <Grid item xs={12} md={6}>
-        <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            minHeight: 187,
-            [theme.breakpoints.up('lg')]: {
-              maxHeight: 632,
-            },
-            overflow: 'hidden',
-            overflowY: 'auto',
-          }}
-          elevation={4}
-        >
-          <Title>
-            Hostile Rating
-          </Title>
-          <p>Number of bad words used : {hostileRating}</p>
-          <button onClick={(e) => checkProfanityWords("mf")}>check</button>
-        </Paper>
-      </Grid>
+    
     </>
   );
 }

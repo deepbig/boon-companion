@@ -16,20 +16,25 @@ import JoinedGroup from 'components/joinedGroup/JoinedGroup';
 import ActivityGoal from 'components/activityGoal/ActivityGoal';
 import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import HostileRating from 'components/hostileRating/HostileRating';
 import { getUser } from 'modules/user';
 import InterestAddForm from 'components/addInterest/InterestAddForm';
 import { getSelectedInterest, setSelectedInterest } from 'modules/interests';
+import { getProfanityList, setProfanityList } from 'modules/profanity';
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { doc, getDoc, updateDoc } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 function Dashboard() {
   const theme = useTheme();
   const [openActivity, setOpenActivity] = useState(false);
   const [openInterest, setOpenInterest] = useState(false);
   const selectedInterest = useAppSelector(getSelectedInterest);
-  //const profanityList = useAppSelector(getProfanityList);
+  const profanityList = useAppSelector(getProfanityList);
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
-  
+  var [hostileRating, setHostileRating] = useState(0);
+  const db = getFirestore();
+
   useEffect(() => {
     if (user && !selectedInterest) {
       if (user.interests?.length <= 0) {
@@ -42,22 +47,45 @@ function Dashboard() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
+  useEffect(() => {
 
-  // Example function: Use the following function format to find profanity words from user's text message
-  // const checkProfanityWords = (user_string_input: string) => {
-  //   const words = user_string_input.split(' ');
-  //   let result = false;
-  //   for (let word of words) {
-  //     console.log(word);
-  //     if (profanityList.indexOf(word) > -1) {
-  //       result = true;
-  //       console.log('test?');
-  //       break;
-  //     }
-  //   }
-  //   console.log('result: ', result);
-  //   return result;
-  // };
+    if (profanityList.length <= 0) {
+      const fetchProfanityWords = async () => {
+        await fetch('./list.txt')
+          .then((res) => res.text())
+          .then((txt) => {
+            dispatch(setProfanityList(txt.split('\n')));
+          });
+      };
+      fetchProfanityWords();
+      getHostileRating();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profanityList]);
+
+  async function getHostileRating() {
+    const auth = getAuth();
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const uid = user.uid;
+        console.log(uid)
+        const docRef = doc(db, "users", uid);
+        const docSnap = await getDoc(docRef);
+        if (docSnap.exists()) {
+          setHostileRating(docSnap.data().hostileRating);
+        } else {
+          // doc.data() will be undefined in this case
+          console.log("No such document!");
+        }
+        // ...
+      } else {
+        // User is signed out
+        // ...
+      }
+    });
+
+  }
+
 
   const handleCloseActivityForm = () => {
     setOpenActivity(false);
@@ -161,7 +189,27 @@ function Dashboard() {
             <ActivityGoal />
           </Paper>
         </Grid>
-        <HostileRating/>
+        <Grid item xs={12} md={6}>
+        <Paper
+          sx={{
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            minHeight: 187,
+            [theme.breakpoints.up('lg')]: {
+              maxHeight: 632,
+            },
+            overflow: 'hidden',
+            overflowY: 'auto',
+          }}
+          elevation={4}
+        >
+          <Title>
+            Hostile Rating
+          </Title>
+          <p>Number of bad words used : {hostileRating}</p>
+        </Paper>
+      </Grid>
       </Grid>
       <Copyright sx={{ pt: 4 }} />
       <Backdrop

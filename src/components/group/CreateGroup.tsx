@@ -25,7 +25,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { getLoggedInUser } from 'db/repository/user';
 import { useState, useEffect } from 'react';
 import { UserData, CreateGroupFormData, GroupData } from 'types';
-
+import HostileRating from 'components/hostileRating/HostileRating';
 
 type CreatGroupProps = {
   open: boolean;
@@ -33,7 +33,7 @@ type CreatGroupProps = {
 };
 
 function CreateGroup({ open, onClose }: CreatGroupProps) {
-  const [user, setUser] = useState<UserData>();
+  const [user, setUser] = useState<UserData>()
 
   const [age, setAge] = useState<number[]>([0, 100]);
   const [peerRating, setPeerRating] = useState<number[]>([0, 10]);
@@ -43,6 +43,8 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
   const { control, reset, handleSubmit } = useForm<CreateGroupFormData>();
 
   const groupsRef = collection(db, 'groups');
+
+  const [description,setDescription]=useState("");
 
   useEffect(() => {
     const getUser = async () => {
@@ -119,6 +121,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
   };
 
   const onSubmit = handleSubmit(async (data) => {
+    setDescription(data.description);
     const newGroupData: GroupData = {
       name: data.name,
       title: data.title,
@@ -156,6 +159,8 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
   };
 
   return (
+    <>
+    <div>
     <Dialog open={open} onClose={onClose}>
       <DialogTitle sx={{ textAlign: 'center' }}>Create Group Form</DialogTitle>
       <DialogContent>
@@ -442,6 +447,9 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         </Button>
       </DialogActions>
     </Dialog>
+    <HostileRating cussword={description}/>
+   </div>
+    </>
   );
 }
 
