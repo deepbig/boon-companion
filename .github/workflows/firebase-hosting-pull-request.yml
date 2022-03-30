@@ -29,7 +29,9 @@ jobs:
         run: npm install
 
       - name: Run Firestore Unit Tests
-        run: firebase emulators:exec --only forestore --project my-project-id 'npm run test_firestore db.test.ts'
+        run: firebase emulators:exec --only forestore --project boon-companion 'npm run test_firestore db.test.ts'
+        env:
+          GCLOUD_PROJECT: boon-companion
 
       - name: Build Project
         run: npm ci && npm run build
