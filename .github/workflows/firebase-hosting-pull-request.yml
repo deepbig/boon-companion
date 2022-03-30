@@ -30,6 +30,9 @@ jobs:
       # - name: Install Dependencies
       #   run: npm install && npm ci
 
+      - name: Npm CI
+        run: npm ci
+
       - name: Run Firestore Unit Tests
         uses: w9jds/firebase-action@master
         with:
