@@ -22,10 +22,10 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
 
-      - name: Setup Node
-        uses: actions/setup-node@v1
-        with:
-          node-version: '16'
+      # - name: Setup Node
+      #   uses: actions/setup-node@v1
+      #   with:
+      #     node-version: '16'
 
       # - name: Install Dependencies
       #   run: npm install && npm ci
