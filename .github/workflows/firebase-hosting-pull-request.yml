@@ -33,7 +33,7 @@ jobs:
       - name: Run Firestore Unit Tests
         uses: w9jds/firebase-action@master
         with:
-          args: emulators:exec --only forestore --project boon-companion 'npm run test'
+          args: emulators:start --only forestore
           # args: emulators:exec --only forestore --project boon-companion 'npm run test_firestore db.test.ts'
         env:
           FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BOON_COMPANION }}
