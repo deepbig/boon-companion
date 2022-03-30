@@ -22,13 +22,17 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
 
-      - name: Build Project
-        run: npm ci && npm run build
-
       - name: Run Firestore Unit Tests
         run: |
           npm install -g firebase-tools
-          firebase emulators:exec --only forestore --project my-project-id 'npm run test_firestore db.test.ts'
+          firebase emulators:exec --only forestore 'npm run test_firestore db.test.ts'
+        with:
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BOON_COMPANION }}'
+          projectId: test-boon-companion
+
+      - name: Build Project
+        run: npm ci && npm run build
 
       - name: Delopy to Preview Server
         uses: FirebaseExtended/action-hosting-deploy@v0
