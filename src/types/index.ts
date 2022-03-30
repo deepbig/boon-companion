@@ -2,19 +2,32 @@ export enum PageName {
     LANDING = '',
     SIGIN = '',
     DASHBOARD = 'Dashboard',
-    CREATEGROUP = 'CreateGroup',
 }
 
 export type UserData = {
     displayName: string;
     email: string;
     photoURL: string;
-    gender: string;
+    gender: 'male' | 'female' | 'other' | null;
+    age: number;
     hostileRating: number;
     levelOfExperience: number;
     peerRating: number;
     interests: string[];
+    groups: string[];
 } | null;
+
+export type CreateGroupFormData = {
+  name: string;
+  title: string;
+  gender: string;
+  interest: string;
+  age: number[];
+  peerRating: number[];
+  hostileRating: number[];
+  levelOfExperience: number[];
+  description: string;
+};
 
 export interface ActivityData {
     id?: string;
@@ -33,6 +46,42 @@ export interface ActivityAddFormData {
     performance: number;
     uid: string;
 }
+
+export interface GroupSearchFormData {
+    interest: string;
+    age: number[];
+    peerRating: number[];
+    gender: 'male' | 'female' | 'other' | 'both' | null;
+    hostileRating: number[];
+    levelOfExperience: number[];
+}
+
+export interface MemberData {
+    uid: string,
+    displayName: string;
+    email: string;
+    photoURL: string;
+}
+
+export interface GroupData {
+    id?: string;
+    name: string;
+    title: string;
+    description: string;
+    minAge: number;
+    maxAge: number;
+    gender: string;
+    owner: string;
+    interest: string;
+    peerRatingMin: number;
+    peerRatingMax: number;
+    hostileRatingMin: number;
+    hostileRatingMax: number;
+    levelOfExperienceMin: number;
+    levelOfExperienceMax: number;
+    members: MemberData[];
+}
+
 
 declare module '@mui/material/styles' {
     interface TypographyVariants {

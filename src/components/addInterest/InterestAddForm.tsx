@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { auth } from 'db';
 import { getAllInterests, setInterest } from 'db/repository/interests';
-import { addUserInterest, getUser } from 'db/repository/user';
+import { addUserInterest, getUserFromDB } from 'db/repository/user';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { getinterestList, setinterestList } from 'modules/interests';
 import { setUser } from 'modules/user';
@@ -55,7 +55,7 @@ function InterestAddForm(props: InterestAddFormProps) {
           // If interest value does not exist, the saving process was not copmleted correctly.
           await addUserInterest(currentUser.uid, interest);
         }
-        const user = await getUser(currentUser.uid);
+        const user = await getUserFromDB(currentUser.uid);
         if (user) {
           dispatch(setUser(user));
         }
