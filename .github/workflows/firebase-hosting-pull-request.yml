@@ -17,8 +17,15 @@ jobs:
   build_and_preview:
     if: '${{ github.event.pull_request.head.repo.full_name == github.repository }}'
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
+      - name: Run Firestore Unit Tests
+        run: |
+          npm install -g firebase-tools
+          firebase emulators:exec --only forestore --project my-project-id 'npm run test_firestore db.test.ts'
+
+      - name: Build Preview
       - run: npm ci && npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
