@@ -22,24 +22,16 @@ jobs:
       - name: checkout code
         uses: actions/checkout@v2
 
-      # - name: Setup Node
-      #   uses: actions/setup-node@v1
-      #   with:
-      #     node-version: '16'
+      - name: Install Firebase Emulator Suite
+        run: npm install -g firease-tools
 
-      # - name: Install Dependencies
-      #   run: npm install && npm ci
-
-      - name: Npm CI
-        run: npm ci
+      - name: Install dependencies
+        run: npm install
+        working-directory: boon-companion
 
       - name: Run Firestore Unit Tests
-        uses: w9jds/firebase-action@master
-        with:
-          args: emulators:start --only forestore
-          # args: emulators:exec --only forestore --project boon-companion 'npm run test_firestore db.test.ts'
-        env:
-          FIREBASE_TOKEN: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_BOON_COMPANION }}
+        working-directory: boon-companion
+        run: firebase emulators:exec --only forestore --project my-project-id 'npm run test_firestore db.test.ts'
 
       - name: Build Project
         run: npm ci && npm run build
