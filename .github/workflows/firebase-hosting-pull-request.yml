@@ -27,10 +27,8 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: boon-companion
 
       - name: Run Firestore Unit Tests
-        working-directory: boon-companion
         run: firebase emulators:exec --only forestore --project my-project-id 'npm run test_firestore db.test.ts'
 
       - name: Build Project
