@@ -11,6 +11,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CreateGroup from 'components/group/CreateGroup';
 import JoinGroup from 'components/group/JoinGroup';
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -19,6 +20,7 @@ import { grey } from '@mui/material/colors';
 import { getUserJoinedGroup } from 'db/repository/group';
 
 function JoinedGroup() {
+  const navigate = useNavigate();
   const user = useAppSelector(getUser);
   const joinedGroup = useAppSelector(getJoinedGroup);
   const dispatch = useAppDispatch();
@@ -61,12 +63,17 @@ function JoinedGroup() {
         user.groups?.length <= 0 ? (
           <Box m={2}>
             <Typography variant='guideline' align='center'>
-              You haven't joined a group yet. Please craete or join a group!
+              You haven't joined a group yet. Please create or join a group!
             </Typography>
           </Box>
         ) : joinedGroup.length > 0 ? (
           joinedGroup.map((group, i) => (
-            <Box mb={1} key={i}>
+            <Box
+              mb={1}
+              key={i}
+              onClick={() => navigate(`/group/${group.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <Card
                 sx={{
                   backgroundColor: grey[100],

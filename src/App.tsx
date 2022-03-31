@@ -47,7 +47,7 @@ function App() {
         <Route path='/' element={<></>} />
         <Route path='/landing' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage />} />
-        <Route path='/group' element={<GroupPage />} />
+        <Route path='/group/:id' element={<GroupPage />} />
       </Routes>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
