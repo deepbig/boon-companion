@@ -41,7 +41,7 @@ function Group() {
       const groupData = groupSnap.data() as GroupData;
       setGroup(groupData);
 
-      const memberIds = groupData.members.map((member) => member.uid);
+      // const memberIds = groupData.members.map((member) => member.uid);
       const activitiesRef = await query(
         collection(db, 'user_interest_activity'),
         where('interest', '==', groupData.interest),
