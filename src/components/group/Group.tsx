@@ -12,11 +12,11 @@ import {
   CardMedia,
   useTheme,
 } from '@mui/material';
+import { grey } from '@mui/material/colors';
 import Title from 'components/title/Title';
 import Copyright from 'components/copyright/Copyright';
 import { GroupData, ActivityData } from 'types';
 import db from '../../db';
-import { auth } from 'db';
 import {
   query,
   collection,
@@ -25,7 +25,7 @@ import {
   getDoc,
   getDocs,
   limit,
-} from 'firebase/firestore';
+  } from 'firebase/firestore';
 
 function Group() {
   const { id } = useParams();
@@ -41,17 +41,11 @@ function Group() {
       const groupData = groupSnap.data() as GroupData;
       setGroup(groupData);
 
-      // const memberIds = groupData.members.map((member) => member.uid);
+      const memberIds = groupData.members.map((member) => member.uid);
       const activitiesRef = await query(
         collection(db, 'user_interest_activity'),
         where('interest', '==', groupData.interest),
-        
-        // currently you can only access logged in user's activities
-        // if you add all members you get an error "Group.tsx:63 Uncaught (in promise) FirebaseError: Missing or insufficient permissions."
-        // For now, adding the logged in user's uid
-        
-        where('uid', 'in', [auth.currentUser?.uid || '']),
-        //where('uid', 'in', memberIds), // TODO: make this work with array after fixing the permissions
+        where('uid', 'in', memberIds),        
         limit(10)
       );
       const activitiesSnap = await getDocs(activitiesRef);
@@ -59,20 +53,22 @@ function Group() {
       activitiesSnap.forEach((doc) =>
         activitiez.push(doc.data() as ActivityData)
       );
-      setActivities(activitiez);
+      activitiez
+        .sort((a, b) => (a.date > b.date ? 1 : -1));
+      setActivities(activitiez.reverse());
     };
 
     getGroup();
   }, [id]);
 
   return (
-    <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+    <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <Typography component="h2" variant="h6" align="center">
+          <Typography component='h2' variant='h6' align='center'>
             Group Name: {group && group.title}
           </Typography>
-          <Typography component="h4" variant="h6" align="center">
+          <Typography component='h4' variant='h6' align='center'>
             Description: {group && group.description}
           </Typography>
         </Grid>
@@ -92,23 +88,23 @@ function Group() {
               elevation={4}
             >
               <Title>Group Members</Title>
-              <Stack direction="row" spacing={1} style={{ flexWrap: 'wrap' }}>
+              <Stack direction='row' spacing={1} style={{ flexWrap: 'wrap' }}>
                 {group &&
                   group.members &&
                   group.members.map((member, i) => (
                     <Card sx={{ maxWidth: 345 }}>
                       <CardActionArea>
                         <CardMedia
-                          component="img"
-                          height="100"
+                          component='img'
+                          height='100'
                           image={member.photoURL}
                           alt={member.displayName}
                         />
-                        <CardContent>                         
+                        <CardContent>
                           <Typography
                             gutterBottom
-                            variant="body2"
-                            component="span"
+                            variant='body2'
+                            component='span'
                           >
                             {member.displayName}
                           </Typography>
@@ -156,28 +152,33 @@ function Group() {
             elevation={10}
           >
             <Title>Recent Group Activities</Title>
-            <Stack direction="row" spacing={2} style={{ flexWrap: 'wrap' }}>
+            <Stack direction='row' spacing={2} style={{ flexWrap: 'wrap' }}>
               {activities &&
                 activities.map((activity) => (
-                  <Card variant="outlined" style={{ margin: '5px' }}>
+                  <Card                    
+                    sx={{
+                      backgroundColor: grey[100],
+                    }}
+                    style={{ margin: '5px', minWidth: '45%' }}
+                  >
                     <CardContent>
                       <Typography
                         sx={{ fontSize: 14 }}
-                        color="text.secondary"
+                        color='text.secondary'
                         gutterBottom
                       >
                         {activity.date.toDate().toLocaleDateString('en-US')}
                       </Typography>
-                      <Typography variant="h6" component="div">
+                      <Typography variant='h6' component='div'>
                         Interest: {activity.interest}
                       </Typography>
-                      <Typography variant="subtitle1">
+                      <Typography variant='subtitle1'>
                         {activity.description}
                       </Typography>
-                      <Typography color="text.secondary">
+                      <Typography color='text.secondary'>
                         Duration: {activity.duration}
                       </Typography>
-                      <Typography color="text.secondary">
+                      <Typography color='text.secondary'>
                         Performance: {activity.performance}
                       </Typography>
                     </CardContent>
