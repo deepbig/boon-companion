@@ -47,6 +47,10 @@ need to create
 
 ## Sprint Review Video
 
+
+https://user-images.githubusercontent.com/99055144/161397679-70d6bdfd-a82a-4dd1-a996-f546bbe7a777.mp4
+
+
 ## Continuous Integration & Continous Deployment
 Team developed CI and CD using Github Actions. When user create pull request, the system run a workflow that run all test cases and create temporary demo page when all tests are passes. Team members can test the new features in the demo page and review the code accordingly. The following link shows the CI script:
 https://github.com/deepbig/boon-companion/blob/main/.github/workflows/firebase-hosting-pull-request.yml
