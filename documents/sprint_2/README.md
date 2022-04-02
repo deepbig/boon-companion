@@ -24,9 +24,34 @@ Hongsuk Ryu<br/>
 
 ## Story Point: Forecast and Rationale
 
-### The forecast for the second sprint includes:
+### The forecast for the sprint 2 includes:
+
+Total Forecasted : 36
+
+Total Points Completed : 23
+
+Moved to next sprint : 13
 
 ### Rationale
+
+#### Completed tasks: 
+
+To update the hostile rating to the user's db.
+
+Create Group Enhancements.
+
+As a user, I want to delete accounts and activities.
+
+Allow the user to edit or add to their profile including their list of interests/activities.
+
+Allow users to join a group using the searching and filtering group feature.
+
+#### Moved Tasks:
+
+Build a group dashboard to display current group members and group activities.
+
+As a user, I want to rate my peer user.
+
 
 ## Kanban Board: Product Backlog
 
