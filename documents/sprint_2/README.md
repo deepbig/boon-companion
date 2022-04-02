@@ -38,12 +38,20 @@ Hongsuk Ryu<br/>
 
 ## Burndown Chart
 
+![Burndown sprint 2 ws](https://user-images.githubusercontent.com/99055144/161398089-cc5fd553-58d3-41f4-8555-de254244f0c5.PNG)
+
 ## Daily Scrums
 
 ## Tests
 need to create 
 
 ## Mob Programming Video
+
+
+
+https://user-images.githubusercontent.com/99055144/161397810-d33cd029-d424-46bb-a833-c9ca318ab979.mp4
+
+
 
 ## Sprint Review Video
 
