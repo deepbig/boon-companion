@@ -94,14 +94,14 @@ function JoinedGroup() {
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant='body1' color='div'>
-                        Members:{' '}
+                        Members:
                         {group.members && group.members.length > 0
                           ? null
                           : 'No members yet'}
                       </Typography>
 
                       {group.members && group.members.length > 0 ? (
-                        <Box display='flex' justifyContent='left'>
+                        <Box data-testid='group-members-avatar' display='flex' justifyContent='left'>
                           <AvatarGroup max={4}>
                             {group.members.map((group, i) => (
                               <Tooltip key={i} title={group.displayName}>
@@ -121,7 +121,13 @@ function JoinedGroup() {
             </Box>
           ))
         ) : (
-          <Box display='flex' justifyContent='center' m={1} p={1}>
+          <Box
+            data-testid='circular-progress'
+            display='flex'
+            justifyContent='center'
+            m={1}
+            p={1}
+          >
             <CircularProgress color='inherit' />
           </Box>
         )

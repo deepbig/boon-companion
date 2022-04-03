@@ -1,8 +1,13 @@
-import { render, RenderResult, screen } from '@testing-library/react';
+import {
+  fireEvent,
+  render,
+  RenderResult,
+  screen,
+} from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from 'modules';
 import { setUser, setJoinedGroup } from 'modules/user';
-import { GroupData, UserData } from 'types';
+import { GroupData, MemberData, UserData } from 'types';
 import JoinedGroup from './JoinedGroup';
 
 const newUser: UserData = {
@@ -18,26 +23,24 @@ const newUser: UserData = {
   groups: [],
 };
 
-const newJoinedGroup: GroupData[] = [
-  {
-    id: 'test_group',
-    name: 'Test Group',
-    title: 'Test Group',
-    description: 'Test Group',
-    minAge: 0,
-    maxAge: 100,
-    gender: 'male',
-    owner: 'test test',
-    interest: 'test',
-    peerRatingMin: 0,
-    peerRatingMax: 5,
-    hostileRatingMin: 0,
-    hostileRatingMax: 5,
-    levelOfExperienceMin: 0,
-    levelOfExperienceMax: 10,
-    members: [],
-  },
-];
+const newJoinedGroup: GroupData = {
+  id: 'test_group',
+  name: 'Test Group',
+  title: 'Test Group',
+  description: 'This is description of test group',
+  minAge: 0,
+  maxAge: 100,
+  gender: 'male',
+  owner: 'test test',
+  interest: 'test',
+  peerRatingMin: 0,
+  peerRatingMax: 5,
+  hostileRatingMin: 0,
+  hostileRatingMax: 5,
+  levelOfExperienceMin: 0,
+  levelOfExperienceMax: 10,
+  members: [],
+};
 
 const renderJoinedGroup = (): RenderResult =>
   render(
@@ -45,7 +48,7 @@ const renderJoinedGroup = (): RenderResult =>
       <JoinedGroup />
     </Provider>
   );
-
+  
 beforeEach(() => {
   store.dispatch(setUser(newUser));
 });
@@ -64,13 +67,74 @@ describe('<JoinedGroup />', () => {
     expect(guideline).toBeInTheDocument();
   });
 
-  test('When user have a joined gorup, displya joined group list', () => {
+  test('when user have a joined group but joined group is not updated yet, display circularProgress', () => {
     let addGroupToUser = Object.assign({}, newUser);
     addGroupToUser.groups = ['test_group'];
     store.dispatch(setUser(addGroupToUser));
-    store.dispatch(setJoinedGroup(newJoinedGroup));
     renderJoinedGroup();
-    let groupDesc = screen.getAllByText('Description: Test Group')[0];
+    let groupLoading = screen.getByTestId('circular-progress');
+    expect(groupLoading).toBeInTheDocument();
+  });
+
+  test('When user have a joined gorup, display joined group title', () => {
+    let addGroupToUser = Object.assign({}, newUser);
+    addGroupToUser.groups = ['test_group'];
+    store.dispatch(setUser(addGroupToUser));
+    store.dispatch(setJoinedGroup([newJoinedGroup]));
+    renderJoinedGroup();
+    let groupTitle = screen.getAllByText(`${newJoinedGroup.title}`)[0];
+    expect(groupTitle).toBeInTheDocument();
+  });
+
+  test('When user have a joined gorup, display joined group description', () => {
+    let addGroupToUser = Object.assign({}, newUser);
+    addGroupToUser.groups = ['test_group'];
+    store.dispatch(setUser(addGroupToUser));
+    store.dispatch(setJoinedGroup([newJoinedGroup]));
+    renderJoinedGroup();
+    let groupDesc = screen.getAllByText(
+      `Description: ${newJoinedGroup.description}`
+    )[0];
     expect(groupDesc).toBeInTheDocument();
+  });
+
+  test('When user have a joined group, display joined group Interest', () => {
+    let addGroupToUser = Object.assign({}, newUser);
+    addGroupToUser.groups = ['test_group'];
+    store.dispatch(setUser(addGroupToUser));
+    store.dispatch(setJoinedGroup([newJoinedGroup]));
+    renderJoinedGroup();
+    let groupInterest = screen.getAllByText(
+      `Interest: ${newJoinedGroup.interest}`
+    )[0];
+    expect(groupInterest).toBeInTheDocument();
+  });
+
+  test('When user have a joined group, display joined group members', () => {
+    let addGroupToUser = Object.assign({}, newUser);
+    addGroupToUser.groups = ['test_group'];
+    let addMemberToGroup = Object.assign({}, newJoinedGroup);
+    let members = [
+      {
+        displayName: 'test member',
+        photoURL: 'test',
+        uid: 'uid_abc',
+      } as MemberData,
+    ];
+    addMemberToGroup.members = members;
+    store.dispatch(setUser(addGroupToUser));
+    store.dispatch(setJoinedGroup([addMemberToGroup]));
+    renderJoinedGroup();
+    let groupMembers = screen.getByTestId('group-members-avatar');
+    expect(groupMembers).toBeInTheDocument();
+  });
+
+  test('When user clicks join group button, open Join Group Dialog Form', () => {
+    renderJoinedGroup();
+    const button = screen.getByText('Join a Group', { selector: 'button' });
+
+    fireEvent.click(button);
+    let groupCreateForm = screen.getAllByText('Search Groups By Criteria')[0];
+    expect(groupCreateForm).toBeInTheDocument();
   });
 });
