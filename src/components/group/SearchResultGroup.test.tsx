@@ -50,6 +50,10 @@ const renderSearchResultGroup = (): RenderResult =>
     </Provider>
   );
 
+afterAll((done) => {
+  done();
+});
+
 beforeEach(() => {
   store.dispatch(setUser(newUser));
   // store.dispatch(setGroupList([searchGroups]));

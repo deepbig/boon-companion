@@ -1,8 +1,4 @@
-import {
-  render,
-  RenderResult,
-  screen,
-} from '@testing-library/react';
+import { render, RenderResult, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from 'modules';
 import { setUser } from 'modules/user';
@@ -28,6 +24,10 @@ const renderJoinGroup = (): RenderResult =>
       <JoinGroup open={true} handleClose={() => {}} />
     </Provider>
   );
+
+afterAll((done) => {
+  done();
+});
 
 beforeEach(() => {
   store.dispatch(setUser(newUser));
@@ -82,30 +82,36 @@ describe('<JoinGroup />', () => {
 
   test('When user have peer rating, display peer rating slider from 0 to 10', () => {
     renderJoinGroup();
-    const peerRatingRange = screen.getAllByText(`Peer Rating: Between 0 and 10`)[0];
+    const peerRatingRange = screen.getAllByText(
+      `Peer Rating: Between 0 and 10`
+    )[0];
     expect(peerRatingRange).toBeInTheDocument();
   });
 
   test('When user have Hostile rating, display Hostile Rating slider from 0 to 10', () => {
     renderJoinGroup();
-    const hostileRatingRange = screen.getAllByText(`Hostile Rating: Between 0 and 10`)[0];
+    const hostileRatingRange = screen.getAllByText(
+      `Hostile Rating: Between 0 and 10`
+    )[0];
     expect(hostileRatingRange).toBeInTheDocument();
   });
 
   test('When user have Level of Experience, display Level of Experience slider from 0 to 10', () => {
     renderJoinGroup();
-    const experienceRange = screen.getAllByText(`Level of Experience: Between 0 and 10`)[0];
+    const experienceRange = screen.getAllByText(
+      `Level of Experience: Between 0 and 10`
+    )[0];
     expect(experienceRange).toBeInTheDocument();
   });
 
-//   test('When user clicks search button, open Search Result Dialog Form', async () => {
-//     renderJoinGroup();
-//     const button = screen.getByText('Search', { selector: 'button' });
+  //   test('When user clicks search button, open Search Result Dialog Form', async () => {
+  //     renderJoinGroup();
+  //     const button = screen.getByText('Search', { selector: 'button' });
 
-//     fireEvent.click(button);
+  //     fireEvent.click(button);
 
-//     await waitFor(() =>
-//       expect(screen.getAllByText('Group Search Results')[0]).toBeInTheDocument()
-//     );
-//   });
+  //     await waitFor(() =>
+  //       expect(screen.getAllByText('Group Search Results')[0]).toBeInTheDocument()
+  //     );
+  //   });
 });
