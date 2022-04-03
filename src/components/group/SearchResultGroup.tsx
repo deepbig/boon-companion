@@ -95,74 +95,81 @@ function SearchResultGroup(props: SearchResultGroupFormProps) {
       <Dialog open={props.open}>
         <DialogTitle>Group Search Results</DialogTitle>
         <DialogContent>
-          {groups
-            ? groups.map((group, i) => (
-                <Box key={i} mb={1}>
-                  <Card
-                    onClick={(e) => handleClickCard(e, group)}
-                    sx={{
-                      backgroundColor:
-                        selected && selected.name === group.name
-                          ? grey[300]
-                          : grey[100],
-                    }}
-                  >
-                    <CardContent>
-                      <Typography gutterBottom variant='h5' component='div'>
-                        {group.title}
-                      </Typography>
-                      <Typography gutterBottom variant='body1' component='div'>
-                        Interest: {group.interest}
-                      </Typography>
-                      <Typography variant='body1' color='div'>
-                        Members:{' '}
-                        {group.members && group.members.length > 0
-                          ? null
-                          : 'No members yet'}
-                      </Typography>
-                      {group.members && group.members.length > 0 ? (
-                        <Box display='flex' justifyContent='left'>
-                          <AvatarGroup max={4}>
-                            {group.members.map((group, i) => (
-                              <Tooltip key={i} title={group.displayName}>
-                                <Avatar
-                                  alt={group.displayName}
-                                  src={group.photoURL}
-                                />
-                              </Tooltip>
-                            ))}
-                          </AvatarGroup>
-                        </Box>
-                      ) : null}
-                      {group.description ? (
-                        <Typography variant='body2' color='text.secondary'>
-                          Description: {group.description}
-                        </Typography>
-                      ) : null}
+          {groups && groups.length > 0 ? (
+            groups.map((group, i) => (
+              <Box key={i} mb={1}>
+                <Card
+                  onClick={(e) => handleClickCard(e, group)}
+                  sx={{
+                    backgroundColor:
+                      selected && selected.name === group.name
+                        ? grey[300]
+                        : grey[100],
+                  }}
+                >
+                  <CardContent>
+                    <Typography gutterBottom variant='h5' component='div'>
+                      {group.title}
+                    </Typography>
+                    <Typography gutterBottom variant='body1' component='div'>
+                      Interest: {group.interest}
+                    </Typography>
+                    <Typography variant='body1' color='div'>
+                      Members:{' '}
+                      {group.members && group.members.length > 0
+                        ? null
+                        : 'No members yet'}
+                    </Typography>
+                    {group.members && group.members.length > 0 ? (
+                      <Box display='flex' justifyContent='left' data-testid='group-members-avatar-search-result'>
+                        <AvatarGroup max={4}>
+                          {group.members.map((group, i) => (
+                            <Tooltip key={i} title={group.displayName}>
+                              <Avatar
+                                alt={group.displayName}
+                                src={group.photoURL}
+                              />
+                            </Tooltip>
+                          ))}
+                        </AvatarGroup>
+                      </Box>
+                    ) : null}
+                    {group.description ? (
                       <Typography variant='body2' color='text.secondary'>
-                        Gender: {group.gender}
+                        Description: {group.description}
                       </Typography>
-                      <Typography variant='body2' color='text.secondary'>
-                        Age Range: Between {group.minAge} and {group.maxAge}
-                      </Typography>
-                      <Typography variant='body2' color='text.secondary'>
-                        Peer Rating Range: Between {group.peerRatingMin} and{' '}
-                        {group.peerRatingMax}
-                      </Typography>
-                      <Typography variant='body2' color='text.secondary'>
-                        Hostile Rating Range: Between {group.hostileRatingMin}{' '}
-                        and {group.hostileRatingMax}
-                      </Typography>
-                      <Typography variant='body2' color='text.secondary'>
-                        Experience Level Range: Between{' '}
-                        {group.levelOfExperienceMin} and{' '}
-                        {group.levelOfExperienceMax}
-                      </Typography>
-                    </CardContent>
-                  </Card>
-                </Box>
-              ))
-            : null}
+                    ) : null}
+                    <Typography variant='body2' color='text.secondary'>
+                      Gender: {group.gender}
+                    </Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                      Age Range: Between {group.minAge} and {group.maxAge}
+                    </Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                      Peer Rating Range: Between {group.peerRatingMin} and{' '}
+                      {group.peerRatingMax}
+                    </Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                      Hostile Rating Range: Between {group.hostileRatingMin} and{' '}
+                      {group.hostileRatingMax}
+                    </Typography>
+                    <Typography variant='body2' color='text.secondary'>
+                      Experience Level Range: Between{' '}
+                      {group.levelOfExperienceMin} and{' '}
+                      {group.levelOfExperienceMax}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Box>
+            ))
+          ) : (
+            <Box>
+              <Typography variant='guideline' align='center' sx={{ mt: 2 }}>
+                There are no available matching groups. Please modify your
+                criteria to find a group.
+              </Typography>
+            </Box>
+          )}
         </DialogContent>
         <DialogActions>
           <Button onClick={handleSubmit} variant='contained'>

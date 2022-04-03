@@ -1,7 +1,11 @@
 {
   "hosting": {
     "public": "build",
-    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ],
     "appAssociation": "AUTO",
     "rewrites": [
       {
@@ -16,6 +20,9 @@
     },
     "ui": {
       "enabled": true
+    },
+    "hosting": {
+      "port": 5000
     }
   },
   "firestore": {

@@ -11,6 +11,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import CreateGroup from 'components/group/CreateGroup';
 import JoinGroup from 'components/group/JoinGroup';
 import { useAppDispatch, useAppSelector } from 'hooks';
@@ -19,6 +20,7 @@ import { grey } from '@mui/material/colors';
 import { getUserJoinedGroup } from 'db/repository/group';
 
 function JoinedGroup() {
+  const navigate = useNavigate();
   const user = useAppSelector(getUser);
   const joinedGroup = useAppSelector(getJoinedGroup);
   const dispatch = useAppDispatch();
@@ -27,14 +29,21 @@ function JoinedGroup() {
 
   useEffect(() => {
     if (user) {
-      updateJoinedGroup(user.groups);
+      if (user.groups.length > 0) {
+        updateJoinedGroup(user.groups);
+      } else {
+        dispatch(setJoinedGroup([]));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const updateJoinedGroup = async (groups: string[]) => {
-    //@ts-ignore
-    dispatch(setJoinedGroup(await getUserJoinedGroup(groups)));
+    const value = await getUserJoinedGroup(groups);
+
+    if (value) {
+      dispatch(setJoinedGroup(value));
+    }
   };
 
   const handleClickOpenJoinGroup = () => {
@@ -61,12 +70,17 @@ function JoinedGroup() {
         user.groups?.length <= 0 ? (
           <Box m={2}>
             <Typography variant='guideline' align='center'>
-              You haven't joined a group yet. Please craete or join a group!
+              You haven't joined a group yet. Please create or join a group!
             </Typography>
           </Box>
         ) : joinedGroup.length > 0 ? (
           joinedGroup.map((group, i) => (
-            <Box mb={1} key={i}>
+            <Box
+              mb={1}
+              key={i}
+              onClick={() => navigate(`/group/${group.id}`)}
+              style={{ cursor: 'pointer' }}
+            >
               <Card
                 sx={{
                   backgroundColor: grey[100],
@@ -87,14 +101,18 @@ function JoinedGroup() {
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant='body1' color='div'>
-                        Members:{' '}
+                        Members:
                         {group.members && group.members.length > 0
                           ? null
                           : 'No members yet'}
                       </Typography>
 
                       {group.members && group.members.length > 0 ? (
-                        <Box display='flex' justifyContent='left'>
+                        <Box
+                          data-testid='group-members-avatar'
+                          display='flex'
+                          justifyContent='left'
+                        >
                           <AvatarGroup max={4}>
                             {group.members.map((group, i) => (
                               <Tooltip key={i} title={group.displayName}>
@@ -114,7 +132,13 @@ function JoinedGroup() {
             </Box>
           ))
         ) : (
-          <Box display='flex' justifyContent='center' m={1} p={1}>
+          <Box
+            data-testid='circular-progress'
+            display='flex'
+            justifyContent='center'
+            m={1}
+            p={1}
+          >
             <CircularProgress color='inherit' />
           </Box>
         )
@@ -133,7 +157,7 @@ function JoinedGroup() {
         <Button variant='contained' onClick={handleClickOpen}>
           Create a Group
         </Button>
-        <CreateGroup open={open} onClose={handleClose} />
+        {open ? <CreateGroup open={open} onClose={handleClose} /> : null}
       </Box>
     </>
   );
