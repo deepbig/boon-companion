@@ -35,7 +35,7 @@ Moved to next sprint : 13
 ### Rationale
 **Story:** To update the hostile rating to the user's db.<br/>
 **Rationale:** In this story, we implemented a small hostile algorithm to detect unfriendly or aggressive words whenever a user uses them. In the application, the user's hostile rating will be incremented under the hostileRating column in the database. To indicate that the higher the rating, the more unfriendly or aggressive the user is.<br/>
-**Story:** Create Group Enhancements.<br/>
+**Story:** Create Group Enhancements (Range Sliders, Logged in User's Data)<br/>
 **Rationale:** By implementing this story, a user can create a group by utilizing the following parameters: list of activities, age, gender, peer rating, hostile rating, and level of experience. Along with these parameters to filter to find the most appropriate matches, the user is allowed to give their own name and title to the group created.<br/>
 **Story:** As a user, I want to delete accounts and activities.<br/>
 **Rationale:** By implementing this story, users can delete their profiles when they are no longer interested in the application or for any other reason. When a user clicks on the "Delete Account" button, the complete user information will be deleted, including activities.<br/>
