@@ -67,6 +67,8 @@ As a user, I want to rate my peer user.
 
 ## Daily Scrums
 
+https://kennesawedu-my.sharepoint.com/:x:/g/personal/mgouni_students_kennesaw_edu/EWdagea_pfVDhuGbD7pEmucBKBc0l73t9oKTBF_o-9PirQ?e=bO7aPq
+
 ## Tests
 need to create 
 
