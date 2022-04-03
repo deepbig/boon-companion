@@ -34,7 +34,14 @@ function JoinedGroup() {
 
   const updateJoinedGroup = async (groups: string[]) => {
     //@ts-ignore
-    dispatch(setJoinedGroup(await getUserJoinedGroup(groups)));
+    const value = await getUserJoinedGroup(groups).catch((e) => {
+      alert("Error when processing get user's joined group: " + e);
+      return null;
+    });
+
+    if (value) {
+      dispatch(setJoinedGroup(value));
+    }
   };
 
   const handleClickOpenJoinGroup = () => {
@@ -133,7 +140,7 @@ function JoinedGroup() {
         <Button variant='contained' onClick={handleClickOpen}>
           Create a Group
         </Button>
-        <CreateGroup open={open} onClose={handleClose} />
+        {open ? <CreateGroup open={open} onClose={handleClose} /> : null}
       </Box>
     </>
   );
