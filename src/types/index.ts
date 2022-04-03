@@ -1,7 +1,8 @@
 export enum PageName {
     LANDING = '',
     SIGIN = '',
-    DASHBOARD = 'Dashboard',
+    DASHBOARD = 'Dashboard',  
+    GROUP = 'Group Dashboard', 
 }
 
 export type UserData = {
@@ -27,7 +28,7 @@ export type CreateGroupFormData = {
   hostileRating: number[];
   levelOfExperience: number[];
   description: string;
-};
+  };
 
 export interface ActivityData {
     id?: string;
@@ -57,7 +58,7 @@ export interface GroupSearchFormData {
 }
 
 export interface MemberData {
-    uid: string,
+    uid: string;
     displayName: string;
     email: string;
     photoURL: string;
@@ -72,7 +73,7 @@ export interface GroupData {
     maxAge: number;
     gender: string;
     owner: string;
-    interest: string;
+    interest: string;  
     peerRatingMin: number;
     peerRatingMax: number;
     hostileRatingMin: number;
