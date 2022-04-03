@@ -1,5 +1,4 @@
 import {
-  fireEvent,
   render,
   RenderResult,
   screen,
@@ -49,10 +48,6 @@ const renderSearchResultGroup = (): RenderResult =>
       <SearchResultGroup open={true} handleClose={() => {}} />
     </Provider>
   );
-
-afterAll((done) => {
-  done();
-});
 
 beforeEach(() => {
   store.dispatch(setUser(newUser));

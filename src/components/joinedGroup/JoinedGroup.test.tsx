@@ -49,10 +49,6 @@ const renderJoinedGroup = (): RenderResult =>
     </Provider>
   );
 
-afterAll((done) => {
-  done();
-});
-
 beforeEach(() => {
   store.dispatch(setUser(newUser));
 });

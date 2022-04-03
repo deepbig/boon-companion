@@ -27,17 +27,17 @@ function JoinedGroup() {
 
   useEffect(() => {
     if (user) {
-      updateJoinedGroup(user.groups);
+      if (user.groups.length > 0) {
+        updateJoinedGroup(user.groups);
+      } else {
+        dispatch(setJoinedGroup([]));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const updateJoinedGroup = async (groups: string[]) => {
-    //@ts-ignore
-    const value = await getUserJoinedGroup(groups).catch((e) => {
-      alert("Error when processing get user's joined group: " + e);
-      return null;
-    });
+    const value = await getUserJoinedGroup(groups);
 
     if (value) {
       dispatch(setJoinedGroup(value));
@@ -101,7 +101,11 @@ function JoinedGroup() {
                       </Typography>
 
                       {group.members && group.members.length > 0 ? (
-                        <Box data-testid='group-members-avatar' display='flex' justifyContent='left'>
+                        <Box
+                          data-testid='group-members-avatar'
+                          display='flex'
+                          justifyContent='left'
+                        >
                           <AvatarGroup max={4}>
                             {group.members.map((group, i) => (
                               <Tooltip key={i} title={group.displayName}>

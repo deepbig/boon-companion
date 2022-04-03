@@ -25,10 +25,6 @@ const renderJoinGroup = (): RenderResult =>
     </Provider>
   );
 
-afterAll((done) => {
-  done();
-});
-
 beforeEach(() => {
   store.dispatch(setUser(newUser));
 });
@@ -104,14 +100,4 @@ describe('<JoinGroup />', () => {
     expect(experienceRange).toBeInTheDocument();
   });
 
-  //   test('When user clicks search button, open Search Result Dialog Form', async () => {
-  //     renderJoinGroup();
-  //     const button = screen.getByText('Search', { selector: 'button' });
-
-  //     fireEvent.click(button);
-
-  //     await waitFor(() =>
-  //       expect(screen.getAllByText('Group Search Results')[0]).toBeInTheDocument()
-  //     );
-  //   });
 });
