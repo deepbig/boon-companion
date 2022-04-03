@@ -85,7 +85,13 @@ As a user, I want to rate my peer user.
 https://kennesawedu-my.sharepoint.com/:x:/g/personal/mgouni_students_kennesaw_edu/EWdagea_pfVDhuGbD7pEmucBKBc0l73t9oKTBF_o-9PirQ?e=bO7aPq
 
 ## Tests
-need to create 
+3 test suites with total 22 tests: 
+- JoinedGroup (8 unit tests: https://github.com/deepbig/boon-companion/blob/main/src/components/joinedGroup/JoinedGroup.test.tsx)
+- JoinGroup (8 unit tests: https://github.com/deepbig/boon-companion/blob/main/src/components/group/JoinGroup.test.tsx)
+- SearchResultGroup (6 unit tests: https://github.com/deepbig/boon-companion/blob/main/src/components/group/SearchResultGroup.test.tsx)
+
+![Test Passes List screenshot](./sprint_2_unit_test_list.png) 
+![Test Passes Total screenshot](./sprint_2_unit_test_total.png) 
 
 ## Mob Programming Video
 
