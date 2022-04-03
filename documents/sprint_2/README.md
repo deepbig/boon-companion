@@ -28,9 +28,9 @@ Hongsuk Ryu<br/>
 
 Total Forecasted : 36
 
-Total Points Completed : 23
+Total Points Completed : 26
 
-Moved to next sprint : 13
+Moved to next sprint : 10
 
 ### Rationale
 **Story:** To update the hostile rating to the user's db.<br/>
