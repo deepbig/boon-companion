@@ -1,8 +1,4 @@
-import {
-  render,
-  RenderResult,
-  screen,
-} from '@testing-library/react';
+import { render, RenderResult, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { store } from 'modules';
 import { setGroupList } from 'modules/group';
@@ -51,7 +47,6 @@ const renderSearchResultGroup = (): RenderResult =>
 
 beforeEach(() => {
   store.dispatch(setUser(newUser));
-  // store.dispatch(setGroupList([searchGroups]));
 });
 
 describe('<SearchResultGroup />', () => {
@@ -59,9 +54,6 @@ describe('<SearchResultGroup />', () => {
     renderSearchResultGroup();
     let searchResult = screen.getAllByText('Group Search Results')[0];
     expect(searchResult).toBeInTheDocument();
-    // store.dispatch(setUser(null));
-    // let groupLoading = screen.getByTestId('circular-progress-joinGroup');
-    // expect(groupLoading).toBeInTheDocument();
   });
 
   test('when the search group result is empty, display guideline', () => {

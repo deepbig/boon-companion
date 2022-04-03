@@ -9,6 +9,7 @@ import { store } from 'modules';
 import { setUser, setJoinedGroup } from 'modules/user';
 import { GroupData, MemberData, UserData } from 'types';
 import JoinedGroup from './JoinedGroup';
+import { BrowserRouter } from 'react-router-dom';
 
 const newUser: UserData = {
   displayName: 'test test',
@@ -45,7 +46,9 @@ const newJoinedGroup: GroupData = {
 const renderJoinedGroup = (): RenderResult =>
   render(
     <Provider store={store}>
-      <JoinedGroup />
+      <BrowserRouter>
+        <JoinedGroup />
+      </BrowserRouter>
     </Provider>
   );
 
@@ -62,7 +65,7 @@ describe('<JoinedGroup />', () => {
   test('When user does not have joined group, display guideline', () => {
     renderJoinedGroup();
     let guideline = screen.getAllByText(
-      "You haven't joined a group yet. Please craete or join a group!"
+      "You haven't joined a group yet. Please create or join a group!"
     )[0];
     expect(guideline).toBeInTheDocument();
   });
