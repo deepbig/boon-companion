@@ -37,10 +37,12 @@ export const getUserJoinedGroup = async (groupIds: string[]) => {
     const data: Array<any> = [];
 
     for (const groupId of groupIds) {
-        const docRef = doc(db, COLLECTION_NAME, groupId);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-            data.push({ id: docSnap.id, ...docSnap.data() })
+        if (groupId !== "test_group") {
+            const docRef = doc(db, COLLECTION_NAME, groupId);
+            const docSnap = await getDoc(docRef);
+            if (docSnap.exists()) {
+                data.push({ id: docSnap.id, ...docSnap.data() })
+            }
         }
     }
 
