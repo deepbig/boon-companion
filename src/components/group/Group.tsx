@@ -8,7 +8,6 @@ import {
   Stack,
   Card,
   CardContent,
-  CardActionArea,
   CardMedia,
   useTheme,
 } from '@mui/material';
@@ -25,7 +24,7 @@ import {
   getDoc,
   getDocs,
   limit,
-  } from 'firebase/firestore';
+} from 'firebase/firestore';
 
 function Group() {
   const { id } = useParams();
@@ -45,7 +44,7 @@ function Group() {
       const activitiesRef = await query(
         collection(db, 'user_interest_activity'),
         where('interest', '==', groupData.interest),
-        where('uid', 'in', memberIds),        
+        where('uid', 'in', memberIds),
         limit(10)
       );
       const activitiesSnap = await getDocs(activitiesRef);
@@ -53,8 +52,7 @@ function Group() {
       activitiesSnap.forEach((doc) =>
         activitiez.push(doc.data() as ActivityData)
       );
-      activitiez
-        .sort((a, b) => (a.date > b.date ? 1 : -1));
+      activitiez.sort((a, b) => (a.date > b.date ? 1 : -1));
       setActivities(activitiez.reverse());
     };
 
@@ -93,23 +91,21 @@ function Group() {
                   group.members &&
                   group.members.map((member, i) => (
                     <Card sx={{ maxWidth: 345 }}>
-                      <CardActionArea>
-                        <CardMedia
-                          component='img'
-                          height='100'
-                          image={member.photoURL}
-                          alt={member.displayName}
-                        />
-                        <CardContent>
-                          <Typography
-                            gutterBottom
-                            variant='body2'
-                            component='span'
-                          >
-                            {member.displayName}
-                          </Typography>
-                        </CardContent>
-                      </CardActionArea>
+                      <CardMedia
+                        component='img'
+                        height='100'
+                        image={member.photoURL}
+                        alt={member.displayName}
+                      />
+                      <CardContent>
+                        <Typography
+                          gutterBottom
+                          variant='body2'
+                          component='span'
+                        >
+                          {member.displayName}
+                        </Typography>
+                      </CardContent>
                     </Card>
                   ))}
               </Stack>
@@ -155,7 +151,7 @@ function Group() {
             <Stack direction='row' spacing={2} style={{ flexWrap: 'wrap' }}>
               {activities &&
                 activities.map((activity) => (
-                  <Card                    
+                  <Card
                     sx={{
                       backgroundColor: grey[100],
                     }}
