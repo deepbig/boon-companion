@@ -15,6 +15,7 @@ import { grey } from '@mui/material/colors';
 import Title from 'components/title/Title';
 import Copyright from 'components/copyright/Copyright';
 import { GroupData, ActivityData } from 'types';
+import PeerRating from 'components/peerRating/PeerRating';
 import db from '../../db';
 import {
   query,
@@ -32,7 +33,6 @@ function Group() {
   const [activities, setActivities] = useState<ActivityData[]>();
 
   const theme = useTheme();
-
   useEffect(() => {
     const getGroup = async () => {
       const groupRef = doc(db, 'groups', id as string);
@@ -183,6 +183,7 @@ function Group() {
             </Stack>
           </Paper>
         </Grid>
+        <PeerRating />
       </Grid>
       <Copyright sx={{ pt: 4 }} />
     </Container>
