@@ -5,6 +5,7 @@ import { Routes, Route, useNavigate } from 'react-router-dom';
 import { onAuthChange } from 'db/repository/auth';
 import LandingPage from 'pages/LandingPage';
 import DashboardPage from 'pages/DashboardPage';
+import GroupPage from 'pages/GroupPage';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { setUser } from 'modules/user';
 import { getLoggedInUser } from 'db/repository/user';
@@ -46,6 +47,7 @@ function App() {
         <Route path='/' element={<></>} />
         <Route path='/landing' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage />} />
+        <Route path='/group/:id' element={<GroupPage />} />
       </Routes>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}

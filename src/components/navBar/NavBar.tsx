@@ -35,7 +35,8 @@ function MenuListItems(props: any) {
           </Badge>
         </ListItemIcon>
         {props.open ? <ListItemText primary='Dashboard' /> : null}
-      </ListItem>      
+      </ListItem>
+      
     </div>
   );
 }
