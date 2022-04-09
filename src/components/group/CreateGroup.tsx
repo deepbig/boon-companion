@@ -25,7 +25,7 @@ import { collection, addDoc } from 'firebase/firestore';
 import { getLoggedInUser } from 'db/repository/user';
 import { useState, useEffect } from 'react';
 import { UserData, CreateGroupFormData, GroupData } from 'types';
-<<<<<<< HEAD
+
 import HostileRating from 'components/hostileRating/HostileRating';
 =======
 >>>>>>> 6785a74d1221355c1481138963c848effcb7bd45
