@@ -27,8 +27,7 @@ import { useState, useEffect } from 'react';
 import { UserData, CreateGroupFormData, GroupData } from 'types';
 
 import HostileRating from 'components/hostileRating/HostileRating';
-=======
->>>>>>> 6785a74d1221355c1481138963c848effcb7bd45
+
 
 type CreatGroupProps = {
   open: boolean;
