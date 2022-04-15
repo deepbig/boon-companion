@@ -6,6 +6,7 @@ import { onAuthChange } from 'db/repository/auth';
 import LandingPage from 'pages/LandingPage';
 import DashboardPage from 'pages/DashboardPage';
 import GroupPage from 'pages/GroupPage';
+import ProfilePage from 'pages/ProfilePage';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { setUser } from 'modules/user';
 import { getLoggedInUser } from 'db/repository/user';
@@ -48,6 +49,7 @@ function App() {
         <Route path='/landing' element={<LandingPage />} />
         <Route path='/dashboard' element={<DashboardPage />} />
         <Route path='/group/:id' element={<GroupPage />} />
+        <Route path='/profile' element={<ProfilePage />} />
       </Routes>
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}

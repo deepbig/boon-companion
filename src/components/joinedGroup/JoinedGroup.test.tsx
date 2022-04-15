@@ -21,6 +21,7 @@ const newUser: UserData = {
   levelOfExperience: 0,
   peerRating: 0,
   interests: ['test'],
+  performances: {},
   groups: [],
 };
 

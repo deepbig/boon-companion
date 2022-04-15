@@ -48,3 +48,21 @@ export const getUserJoinedGroup = async (groupIds: string[]) => {
 
     return data.length > 0 ? data as Array<GroupData> : [];
 }
+
+export const exitAllGroupsByUserId = async (uid: string, groups: string[]) => {
+    groups.forEach(async (groupId) => {
+        await exitGroupByUserId(uid, groupId);
+    })
+}
+
+export const exitGroupByUserId = async (uid: string, groupId: string) => {
+    const docRef = doc(db, COLLECTION_NAME, groupId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        const group = docSnap.data() as GroupData;
+        const newMembers = group.members.filter((member) => member.uid !== uid);
+        await updateDoc(docRef, {
+            members: newMembers
+        })
+    }
+}
