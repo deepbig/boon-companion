@@ -26,7 +26,6 @@ import { getLoggedInUser } from 'db/repository/user';
 import { useState, useEffect } from 'react';
 import { UserData, CreateGroupFormData, GroupData } from 'types';
 
-import HostileRating from 'components/hostileRating/HostileRating';
 
 
 type CreatGroupProps = {
@@ -149,6 +148,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
       notes: [],
     };
     resetData();
+    console.log(description);
     onClose(null, null);
     await addDoc(groupsRef, newGroupData);
   });
@@ -450,7 +450,6 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         </Button>
       </DialogActions>
     </Dialog>
-    <HostileRating cussword={description}/>
    </div>
     </>
   );
