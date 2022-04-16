@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Container,
   Grid,
@@ -12,13 +12,15 @@ import {
   CardContent,
   CardMedia,
   useTheme,
+  Box,
+  Button,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Title from 'components/title/Title';
 import Copyright from 'components/copyright/Copyright';
 import { GroupData, ActivityData } from 'types';
 import PeerRating from 'components/peerRating/PeerRating';
-import db from '../../db';
+import db, { auth } from '../../db';
 import {
   query,
   collection,
@@ -28,6 +30,11 @@ import {
   getDocs,
   limit,
 } from 'firebase/firestore';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { getUser, setUser } from 'modules/user';
+import { setBackdrop } from 'modules/backdrop';
+import { exitGroupByUserId } from 'db/repository/group';
+import { delUserGroup, getUserFromDB } from 'db/repository/user';
 import SharedTips from 'components/group/SharedTips';
 
 function Group() {
@@ -35,6 +42,10 @@ function Group() {
   const [openSharedTips, setOpenSharedTips] = useState(false);
   const [group, setGroup] = useState<GroupData>();
   const [activities, setActivities] = useState<ActivityData[]>();
+  const user = useAppSelector(getUser);
+  const currentUser = auth.currentUser;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const theme = useTheme();
 
@@ -77,6 +88,23 @@ function Group() {
     getGroup();
   }, [id, openSharedTips]);
 
+  const handleExitGroup = async () => {
+    if (window.confirm('Are you sure you want to exit this group?')) {
+      if (user && currentUser) {
+        dispatch(setBackdrop(true));
+        await exitGroupByUserId(currentUser.uid, id as string);
+        await delUserGroup(currentUser.uid, id as string);
+        const newUser = await getUserFromDB(currentUser.uid);
+        if (newUser) {
+          dispatch(setUser(newUser));
+        }
+        navigate('/dashboard');
+        dispatch(setBackdrop(false));
+        alert('Exit group process was successfully completed.');
+      }
+    }
+  };
+
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={2}>
@@ -102,10 +130,17 @@ function Group() {
               }}
               elevation={4}
             >
-              <Title>Group Members</Title>
-              <Stack
-                direction='row'
-                spacing={1}
+              <Box display='flex' justifyContent='space-between'>
+                <Typography component='h2' variant='h6' gutterBottom>
+                  Group Members
+                </Typography>
+                <Button onClick={handleExitGroup} variant='contained'>
+                  Exit Group
+                </Button>
+              </Box>
+              <Stack 
+                direction='row' 
+                spacing={1} 
                 style={{ flexWrap: 'wrap', overflow: 'auto' }}
               >
                 {group &&

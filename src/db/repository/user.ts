@@ -1,5 +1,5 @@
 import db from "..";
-import { collection, doc, getDoc, setDoc, getDocs, query, updateDoc, arrayUnion, deleteDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, setDoc, getDocs, query, updateDoc, arrayUnion, deleteDoc, arrayRemove } from 'firebase/firestore';
 import { UserData } from 'types';
 const COLLECTION_NAME = "users";
 
@@ -34,6 +34,7 @@ export const getLoggedInUser = async (user: { uid: string; displayName: any; ema
                 levelOfExperience: 0,
                 peerRating: 10,
                 interests: [],
+                performances: [],
                 groups: [],
                 age: null,
             });
@@ -58,6 +59,20 @@ export const getUserFromDB = async (uid: string): Promise<UserData> => {
     }
 }
 
+export const updateUser = async (uid: string, userData: UserData): Promise<UserData> => {
+    try {
+        await setDoc(doc(db, COLLECTION_NAME, uid), {
+            ...userData
+        });
+    } catch (e) {
+        // need to handle error case.
+        return null as UserData;
+    }
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    const newDocSnap = await getDoc(docRef);
+    return newDocSnap.data() as UserData;
+}
+
 export const addUserInterest = async (uid: string, interest: string) => {
     const docRef = doc(db, COLLECTION_NAME, uid);
     await updateDoc(docRef, {
@@ -72,7 +87,29 @@ export const addUserGroup = async (uid: string, group: string) => {
     });
 }
 
+export const delUserGroup = async (uid: string, group: string) => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    await updateDoc(docRef, {
+        groups: arrayRemove(group)
+    })
+}
+
 export const deleteUser = async (uid: any) => {
     const docRef = doc(db, COLLECTION_NAME, uid);
     await deleteDoc(docRef);
+}
+
+
+export const updateUserInterest = async (uid: string, name: string, totalPractices: number, totalDurations: number) => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    const key = `performances.${name}`;
+    await updateDoc(docRef, {
+        'levelOfExperience': totalDurations > 600000
+            ? '10'
+            : Math.ceil(totalDurations / 60000),
+        [key]: {
+            totalPractices: +totalPractices,
+            totalDurations: +totalDurations,
+        },
+    })
 }
