@@ -31,6 +31,11 @@ Hongsuk Ryu<br/>
 And it is part of user profile creation.<br/>
 **Story:** As a user, I want to see all my previous activities.<br/>
 **Rationale:** By implementing this story, the user can see milestones. And it is also part of user profile creation.<br/>
+**Story:** As a user, I want to create group.<br/>
+**Rationale:** By implementing this story, the user can create a group by setting the group criteria such as gender, age, interest, peer rating, hostile rating, and level of experience that allows others to join his group. <br/>
+**Story:** As a user, I want to view my hostile rating.<br/>
+**Rationale:** By implementing this story, the user can view his hostile rating. The hostile rating is calculated with the following formula: the number of posts containing bad words / total number of posts. <br/>
+
 
 In this sprint, we completely focused on allowing users to signup/login and create user profiles, which is basic and one of the important functionalities of the application.
 
