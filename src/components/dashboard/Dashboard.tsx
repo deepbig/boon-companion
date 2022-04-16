@@ -21,7 +21,6 @@ import JoinedGroup from 'components/joinedGroup/JoinedGroup';
 import ActivityPerformance from 'components/activityPerformance/ActivityPerformance';
 import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import HostileRating from 'components/hostileRating/HostileRating';
 import { getUser } from 'modules/user';
 import InterestAddForm from 'components/addInterest/InterestAddForm';
 import { getSelectedInterest, setSelectedInterest } from 'modules/interests';
@@ -186,7 +185,6 @@ function Dashboard() {
             <RecentActivity />
           </Paper>
         </Grid>
-        <HostileRating />
       </Grid>
       <Copyright sx={{ pt: 4 }} />
       <Backdrop
