@@ -26,7 +26,6 @@ import { getLoggedInUser } from 'db/repository/user';
 import { useState, useEffect } from 'react';
 import { UserData, CreateGroupFormData, GroupData } from 'types';
 
-
 type CreatGroupProps = {
   open: boolean;
   onClose: (event: any, reason: any) => void;
@@ -140,7 +139,8 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         (data.levelOfExperience && data.levelOfExperience[1]) ||
         levelOfExperience[1],
       description: data.description || '',
-      members: []
+      members: [],
+      notes: [],
     };
     resetData();
     onClose(null, null);
