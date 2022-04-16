@@ -162,7 +162,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
         <form id='create-group-form' onSubmit={onSubmit}>
           <Container maxWidth='md' sx={{ mt: 4, mb: 4 }}>
             <Grid container spacing={4}>
-              <Grid item xs={6} spacing={4} style={{ paddingLeft: 20 }}>
+              <Grid item xs={6} style={{ paddingLeft: 20 }}>
                 <FormControl fullWidth>
                   <Controller
                     name='name'
@@ -182,7 +182,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={6} spacing={4}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <Controller
                     name='title'
@@ -202,7 +202,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={7} spacing={4} style={{ paddingLeft: 20 }}>
+              <Grid item xs={7} style={{ paddingLeft: 20 }}>
                 <FormControl>
                   <FormLabel id='gender-label'>Gender</FormLabel>
                   <Controller
@@ -241,7 +241,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={5} spacing={4} style={{ paddingLeft: 0 }}>
+              <Grid item xs={5} style={{ paddingLeft: 0 }}>
                 <FormControl fullWidth>
                   <InputLabel id='interest-label'>Interest</InputLabel>
                   <Controller
@@ -269,7 +269,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={6} spacing={4}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <Typography id='age-label' gutterBottom>
                     Age
@@ -302,7 +302,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={6} spacing={4}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <Typography id='peer-rating-label' gutterBottom>
                     Peer Rating
@@ -336,7 +336,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={6} spacing={4}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <Typography id='hostile-rating-label' gutterBottom>
                     Hostile Rating
@@ -370,7 +370,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={6} spacing={4}>
+              <Grid item xs={6}>
                 <FormControl fullWidth>
                   <Typography id='level-of-experience-label' gutterBottom>
                     Level of Experience
@@ -404,7 +404,7 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
                 </FormControl>
               </Grid>
 
-              <Grid item xs={12} spacing={4} style={{ paddingLeft: 20 }}>
+              <Grid item xs={12} style={{ paddingLeft: 20 }}>
                 <FormControl fullWidth>
                   <Controller
                     name='description'

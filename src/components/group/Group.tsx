@@ -17,6 +17,7 @@ import { grey } from '@mui/material/colors';
 import Title from 'components/title/Title';
 import Copyright from 'components/copyright/Copyright';
 import { GroupData, ActivityData } from 'types';
+import PeerRating from 'components/peerRating/PeerRating';
 import db from '../../db';
 import {
   query,
@@ -242,6 +243,7 @@ function Group() {
             </Stack>
           </Paper>
         </Grid>
+        <PeerRating />
       </Grid>
       <Copyright sx={{ pt: 4 }} />
     </Container>

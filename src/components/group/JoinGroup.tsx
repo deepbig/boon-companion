@@ -209,6 +209,7 @@ function JoinGroup(props: JoinGroupFormProps) {
                 name='interest'
                 value={criteria.interest}
                 onChange={handleChangeInterest}
+                data-testid='joinGroup-interest'
               >
                 {user?.interests.map((interest, index) => (
                   <MenuItem key={index} value={interest}>
@@ -266,6 +267,7 @@ function JoinGroup(props: JoinGroupFormProps) {
                 onChange={handleChangeAge}
                 valueLabelDisplay='auto'
                 getAriaValueText={valuetext}
+                data-testid='joinGroup-age'
               />
             </Grid>
 
@@ -283,6 +285,7 @@ function JoinGroup(props: JoinGroupFormProps) {
                 onChange={handleChangePeerRating}
                 valueLabelDisplay='auto'
                 getAriaValueText={valuetext}
+                data-testid='joinGroup-peer-rating'
               />
             </Grid>
 
@@ -300,6 +303,7 @@ function JoinGroup(props: JoinGroupFormProps) {
                 onChange={handleChangeHostileRating}
                 valueLabelDisplay='auto'
                 getAriaValueText={valuetext}
+                data-testid='joinGroup-hostile-rating'
               />
             </Grid>
 
@@ -317,12 +321,13 @@ function JoinGroup(props: JoinGroupFormProps) {
                 onChange={handleChangeLevelOfExperience}
                 valueLabelDisplay='auto'
                 getAriaValueText={valuetext}
+                data-testid='joinGroup-level-of-experience'
               />
             </Grid>
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSubmit} variant='contained'>
+          <Button onClick={handleSubmit} variant='contained' data-testid='group-search-button'>
             Search
           </Button>
           <Button onClick={props.handleClose} variant='contained'>
@@ -333,6 +338,7 @@ function JoinGroup(props: JoinGroupFormProps) {
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1000 }}
         open={!user || backdrop}
+        data-testid='circular-progress-joinGroup'
       >
         <CircularProgress color='inherit' />
       </Backdrop>

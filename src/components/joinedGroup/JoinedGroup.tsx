@@ -29,14 +29,21 @@ function JoinedGroup() {
 
   useEffect(() => {
     if (user) {
-      updateJoinedGroup(user.groups);
+      if (user.groups.length > 0) {
+        updateJoinedGroup(user.groups);
+      } else {
+        dispatch(setJoinedGroup([]));
+      }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const updateJoinedGroup = async (groups: string[]) => {
-    //@ts-ignore
-    dispatch(setJoinedGroup(await getUserJoinedGroup(groups)));
+    const value = await getUserJoinedGroup(groups);
+
+    if (value) {
+      dispatch(setJoinedGroup(value));
+    }
   };
 
   const handleClickOpenJoinGroup = () => {
@@ -94,14 +101,18 @@ function JoinedGroup() {
                     </Grid>
                     <Grid item xs={6}>
                       <Typography variant='body1' color='div'>
-                        Members:{' '}
+                        Members:
                         {group.members && group.members.length > 0
                           ? null
                           : 'No members yet'}
                       </Typography>
 
                       {group.members && group.members.length > 0 ? (
-                        <Box display='flex' justifyContent='left'>
+                        <Box
+                          data-testid='group-members-avatar'
+                          display='flex'
+                          justifyContent='left'
+                        >
                           <AvatarGroup max={4}>
                             {group.members.map((group, i) => (
                               <Tooltip key={i} title={group.displayName}>
@@ -121,7 +132,13 @@ function JoinedGroup() {
             </Box>
           ))
         ) : (
-          <Box display='flex' justifyContent='center' m={1} p={1}>
+          <Box
+            data-testid='circular-progress'
+            display='flex'
+            justifyContent='center'
+            m={1}
+            p={1}
+          >
             <CircularProgress color='inherit' />
           </Box>
         )
@@ -140,7 +157,7 @@ function JoinedGroup() {
         <Button variant='contained' onClick={handleClickOpen}>
           Create a Group
         </Button>
-        <CreateGroup open={open} onClose={handleClose} />
+        {open ? <CreateGroup open={open} onClose={handleClose} /> : null}
       </Box>
     </>
   );
