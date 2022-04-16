@@ -1,22 +1,26 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Container,
   Grid,
   Paper,
   Typography,
   Stack,
+  Tooltip,
+  Avatar,
   Card,
   CardContent,
   CardMedia,
   useTheme,
+  Box,
+  Button,
 } from '@mui/material';
 import { grey } from '@mui/material/colors';
 import Title from 'components/title/Title';
 import Copyright from 'components/copyright/Copyright';
 import { GroupData, ActivityData } from 'types';
 import PeerRating from 'components/peerRating/PeerRating';
-import db from '../../db';
+import db, { auth } from '../../db';
 import {
   query,
   collection,
@@ -26,18 +30,43 @@ import {
   getDocs,
   limit,
 } from 'firebase/firestore';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { getUser, setUser } from 'modules/user';
+import { setBackdrop } from 'modules/backdrop';
+import { exitGroupByUserId } from 'db/repository/group';
+import { delUserGroup, getUserFromDB } from 'db/repository/user';
+import SharedTips from 'components/group/SharedTips';
 
 function Group() {
   const { id } = useParams();
+  const [openSharedTips, setOpenSharedTips] = useState(false);
   const [group, setGroup] = useState<GroupData>();
   const [activities, setActivities] = useState<ActivityData[]>();
+  const user = useAppSelector(getUser);
+  const currentUser = auth.currentUser;
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
 
   const theme = useTheme();
+
+  const handleSharedTipsForm = () => {
+    setOpenSharedTips(true);
+  };
+
+  const handleClose = (event: any, reason: any) => {
+    if (reason !== 'backdropClick') {
+      setOpenSharedTips(false);
+    }
+  };
+
   useEffect(() => {
     const getGroup = async () => {
       const groupRef = doc(db, 'groups', id as string);
       const groupSnap = await getDoc(groupRef);
       const groupData = groupSnap.data() as GroupData;
+      groupData.notes &&
+        groupData.notes.sort((a, b) => (a.date > b.date ? 1 : -1));
+      groupData.notes = groupData.notes && groupData.notes.slice(0, 10);
       setGroup(groupData);
 
       const memberIds = groupData.members.map((member) => member.uid);
@@ -57,7 +86,24 @@ function Group() {
     };
 
     getGroup();
-  }, [id]);
+  }, [id, openSharedTips]);
+
+  const handleExitGroup = async () => {
+    if (window.confirm('Are you sure you want to exit this group?')) {
+      if (user && currentUser) {
+        dispatch(setBackdrop(true));
+        await exitGroupByUserId(currentUser.uid, id as string);
+        await delUserGroup(currentUser.uid, id as string);
+        const newUser = await getUserFromDB(currentUser.uid);
+        if (newUser) {
+          dispatch(setUser(newUser));
+        }
+        navigate('/dashboard');
+        dispatch(setBackdrop(false));
+        alert('Exit group process was successfully completed.');
+      }
+    }
+  };
 
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
@@ -77,20 +123,30 @@ function Group() {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                minHeight: 187,
+                minHeight: 175,
                 [theme.breakpoints.up('lg')]: {
-                  maxHeight: 632,
+                  maxHeight: 245,
                 },
-                overflow: 'auto',
               }}
               elevation={4}
             >
-              <Title>Group Members</Title>
-              <Stack direction='row' spacing={1} style={{ flexWrap: 'wrap' }}>
+              <Box display='flex' justifyContent='space-between'>
+                <Typography component='h2' variant='h6' gutterBottom>
+                  Group Members
+                </Typography>
+                <Button onClick={handleExitGroup} variant='contained'>
+                  Exit Group
+                </Button>
+              </Box>
+              <Stack 
+                direction='row' 
+                spacing={1} 
+                style={{ flexWrap: 'wrap', overflow: 'auto' }}
+              >
                 {group &&
                   group.members &&
                   group.members.map((member, i) => (
-                    <Card sx={{ maxWidth: 345 }}>
+                    <Card style={{ margin: '5px' }}>
                       <CardMedia
                         component='img'
                         height='100'
@@ -117,17 +173,54 @@ function Group() {
               sx={{
                 p: 2,
                 display: 'flex',
-                flexDirection: 'row',
+                flexDirection: 'column',
                 minHeight: 187,
                 [theme.breakpoints.up('lg')]: {
-                  maxHeight: 632,
+                  maxHeight: 481,
                 },
-                overflow: 'hidden',
-                overflowY: 'auto',
               }}
               elevation={4}
             >
-              <Title>Shared Tips</Title>
+              <Title buttonFunction={handleSharedTipsForm}>Shared Tips</Title>
+              <Stack
+                direction='row'
+                spacing={2}
+                sx={{ flexWrap: 'wrap', overflow: 'auto', mt: 2 }}
+              >
+                {group &&
+                  group.notes &&
+                  group.notes.map((note, i) => (
+                    <Card
+                      sx={{
+                        backgroundColor: grey[100],
+                      }}
+                      style={{ margin: '5px', minWidth: '95%' }}
+                    >
+                      <CardContent>
+                        <Grid container spacing={1}>
+                          <Grid item xs={11}>
+                            <Typography variant='subtitle1'>
+                              {note.note}
+                            </Typography>
+                          </Grid>
+                          <Grid item xs={1}>
+                            <Tooltip title={note.displayName}>
+                              <Avatar
+                                alt={note.displayName}
+                                src={note.photoURL}
+                              />
+                            </Tooltip>
+                          </Grid>
+                        </Grid>
+                      </CardContent>
+                    </Card>
+                  ))}
+              </Stack>
+              <SharedTips
+                open={openSharedTips}
+                onClose={handleClose}
+                groupId={id as string}
+              />
             </Paper>
           </Grid>
         </Grid>
@@ -140,22 +233,24 @@ function Group() {
               flexDirection: 'column',
               minHeight: 250,
               [theme.breakpoints.up('lg')]: {
-                maxHeight: 632,
+                maxHeight: 750,
               },
-              overflow: 'hidden',
-              overflowY: 'auto',
             }}
             elevation={10}
           >
             <Title>Recent Group Activities</Title>
-            <Stack direction='row' spacing={2} style={{ flexWrap: 'wrap' }}>
+            <Stack
+              direction='row'
+              spacing={2}
+              style={{ flexWrap: 'wrap', overflow: 'auto' }}
+            >
               {activities &&
                 activities.map((activity) => (
                   <Card
                     sx={{
                       backgroundColor: grey[100],
                     }}
-                    style={{ margin: '5px', minWidth: '45%' }}
+                    style={{ margin: '5px', minWidth: '47%' }}
                   >
                     <CardContent>
                       <Typography

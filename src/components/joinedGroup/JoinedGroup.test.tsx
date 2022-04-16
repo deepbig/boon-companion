@@ -21,6 +21,7 @@ const newUser: UserData = {
   levelOfExperience: 0,
   peerRating: 0,
   interests: ['test'],
+  performances: {},
   groups: [],
 };
 
@@ -41,6 +42,7 @@ const newJoinedGroup: GroupData = {
   levelOfExperienceMin: 0,
   levelOfExperienceMax: 10,
   members: [],
+  notes: [],
 };
 
 const renderJoinedGroup = (): RenderResult =>

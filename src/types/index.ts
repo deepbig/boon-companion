@@ -1,8 +1,9 @@
 export enum PageName {
     LANDING = '',
     SIGIN = '',
-    DASHBOARD = 'Dashboard',  
-    GROUP = 'Group Dashboard', 
+    DASHBOARD = 'Dashboard',
+    GROUP = 'Group Dashboard',
+    PROFILE = "Profile",
 }
 
 export type UserData = {
@@ -15,23 +16,31 @@ export type UserData = {
     levelOfExperience: number;
     peerRating: number;
     interests: string[];
+    performances: InterestData;
     groups: string[];
 } | null;
 
 export type CreateGroupFormData = {
-  name: string;
-  title: string;
-  gender: string;
-  interest: string;
-  age: number[];
-  peerRating: number[];
-  hostileRating: number[];
-  levelOfExperience: number[];
-  description: string;
-  };
+    name: string;
+    title: string;
+    gender: string;
+    interest: string;
+    age: number[];
+    peerRating: number[];
+    hostileRating: number[];
+    levelOfExperience: number[];
+    description: string;
+};
+
+export interface InterestData {
+    [key: string]: {
+        totalPractices: number;
+        totalDurations: number;
+    }
+}
 
 export interface ActivityData {
-    id?: string;
+    id: string;
     interest: string; // category
     description: string; // note
     date: any;
@@ -73,7 +82,7 @@ export interface GroupData {
     maxAge: number;
     gender: string;
     owner: string;
-    interest: string;  
+    interest: string;
     peerRatingMin: number;
     peerRatingMax: number;
     hostileRatingMin: number;
@@ -81,7 +90,16 @@ export interface GroupData {
     levelOfExperienceMin: number;
     levelOfExperienceMax: number;
     members: MemberData[];
+    notes: SharedTipsData[];
 }
+
+export interface SharedTipsData {
+    uid: string;
+    displayName: string;
+    note: string;
+    date: any;
+    photoURL: string;
+  }
 
 
 declare module '@mui/material/styles' {

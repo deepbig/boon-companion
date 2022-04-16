@@ -16,6 +16,7 @@ const newUser: UserData = {
   levelOfExperience: 3,
   peerRating: 4,
   interests: ['test'],
+  performances: {},
   groups: [],
 };
 
@@ -36,6 +37,7 @@ const searchGroup: GroupData = {
   levelOfExperienceMin: 0,
   levelOfExperienceMax: 10,
   members: [],
+  notes: [],
 };
 
 const renderSearchResultGroup = (): RenderResult =>

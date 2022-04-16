@@ -7,38 +7,34 @@ import {
   Typography,
   Backdrop,
   CircularProgress,
+  SelectChangeEvent,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import Title from 'components/title/Title';
 import { useTheme } from '@mui/material/styles';
 import Copyright from 'components/copyright/Copyright';
 import ActivityHistory from 'components/activityHistory/ActivityHistory';
 import JoinedGroup from 'components/joinedGroup/JoinedGroup';
-import ActivityGoal from 'components/activityGoal/ActivityGoal';
+import ActivityPerformance from 'components/activityPerformance/ActivityPerformance';
 import ActivityAddForm from 'components/activityHistory/ActivityAddForm';
 import { useAppDispatch, useAppSelector } from 'hooks';
+import HostileRating from 'components/hostileRating/HostileRating';
 import { getUser } from 'modules/user';
 import InterestAddForm from 'components/addInterest/InterestAddForm';
 import { getSelectedInterest, setSelectedInterest } from 'modules/interests';
-import { getProfanityList, setProfanityList } from 'modules/profanity';
-import { getAuth, onAuthStateChanged } from "firebase/auth";
-import { collection, doc, getDoc, getDocs, query, updateDoc, where } from "firebase/firestore";
-import { getFirestore } from "firebase/firestore";
-
-let count=0;
-let hostileRatingCheck=0;
-let numberOfBadwords=0;
+import RecentActivity from 'components/activityHistory/RecentActivity';
 
 function Dashboard() {
   const theme = useTheme();
   const [openActivity, setOpenActivity] = useState(false);
   const [openInterest, setOpenInterest] = useState(false);
   const selectedInterest = useAppSelector(getSelectedInterest);
-  const profanityList = useAppSelector(getProfanityList);
+  //const profanityList = useAppSelector(getProfanityList);
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
-  var [hostileRating, setHostileRating] = useState(0);
-
-  const db = getFirestore();
 
   useEffect(() => {
     if (user && !selectedInterest) {
@@ -52,118 +48,27 @@ function Dashboard() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
- 
-  useEffect(() => {
 
-    if (profanityList.length <= 0) {
-      const fetchProfanityWords = async () => {
-        await fetch('./list.txt')
-          .then((res) => res.text())
-          .then((txt) => {
-            dispatch(setProfanityList(txt.split('\n')));
-          });
-      };
-      fetchProfanityWords();
-      getHostileRating();
-     
-     
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [profanityList]);
- 
-useEffect(()=>{
-  checkHostileRating();
-})
-  async function checkHostileRating() {
+  // Example function: Use the following function format to find profanity words from user's text message
+  // const checkProfanityWords = (user_string_input: string) => {
+  //   const words = user_string_input.split(' ');
+  //   let result = false;
+  //   for (let word of words) {
+  //     console.log(word);
+  //     if (profanityList.indexOf(word) > -1) {
+  //       result = true;
+  //       console.log('test?');
+  //       break;
+  //     }
+  //   }
+  //   console.log('result: ', result);
+  //   return result;
+  // };
 
-
-const auth = getAuth();
-onAuthStateChanged(auth, async (user) => {
-  if (user) {
-    // User is signed in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
-    const uid = user.uid;
-    const usersRef = collection(db, "user_interest_activity");
-    // const uid = user.uid;
-     // Create a query against the collection.
-       const q = query(usersRef, where("uid", "==", uid));
-       const querySnapshot = await getDocs(q);
-       querySnapshot.forEach((doc) => {            
-        
-         let result=checkProfanityWords(doc.data().description);
-         if(result){
-           count=count+1;
-         }
-
-
-       });
-       hostileRatingCheck= 10-(count/querySnapshot.size)*10;
-       console.log(hostileRatingCheck,count,querySnapshot.size)
-       addData(hostileRatingCheck);
-       count=0;
-
-    // ...
-  } else {
-    // User is signed out
-    // ...
-  }
-});
-  }
-  async function getHostileRating() {
-    const auth = getAuth();
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        const uid = user.uid;
-        console.log(uid)
-        const docRef = doc(db, "users", uid);
-        const docSnap = await getDoc(docRef);
-        if (docSnap.exists()) {
-          setHostileRating(docSnap.data().hostileRating);
-        } else {
-          // doc.data() will be undefined in this case
-          console.log("No such document!");
-        }
-        // ...
-      } else {
-        // User is signed out
-        // ...
-      }
-    });
-
-  }
-
-  function checkProfanityWords(user_string_input: string) {
-
-  
-    const words = user_string_input.toString().split(' ');
-
-    for (let word of words) {
-      if (profanityList.indexOf(word +"\r") > -1) {
-        return true;
-      }
-    }
-    return false;
+  const handleChangeInterest = (e: SelectChangeEvent) => {
+    dispatch(setSelectedInterest(e.target.value as string));
   };
-  async function addData(result: number) {
-    const auth = getAuth();
-    onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // User is signed in, see docs for a list of available properties
-        // https://firebase.google.com/docs/reference/js/firebase.User
-        const uid = user.uid;
-        const dbRef = doc(db, "users", uid);
-        await updateDoc(dbRef, {
-          hostileRating: result
-        });
-        // ...
-      } else {
-        // User is signed out
-        // ...
-      }
-    });
 
-
-  }
   const handleCloseActivityForm = () => {
     setOpenActivity(false);
   };
@@ -187,7 +92,26 @@ onAuthStateChanged(auth, async (user) => {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Typography component='h2' variant='h6' align='center'>
-                Interest: {selectedInterest}
+                  <FormControl sx={{ minWidth: 300 }}>
+                    <InputLabel id='demo-simple-select-label'>
+                      Interest
+                    </InputLabel>
+                    <Select
+                      labelId='demo-simple-select-label'
+                      id='demo-simple-select'
+                      value={selectedInterest}
+                      label='Interest'
+                      onChange={handleChangeInterest}
+                    >
+                      {user?.interests
+                        ? user.interests.map((interest, i) => (
+                            <MenuItem key={i} value={interest}>
+                              {interest}
+                            </MenuItem>
+                          ))
+                        : null}
+                    </Select>
+                  </FormControl>
               </Typography>
             </Grid>
             {/* Activity History */}
@@ -256,16 +180,13 @@ onAuthStateChanged(auth, async (user) => {
             }}
             elevation={4}
           >
-            <Title
-              buttonFunction={() => {
-                alert('Need to develop Activity Goal Form');
-              }}
-            >
-              Activity Goal
-            </Title>
-            <ActivityGoal />
+            <Title>Activity Performance</Title>
+            <ActivityPerformance />
+            <Title>Recent Activity</Title>
+            <RecentActivity />
           </Paper>
         </Grid>
+        <HostileRating />
       </Grid>
       <Copyright sx={{ pt: 4 }} />
       <Backdrop

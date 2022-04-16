@@ -17,7 +17,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import TrackChangesIcon from '@mui/icons-material/TrackChanges';
 import Login from 'components/login/Login';
-import Profile from 'components/profile/Profile';
+import UserMenu from 'components/profile/UserMenu';
 
 function MenuListItems(props: any) {
   const navigate = useNavigate();
@@ -36,7 +36,6 @@ function MenuListItems(props: any) {
         </ListItemIcon>
         {props.open ? <ListItemText primary='Dashboard' /> : null}
       </ListItem>
-      
     </div>
   );
 }
@@ -133,7 +132,7 @@ export default function NavBar({ selectedName }: { selectedName: string }) {
             {selectedName}
           </Typography>
 
-          {selectedName ? <Profile /> : <Login />}
+          {selectedName ? <UserMenu /> : <Login />}
         </Toolbar>
       </AppBar>
       {selectedName ? (

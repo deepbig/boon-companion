@@ -9,13 +9,15 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { currentDate } from 'lib/common';
+import { currentDateTime } from 'lib/common';
 import { getSelectedInterest } from 'modules/interests';
 import React, { useState } from 'react';
 import { ActivityAddFormData, ActivityData } from 'types';
 import { saveActivity } from 'db/repository/activity';
 import { auth } from 'db';
 import { getActivities, setActivityList } from 'modules/activity';
+import { getUser, setUser } from 'modules/user';
+import { getUserFromDB, updateUserInterest } from 'db/repository/user';
 
 interface ActivityAddFormProps {
   open: boolean;
@@ -26,10 +28,11 @@ function ActivityAddForm(props: ActivityAddFormProps) {
   const selectedInterest = useAppSelector(getSelectedInterest);
   const activities = useAppSelector(getActivities);
   const dispatch = useAppDispatch();
+  const user = useAppSelector(getUser);
   const currentUser = auth.currentUser;
   const [values, setValues] = useState<ActivityAddFormData>({
     interest: '',
-    date: currentDate(),
+    date: currentDateTime(),
     description: '',
     duration: 0,
     performance: 0,
@@ -38,56 +41,85 @@ function ActivityAddForm(props: ActivityAddFormProps) {
   const [backdrop, setBackdrop] = useState(false);
 
   const handleSubmit = async () => {
-    // need to add interset values.
-    if (selectedInterest && currentUser) {
-      const addValues = {
-        ...values,
-        interest: selectedInterest,
-        uid: currentUser.uid,
-      };
+    try {
+      // need to add interset values.
+      if (selectedInterest && currentUser && user) {
+        const addValues = {
+          ...values,
+          date: values.date ? values.date : maxDateTime,
+          interest: selectedInterest,
+          uid: currentUser.uid,
+        };
 
-      setBackdrop(true);
+        setBackdrop(true);
 
-      const newActivity: ActivityData | null = await saveActivity(addValues);
-      let updatedActivities = [...activities];
-      // find right location from backward.
-      if (newActivity) {
-        const newActivityDate = newActivity.date.toDate().getTime();
-        if (updatedActivities[0].date.toDate().getTime() > newActivityDate) {
-          updatedActivities.splice(0, 0, newActivity);
-        } else {
-          for (let i = updatedActivities.length - 1; i >= 0; i--) {
+        const newActivity: ActivityData | null = await saveActivity(addValues);
+
+        let interest = user.performances?.[addValues.interest];
+        await updateUserInterest(
+          currentUser.uid,
+          addValues.interest,
+          interest?.totalPractices ? interest.totalPractices + 1 : 1,
+          interest?.totalDurations
+            ? interest.totalDurations + +addValues.duration
+            : addValues.duration
+        );
+        let updatedActivities = [...activities];
+        // find right location from backward.
+        if (newActivity) {
+          if (activities.length === 0) {
+            dispatch(setActivityList([newActivity]));
+          } else {
+            const newActivityDate = newActivity.date.toDate().getTime();
             if (
-              updatedActivities[i].date.toDate().getTime() <= newActivityDate
+              updatedActivities[0].date.toDate().getTime() > newActivityDate
             ) {
-              updatedActivities.splice(i + 1, 0, newActivity);
-              break;
+              updatedActivities.splice(0, 0, newActivity);
+            } else {
+              for (let i = updatedActivities.length - 1; i >= 0; i--) {
+                if (
+                  updatedActivities[i].date.toDate().getTime() <=
+                  newActivityDate
+                ) {
+                  updatedActivities.splice(i + 1, 0, newActivity);
+                  break;
+                }
+              }
             }
+            dispatch(setActivityList(updatedActivities));
           }
+
+          const user = await getUserFromDB(currentUser.uid);
+          if (user) {
+            dispatch(setUser(user));
+          }
+        } else {
+          alert(
+            'Failed to save activity due to database error. Please try again.'
+          );
         }
-        dispatch(setActivityList(updatedActivities));
+
+        setBackdrop(false);
+        props.handleClose();
+        // reset state
+        setValues({
+          interest: '',
+          date: currentDateTime(),
+          description: '',
+          duration: 0,
+          performance: 0,
+          uid: '',
+        });
       } else {
         alert(
-          'Failed to save activity due to database error. Please try again.'
+          'User is not logged in correctly. Please logout and login again to continue this process.'
         );
+        props.handleClose();
       }
-
+    } catch (e) {
+      alert('Creating Activity was not successful due to database error: ' + e);
+    } finally {
       setBackdrop(false);
-      props.handleClose();
-      // reset state
-      setValues({
-        interest: '',
-        date: currentDate(),
-        description: '',
-        duration: 0,
-        performance: 0,
-        uid: '',
-      });
-    } else {
-      alert(
-        'User is not logged in correctly. Please logout and login again to continue this process.'
-      );
-      props.handleClose();
     }
   };
 
@@ -98,7 +130,7 @@ function ActivityAddForm(props: ActivityAddFormProps) {
     });
   };
 
-  const maxDate = currentDate();
+  const maxDateTime = currentDateTime();
   return (
     <>
       <Dialog open={props.open}>
@@ -116,15 +148,16 @@ function ActivityAddForm(props: ActivityAddFormProps) {
             <TextField
               autoFocus
               required
-              margin='dense'
               id='date'
-              label='Date'
-              type='date'
+              label='Date & Time'
+              type='datetime-local'
               fullWidth
               variant='standard'
-              defaultValue={maxDate}
-              inputProps={{ min: '1900-01-01', max: maxDate }}
+              defaultValue={maxDateTime}
               onChange={handleChange}
+              InputLabelProps={{
+                shrink: true,
+              }}
             />
             <TextField
               margin='dense'
