@@ -42,6 +42,7 @@ const newJoinedGroup: GroupData = {
   levelOfExperienceMin: 0,
   levelOfExperienceMax: 10,
   members: [],
+  notes: [],
 };
 
 const renderJoinedGroup = (): RenderResult =>

@@ -90,7 +90,16 @@ export interface GroupData {
     levelOfExperienceMin: number;
     levelOfExperienceMax: number;
     members: MemberData[];
+    notes: SharedTipsData[];
 }
+
+export interface SharedTipsData {
+    uid: string;
+    displayName: string;
+    note: string;
+    date: any;
+    photoURL: string;
+  }
 
 
 declare module '@mui/material/styles' {
