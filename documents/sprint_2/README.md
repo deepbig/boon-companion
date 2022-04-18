@@ -111,5 +111,14 @@ https://user-images.githubusercontent.com/99055144/161397679-70d6bdfd-a82a-4dd1-
 Team developed CI and CD using Github Actions. When user create pull request, the system run a workflow that run all test cases and create temporary demo page when all tests are passes. Team members can test the new features in the demo page and review the code accordingly. The following link shows the CI script:
 https://github.com/deepbig/boon-companion/blob/main/.github/workflows/firebase-hosting-pull-request.yml
 
+Evidence:
+![Screenshot (4)](https://user-images.githubusercontent.com/99055144/163829816-ed2fe12f-aa5f-477c-a69a-a1fad06ce5dd.png)
+
+
 Also, when a team member merges his/her code to the main branch, the system will test all changes and deploy to the hosting server automatically. The following link shows the CD script:
 https://github.com/deepbig/boon-companion/blob/main/.github/workflows/firebase-hosting-merge.yml
+
+Evidence:
+![Screenshot (3)](https://user-images.githubusercontent.com/99055144/163829778-890b0d1e-5bb1-494a-bdef-16f37e51a43c.png)
+
+
