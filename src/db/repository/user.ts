@@ -38,7 +38,7 @@ export const getLoggedInUser = async (user: { uid: string; displayName: any; ema
                 totalProfanities: 0,
                 performances: [],
                 groups: [],
-                age: null,
+                age: 0,
             });
         } catch (e) {
             // need to handle error case.
