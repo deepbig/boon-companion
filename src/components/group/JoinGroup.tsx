@@ -58,12 +58,15 @@ function JoinGroup(props: JoinGroupFormProps) {
   useEffect(() => {
     if (!props.open) {
       setCriteria({
-        interest: user?.interests[0] ? user?.interests[0] : '',
+        interest: user?.interests[0] ? user.interests[0] : '',
         age: [0, 120],
-        peerRating: [0, user?.peerRating ? user?.peerRating : 10],
+        peerRating: [0, user?.peerRating ? user.peerRating : 10],
         gender: 'both',
-        hostileRating: [user?.hostileRating ? user?.hostileRating : 0, 10],
-        levelOfExperience: [0, 10],
+        hostileRating: [user?.hostileRating ? user.hostileRating : 0, 10],
+        levelOfExperience: [
+          0,
+          user?.levelOfExperience ? user.levelOfExperience : 0,
+        ],
       });
     }
   }, [props.open, user]);
@@ -136,7 +139,7 @@ function JoinGroup(props: JoinGroupFormProps) {
   ) => {
     const myValue = user?.levelOfExperience ? user.levelOfExperience : 0;
     const rangeValue = value as number[];
-    if (myValue >= rangeValue[0] && myValue <= rangeValue[1]) {
+    if (myValue >= rangeValue[1]) {
       setCriteria({
         ...criteria,
         levelOfExperience: rangeValue,
