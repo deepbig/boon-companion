@@ -16,6 +16,8 @@ export type UserData = {
     levelOfExperience: number;
     peerRating: number;
     interests: string[];
+    totalPosts: number;
+    totalProfanities: number;
     performances: InterestData;
     groups: string[];
 } | null;
@@ -23,20 +25,36 @@ export type UserData = {
 export type CreateGroupFormData = {
     name: string;
     title: string;
+    description: string;
     gender: string;
     interest: string;
     age: number[];
     peerRating: number[];
     hostileRating: number[];
     levelOfExperience: number[];
-    description: string;
 };
+
+export interface GroupSearchFormData {
+    gender: 'male' | 'female' | 'other' | 'both' | null;
+    interest: string;
+    age: number[];
+    peerRating: number[];
+    hostileRating: number[];
+    levelOfExperience: number[];
+}
 
 export interface InterestData {
     [key: string]: {
         totalPractices: number;
         totalDurations: number;
     }
+}
+
+export interface PeerRatingData {
+    id: string;
+    assignedFrom: string;
+    assignedTo: string;
+    rating: number;
 }
 
 export interface ActivityData {
@@ -57,14 +75,6 @@ export interface ActivityAddFormData {
     uid: string;
 }
 
-export interface GroupSearchFormData {
-    interest: string;
-    age: number[];
-    peerRating: number[];
-    gender: 'male' | 'female' | 'other' | 'both' | null;
-    hostileRating: number[];
-    levelOfExperience: number[];
-}
 
 export interface MemberData {
     uid: string;
@@ -99,7 +109,7 @@ export interface SharedTipsData {
     note: string;
     date: any;
     photoURL: string;
-  }
+}
 
 
 declare module '@mui/material/styles' {

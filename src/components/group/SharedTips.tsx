@@ -9,12 +9,15 @@ import {
   DialogTitle,
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
-import db from '../../db';
 import { auth } from 'db';
-import { updateDoc, doc, getDoc, Timestamp } from 'firebase/firestore';
-import { GroupData, SharedTipsData } from 'types';
-import { currentDate } from 'lib/common';
-import { getLoggedInUser } from 'db/repository/user';
+import { Timestamp } from 'firebase/firestore';
+import { SharedTipsData } from 'types';
+import { checkProfanityWords, currentDateTime } from 'lib/common';
+import { useAppDispatch, useAppSelector } from 'hooks';
+import { getUser, setUser } from 'modules/user';
+import { addGroupNote } from 'db/repository/group';
+import { getUserFromDB, updateUserHostileRating } from 'db/repository/user';
+import { getProfanityList } from 'modules/profanity';
 
 type SharedTipsFormData = {
   note: string;
@@ -22,39 +25,51 @@ type SharedTipsFormData = {
 
 type SharedTipsProps = {
   open: boolean;
-  onClose: (event: any, reason: any) => void;
+  onClose: () => void;
   groupId: string;
 };
 
-
 function SharedTips({ open, onClose, groupId }: SharedTipsProps) {
-  
+  const user = useAppSelector(getUser);
+  const currentUser = auth.currentUser;
+  const profanityList = useAppSelector(getProfanityList);
+  const dispatch = useAppDispatch();
+
   const { control, reset, handleSubmit } = useForm<SharedTipsFormData>();
 
   const onSubmit = handleSubmit(async (data) => {
-    const currentUser = auth.currentUser || { uid: '' };
-    const user = await getLoggedInUser({
-      uid: currentUser.uid,
-      displayName: '',
-      email: '',
-      photoURL: '',
-    });
-    const sharedTipsData: SharedTipsData = {
-      uid: currentUser.uid,
-      displayName: user?.displayName || '',
-      photoURL: user?.photoURL || '',
-      note: data.note,
-      date: Timestamp.fromDate(new Date(currentDate()))
-    };    
-    const groupRef = doc(db, 'groups', groupId as string);
-    const groupSnap = await getDoc(groupRef);
-    const groupData = groupSnap.data() as GroupData;
-    const notes =  groupData.notes || [] ;
-    notes.push(sharedTipsData);
-    const newFields = { notes: notes };
-    await updateDoc(groupRef, newFields);
-    reset();
-    onClose(null, null);
+    if (data.note) {
+      if (currentUser && user) {
+        const sharedTipsData: SharedTipsData = {
+          uid: currentUser.uid,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+          note: data.note,
+          date: Timestamp.fromDate(new Date(currentDateTime())),
+        };
+
+        await addGroupNote(groupId, sharedTipsData);
+        if (user && currentUser) {
+          let totalProfanities = user.totalProfanities ? user.totalProfanities : 0;
+          if (await checkProfanityWords(data.note, profanityList)) {
+            totalProfanities++;
+          }
+          await updateUserHostileRating(
+            currentUser.uid,
+            user.totalPosts ? user.totalPosts + 1 : 1,
+            totalProfanities
+          );
+          const updatedUser = await getUserFromDB(currentUser.uid);
+          if (updatedUser) {
+            dispatch(setUser(updatedUser));
+          }
+        }
+        reset();
+        onClose();
+      }
+    } else {
+      alert('Please add your tip to share with group.');
+    }
   });
 
   return (
@@ -62,14 +77,14 @@ function SharedTips({ open, onClose, groupId }: SharedTipsProps) {
       <DialogTitle sx={{ textAlign: 'center' }}>Shared Tips Form</DialogTitle>
       <DialogContent>
         <Container sx={{ mt: 1, '& .MuiTextField-root': { width: '50ch' } }}>
-          <form id="shared-tips-form" onSubmit={onSubmit}>
+          <form id='shared-tips-form' onSubmit={onSubmit}>
             <FormControl fullWidth>
               <Controller
-                name="note"
+                name='note'
                 control={control}
                 render={({ field: { name, value, onChange } }) => (
                   <TextField
-                    id="shared-tip"
+                    id='shared-tip'
                     multiline
                     rows={4}
                     name={name}
@@ -83,14 +98,14 @@ function SharedTips({ open, onClose, groupId }: SharedTipsProps) {
         </Container>
       </DialogContent>
       <DialogActions>
-        <Button variant="contained" type="submit" form="shared-tips-form">
+        <Button variant='contained' type='submit' form='shared-tips-form'>
           ADD
         </Button>
         <Button
-          variant="contained"
+          variant='contained'
           onClick={() => {
             reset();
-            onClose(null, null);
+            onClose();
           }}
         >
           Cancel

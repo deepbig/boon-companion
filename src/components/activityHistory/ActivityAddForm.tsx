@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { currentDateTime } from 'lib/common';
+import { checkProfanityWords, currentDateTime } from 'lib/common';
 import { getSelectedInterest } from 'modules/interests';
 import React, { useState } from 'react';
 import { ActivityAddFormData, ActivityData } from 'types';
@@ -17,7 +17,12 @@ import { saveActivity } from 'db/repository/activity';
 import { auth } from 'db';
 import { getActivities, setActivityList } from 'modules/activity';
 import { getUser, setUser } from 'modules/user';
-import { getUserFromDB, updateUserInterest } from 'db/repository/user';
+import {
+  getUserFromDB,
+  updateUserHostileRating,
+  updateUserInterest,
+} from 'db/repository/user';
+import { getProfanityList } from 'modules/profanity';
 
 interface ActivityAddFormProps {
   open: boolean;
@@ -39,6 +44,7 @@ function ActivityAddForm(props: ActivityAddFormProps) {
     uid: '',
   });
   const [backdrop, setBackdrop] = useState(false);
+  const profanityList = useAppSelector(getProfanityList);
 
   const handleSubmit = async () => {
     try {
@@ -54,6 +60,18 @@ function ActivityAddForm(props: ActivityAddFormProps) {
         setBackdrop(true);
 
         const newActivity: ActivityData | null = await saveActivity(addValues);
+
+        let totalProfanities = user.totalProfanities
+          ? user.totalProfanities
+          : 0;
+        if (await checkProfanityWords(values.description, profanityList)) {
+          totalProfanities++;
+        }
+        await updateUserHostileRating(
+          currentUser.uid,
+          user.totalPosts ? user.totalPosts + 1 : 1,
+          totalProfanities
+        );
 
         let interest = user.performances?.[addValues.interest];
         await updateUserInterest(

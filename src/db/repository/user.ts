@@ -34,6 +34,8 @@ export const getLoggedInUser = async (user: { uid: string; displayName: any; ema
                 levelOfExperience: 0,
                 peerRating: 10,
                 interests: [],
+                totalPosts: 0,
+                totalProfanities: 0,
                 performances: [],
                 groups: [],
                 age: null,
@@ -112,4 +114,21 @@ export const updateUserInterest = async (uid: string, name: string, totalPractic
             totalDurations: +totalDurations,
         },
     })
+}
+
+export const updateUserHostileRating = async (uid: string, totalPosts: number, totalProfanities: number) => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    await updateDoc(docRef, {
+        hostileRating: +(totalProfanities / totalPosts * 10).toFixed(2),
+        totalPosts: totalPosts,
+        totalProfanities: totalProfanities,
+    })
+}
+
+export const updateUserPeerRating = async (uid: string, peerRating: number) => {
+    const docRef = doc(db, COLLECTION_NAME, uid);
+    console.log("peer rating", peerRating);
+    await updateDoc(docRef, {
+        peerRating: peerRating
+    });
 }

@@ -143,7 +143,7 @@ function JoinGroup(props: JoinGroupFormProps) {
       });
     } else {
       setMessage(
-        `You cannot set range outside of your age. Your age is: ${user?.age}`
+        `You cannot set range outside of your level. Your level of experience is: ${user?.levelOfExperience}`
       );
       setOpenMessage(true);
     }
@@ -281,6 +281,7 @@ function JoinGroup(props: JoinGroupFormProps) {
                 name='peerRating'
                 disabled={user?.peerRating === null}
                 max={10}
+                step={0.1}
                 value={criteria.peerRating}
                 onChange={handleChangePeerRating}
                 valueLabelDisplay='auto'
@@ -299,6 +300,7 @@ function JoinGroup(props: JoinGroupFormProps) {
                 name='hostileRating'
                 disabled={user?.hostileRating === null}
                 max={10}
+                step={0.1}
                 value={criteria.hostileRating}
                 onChange={handleChangeHostileRating}
                 valueLabelDisplay='auto'
@@ -327,7 +329,11 @@ function JoinGroup(props: JoinGroupFormProps) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSubmit} variant='contained' data-testid='group-search-button'>
+          <Button
+            onClick={handleSubmit}
+            variant='contained'
+            data-testid='group-search-button'
+          >
             Search
           </Button>
           <Button onClick={props.handleClose} variant='contained'>

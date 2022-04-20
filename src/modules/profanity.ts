@@ -15,11 +15,12 @@ export const profanitySlice = createSlice({
     reducers: {
         setProfanityList: (state, action: PayloadAction<string[]>) => {
             state.profanityList = action.payload;
-        }
+        },
+        reset: () => initialState,
     }
 })
 
-export const { setProfanityList } = profanitySlice.actions;
+export const { setProfanityList, reset } = profanitySlice.actions;
 
 export const getProfanityList = (state: RootState) => state.profanity.profanityList;
 

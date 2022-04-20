@@ -5,6 +5,7 @@ import profanityReducer from './profanity';
 import interestReducer from './interests';
 import groupReducer from './group';
 import backdropReducer from './backdrop';
+import peerRatingReducer from './peerRating';
 
 export const store = configureStore({
     reducer: {
@@ -13,7 +14,8 @@ export const store = configureStore({
         profanity: profanityReducer,
         interest: interestReducer,
         group: groupReducer,
-        backdrop: backdropReducer
+        backdrop: backdropReducer,
+        peerRating: peerRatingReducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false }),
     devTools: process.env.NODE_ENV !== 'production',

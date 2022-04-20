@@ -78,7 +78,7 @@ function Profile() {
 
     const newInterest = splitStr.join(' ');
 
-    if (isFound(newInterest, values.tags)) {
+    if (isFound(newInterest, values.interests)) {
       alert('You cannot add same interest twice.');
     } else {
       const newInterests = [...values.interests];

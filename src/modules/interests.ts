@@ -20,11 +20,12 @@ export const interestSlice = createSlice({
         },
         setSelectedInterest: (state, action: PayloadAction<string>) => {
             state.selectedInterest = action.payload;
-        }
+        },
+        reset: () => initialState
     }
 })
 
-export const { setinterestList, setSelectedInterest } = interestSlice.actions;
+export const { setinterestList, setSelectedInterest, reset } = interestSlice.actions;
 export const getinterestList = (state: RootState) => state.interest.interestList;
 export const getSelectedInterest = (state: RootState) => state.interest.selectedInterest;
 export default interestSlice.reducer;

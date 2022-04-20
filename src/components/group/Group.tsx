@@ -18,23 +18,15 @@ import {
 import { grey } from '@mui/material/colors';
 import Title from 'components/title/Title';
 import Copyright from 'components/copyright/Copyright';
-import { GroupData, ActivityData } from 'types';
+import { GroupData, ActivityData, MemberData } from 'types';
 import PeerRating from 'components/peerRating/PeerRating';
-import db, { auth } from '../../db';
-import {
-  query,
-  collection,
-  where,
-  doc,
-  getDoc,
-  getDocs,
-  limit,
-} from 'firebase/firestore';
+import { auth } from '../../db';
 import { useAppDispatch, useAppSelector } from 'hooks';
 import { getUser, setUser } from 'modules/user';
 import { setBackdrop } from 'modules/backdrop';
-import { exitGroupByUserId } from 'db/repository/group';
+import { exitGroupByUserId, getGroupById } from 'db/repository/group';
 import { delUserGroup, getUserFromDB } from 'db/repository/user';
+import { getActivityListByUserIds } from 'db/repository/activity';
 import SharedTips from 'components/group/SharedTips';
 
 function Group() {
@@ -42,6 +34,7 @@ function Group() {
   const [openSharedTips, setOpenSharedTips] = useState(false);
   const [group, setGroup] = useState<GroupData>();
   const [activities, setActivities] = useState<ActivityData[]>();
+  const [openPeerRating, setOpenPeerRating] = useState<MemberData | null>(null);
   const user = useAppSelector(getUser);
   const currentUser = auth.currentUser;
   const dispatch = useAppDispatch();
@@ -53,40 +46,36 @@ function Group() {
     setOpenSharedTips(true);
   };
 
-  const handleClose = (event: any, reason: any) => {
-    if (reason !== 'backdropClick') {
-      setOpenSharedTips(false);
-    }
+  const handleClose = () => {
+    setOpenSharedTips(false);
   };
 
   useEffect(() => {
-    const getGroup = async () => {
-      const groupRef = doc(db, 'groups', id as string);
-      const groupSnap = await getDoc(groupRef);
-      const groupData = groupSnap.data() as GroupData;
-      groupData.notes &&
-        groupData.notes.sort((a, b) => (a.date > b.date ? 1 : -1));
-      groupData.notes = groupData.notes && groupData.notes.slice(0, 10);
-      setGroup(groupData);
+    if (currentUser && !openSharedTips) {
+      const getGroup = async () => {
+        const groupData = await getGroupById(id as string);
+        if (groupData) {
+          groupData.notes &&
+            groupData.notes.sort((a, b) => (a.date > b.date ? 1 : -1));
+          groupData.notes = groupData.notes && groupData.notes.slice(0, 10);
+          setGroup(groupData);
 
-      const memberIds = groupData.members.map((member) => member.uid);
-      const activitiesRef = await query(
-        collection(db, 'user_interest_activity'),
-        where('interest', '==', groupData.interest),
-        where('uid', 'in', memberIds),
-        limit(10)
-      );
-      const activitiesSnap = await getDocs(activitiesRef);
-      const activitiez = [] as ActivityData[];
-      activitiesSnap.forEach((doc) =>
-        activitiez.push(doc.data() as ActivityData)
-      );
-      activitiez.sort((a, b) => (a.date > b.date ? 1 : -1));
-      setActivities(activitiez.reverse());
-    };
+          const memberIds = groupData.members.map((member) => member.uid);
 
-    getGroup();
-  }, [id, openSharedTips]);
+          if (memberIds.length > 0) {
+            const res = await getActivityListByUserIds(
+              groupData.interest,
+              memberIds
+            );
+            setActivities(res);
+          } else {
+            alert('There are no member in this group to display activities.');
+          }
+        }
+      };
+      getGroup();
+    }
+  }, [id, currentUser, openSharedTips]);
 
   const handleExitGroup = async () => {
     if (window.confirm('Are you sure you want to exit this group?')) {
@@ -105,6 +94,10 @@ function Group() {
     }
   };
 
+  const handlePeerRating = (member: MemberData) => {
+    setOpenPeerRating(member);
+  };
+
   return (
     <Container maxWidth='lg' sx={{ mt: 4, mb: 4 }}>
       <Grid container spacing={2}>
@@ -116,8 +109,8 @@ function Group() {
             Description: {group && group.description}
           </Typography>
         </Grid>
-        <Grid item xs={6} spacing={4}>
-          <Grid item xs={12} md={12} spacing={2}>
+        <Grid item xs={6}>
+          <Grid item xs={12} md={12}>
             <Paper
               sx={{
                 p: 2,
@@ -138,15 +131,19 @@ function Group() {
                   Exit Group
                 </Button>
               </Box>
-              <Stack 
-                direction='row' 
-                spacing={1} 
+              <Stack
+                direction='row'
+                spacing={1}
                 style={{ flexWrap: 'wrap', overflow: 'auto' }}
               >
                 {group &&
                   group.members &&
                   group.members.map((member, i) => (
-                    <Card style={{ margin: '5px' }}>
+                    <Card
+                      key={i}
+                      style={{ margin: '5px' }}
+                      onClick={() => handlePeerRating(member)}
+                    >
                       <CardMedia
                         component='img'
                         height='100'
@@ -168,7 +165,7 @@ function Group() {
             </Paper>
           </Grid>
 
-          <Grid item xs={12} md={12} spacing={2} sx={{ mt: 3 }}>
+          <Grid item xs={12} md={12} sx={{ mt: 3 }}>
             <Paper
               sx={{
                 p: 2,
@@ -191,6 +188,7 @@ function Group() {
                   group.notes &&
                   group.notes.map((note, i) => (
                     <Card
+                      key={i}
                       sx={{
                         backgroundColor: grey[100],
                       }}
@@ -245,8 +243,9 @@ function Group() {
               style={{ flexWrap: 'wrap', overflow: 'auto' }}
             >
               {activities &&
-                activities.map((activity) => (
+                activities.map((activity, i) => (
                   <Card
+                    key={i}
                     sx={{
                       backgroundColor: grey[100],
                     }}
@@ -278,7 +277,14 @@ function Group() {
             </Stack>
           </Paper>
         </Grid>
-        <PeerRating />
+        {openPeerRating ? (
+          <PeerRating
+            member={openPeerRating}
+            handleClose={() => {
+              setOpenPeerRating(null);
+            }}
+          />
+        ) : null}
       </Grid>
       <Copyright sx={{ pt: 4 }} />
     </Container>

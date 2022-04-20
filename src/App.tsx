@@ -8,7 +8,13 @@ import DashboardPage from 'pages/DashboardPage';
 import GroupPage from 'pages/GroupPage';
 import ProfilePage from 'pages/ProfilePage';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { setUser } from 'modules/user';
+import { setUser, reset as resetUser } from 'modules/user';
+import { reset as resetActivity } from 'modules/activity';
+import { reset as resetProfanity } from 'modules/profanity';
+import { reset as resetInterest } from 'modules/interests';
+import { reset as resetGroup } from 'modules/group';
+import { reset as resetBackdrop } from 'modules/backdrop';
+import { reset as resetPeerRating } from 'modules/peerRating';
 import { getLoggedInUser } from 'db/repository/user';
 import { getBackdrop } from 'modules/backdrop';
 
@@ -35,7 +41,13 @@ function App() {
         dispatch(setUser(await getLoggedInUser(user)));
       } else {
         navigate('/landing');
-        dispatch(setUser(null));
+        dispatch(resetUser());
+        dispatch(resetActivity());
+        dispatch(resetProfanity());
+        dispatch(resetInterest());
+        dispatch(resetGroup());
+        dispatch(resetBackdrop());
+        dispatch(resetPeerRating());
       }
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

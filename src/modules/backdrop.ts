@@ -15,10 +15,11 @@ export const backdropSlice = createSlice({
     reducers: {
         setBackdrop: (state, action: PayloadAction<boolean>) => {
             state.backdrop = action.payload;
-        }
+        },
+        reset: () => initialState,
     }
 })
 
-export const { setBackdrop } = backdropSlice.actions;
+export const { setBackdrop, reset } = backdropSlice.actions;
 export const getBackdrop = (state: RootState) => state.backdrop.backdrop;
 export default backdropSlice.reducer;

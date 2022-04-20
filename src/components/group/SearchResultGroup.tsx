@@ -102,7 +102,7 @@ function SearchResultGroup(props: SearchResultGroupFormProps) {
                   onClick={(e) => handleClickCard(e, group)}
                   sx={{
                     backgroundColor:
-                      selected && selected.name === group.name
+                      selected && selected.id === group.id
                         ? grey[300]
                         : grey[100],
                   }}

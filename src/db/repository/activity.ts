@@ -1,5 +1,5 @@
 import db, { auth } from "..";
-import { collection, addDoc, query, getDocs, where, orderBy, Timestamp, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, where, orderBy, Timestamp, doc, getDoc, deleteDoc, limit } from 'firebase/firestore';
 import { ActivityAddFormData, ActivityData } from "types";
 const COLLECTION_NAME = "user_interest_activity";
 
@@ -59,4 +59,18 @@ export const deleteAllActivitiesByUserId = async (uid: any) => {
   activitiesSnapshot.docs.forEach(async (_data) => {
     await deleteActivity(_data.id);
   });
+}
+
+export const getActivityListByUserIds = async (interest: string, memberIds: string[]): Promise<ActivityData[]> => {
+  const q = query(collection(db, COLLECTION_NAME), where('interest', '==', interest), where('uid', 'in', memberIds), limit(10));
+  const activitiesSnapshot = await getDocs(q);
+
+  const data: Array<any> = [];
+
+  activitiesSnapshot.docs.forEach((_data) => {
+    data.push({ id: _data.id, ..._data.data() });
+  });
+
+
+  return activitiesSnapshot.docs.length > 0 ? data as Array<ActivityData> : [];
 }

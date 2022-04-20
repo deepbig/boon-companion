@@ -25,15 +25,16 @@ import { getUser } from 'modules/user';
 import InterestAddForm from 'components/addInterest/InterestAddForm';
 import { getSelectedInterest, setSelectedInterest } from 'modules/interests';
 import RecentActivity from 'components/activityHistory/RecentActivity';
+import { getProfanityList, setProfanityList } from 'modules/profanity';
 
 function Dashboard() {
   const theme = useTheme();
   const [openActivity, setOpenActivity] = useState(false);
   const [openInterest, setOpenInterest] = useState(false);
   const selectedInterest = useAppSelector(getSelectedInterest);
-  //const profanityList = useAppSelector(getProfanityList);
   const user = useAppSelector(getUser);
   const dispatch = useAppDispatch();
+  const profanityList = useAppSelector(getProfanityList);
 
   useEffect(() => {
     if (user && !selectedInterest) {
@@ -48,21 +49,19 @@ function Dashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
-  // Example function: Use the following function format to find profanity words from user's text message
-  // const checkProfanityWords = (user_string_input: string) => {
-  //   const words = user_string_input.split(' ');
-  //   let result = false;
-  //   for (let word of words) {
-  //     console.log(word);
-  //     if (profanityList.indexOf(word) > -1) {
-  //       result = true;
-  //       console.log('test?');
-  //       break;
-  //     }
-  //   }
-  //   console.log('result: ', result);
-  //   return result;
-  // };
+  useEffect(() => {
+    if (profanityList.length <= 0) {
+      const fetchProfanityWords = async () => {
+        await fetch('./list.txt')
+          .then((res) => res.text())
+          .then((txt) => {
+            dispatch(setProfanityList(txt.toString().split(/\r\n|\n/)));
+          });
+      };
+      fetchProfanityWords();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [profanityList]);
 
   const handleChangeInterest = (e: SelectChangeEvent) => {
     dispatch(setSelectedInterest(e.target.value as string));
@@ -91,26 +90,26 @@ function Dashboard() {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Typography component='h2' variant='h6' align='center'>
-                  <FormControl sx={{ minWidth: 300 }}>
-                    <InputLabel id='demo-simple-select-label'>
-                      Interest
-                    </InputLabel>
-                    <Select
-                      labelId='demo-simple-select-label'
-                      id='demo-simple-select'
-                      value={selectedInterest}
-                      label='Interest'
-                      onChange={handleChangeInterest}
-                    >
-                      {user?.interests
-                        ? user.interests.map((interest, i) => (
-                            <MenuItem key={i} value={interest}>
-                              {interest}
-                            </MenuItem>
-                          ))
-                        : null}
-                    </Select>
-                  </FormControl>
+                <FormControl sx={{ minWidth: 300 }}>
+                  <InputLabel id='demo-simple-select-label'>
+                    Interest
+                  </InputLabel>
+                  <Select
+                    labelId='demo-simple-select-label'
+                    id='demo-simple-select'
+                    value={selectedInterest}
+                    label='Interest'
+                    onChange={handleChangeInterest}
+                  >
+                    {user?.interests
+                      ? user.interests.map((interest, i) => (
+                          <MenuItem key={i} value={interest}>
+                            {interest}
+                          </MenuItem>
+                        ))
+                      : null}
+                  </Select>
+                </FormControl>
               </Typography>
             </Grid>
             {/* Activity History */}
