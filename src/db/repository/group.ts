@@ -1,6 +1,6 @@
 import db from "..";
 import { collection, query, getDocs, where, doc, updateDoc, arrayUnion, getDoc } from 'firebase/firestore';
-import { GroupData, GroupSearchFormData, MemberData } from "types";
+import { GroupData, GroupSearchFormData, MemberData, SharedTipsData } from "types";
 const COLLECTION_NAME = "groups";
 
 export const getGroupsByCriteria = async (criteria: GroupSearchFormData, uid: string): Promise<GroupData[]> => {
@@ -25,6 +25,23 @@ export const getGroupsByCriteria = async (criteria: GroupSearchFormData, uid: st
     return data as Array<GroupData>;
 }
 
+export const getGroupById = async (groupId: string): Promise<GroupData | null> => {
+    const docRef = doc(db, COLLECTION_NAME, groupId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        return docSnap.data() as GroupData;
+    } else {
+        return null;
+    }
+}
+
+export const addGroupNote = async (groupId: string, note: SharedTipsData) => {
+    const docRef = doc(db, COLLECTION_NAME, groupId);
+    await updateDoc(docRef, {
+        notes: arrayUnion(note)
+    })
+}
+
 export const joinGroupAsMember = async (memberData: MemberData, group: GroupData) => {
     //@ts-ignore
     const docRef = doc(db, COLLECTION_NAME, group.id);
@@ -47,4 +64,22 @@ export const getUserJoinedGroup = async (groupIds: string[]) => {
     }
 
     return data.length > 0 ? data as Array<GroupData> : [];
+}
+
+export const exitAllGroupsByUserId = async (uid: string, groups: string[]) => {
+    groups.forEach(async (groupId) => {
+        await exitGroupByUserId(uid, groupId);
+    })
+}
+
+export const exitGroupByUserId = async (uid: string, groupId: string) => {
+    const docRef = doc(db, COLLECTION_NAME, groupId);
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+        const group = docSnap.data() as GroupData;
+        const newMembers = group.members.filter((member) => member.uid !== uid);
+        await updateDoc(docRef, {
+            members: newMembers
+        })
+    }
 }

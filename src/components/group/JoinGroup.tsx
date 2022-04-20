@@ -58,12 +58,15 @@ function JoinGroup(props: JoinGroupFormProps) {
   useEffect(() => {
     if (!props.open) {
       setCriteria({
-        interest: user?.interests[0] ? user?.interests[0] : '',
+        interest: user?.interests[0] ? user.interests[0] : '',
         age: [0, 120],
-        peerRating: [0, user?.peerRating ? user?.peerRating : 10],
+        peerRating: [0, user?.peerRating ? user.peerRating : 10],
         gender: 'both',
-        hostileRating: [user?.hostileRating ? user?.hostileRating : 0, 10],
-        levelOfExperience: [0, 10],
+        hostileRating: [user?.hostileRating ? user.hostileRating : 0, 10],
+        levelOfExperience: [
+          0,
+          user?.levelOfExperience ? user.levelOfExperience : 0,
+        ],
       });
     }
   }, [props.open, user]);
@@ -136,14 +139,14 @@ function JoinGroup(props: JoinGroupFormProps) {
   ) => {
     const myValue = user?.levelOfExperience ? user.levelOfExperience : 0;
     const rangeValue = value as number[];
-    if (myValue >= rangeValue[0] && myValue <= rangeValue[1]) {
+    if (myValue >= rangeValue[1]) {
       setCriteria({
         ...criteria,
         levelOfExperience: rangeValue,
       });
     } else {
       setMessage(
-        `You cannot set range outside of your age. Your age is: ${user?.age}`
+        `You cannot set range outside of your level. Your level of experience is: ${user?.levelOfExperience}`
       );
       setOpenMessage(true);
     }
@@ -281,6 +284,7 @@ function JoinGroup(props: JoinGroupFormProps) {
                 name='peerRating'
                 disabled={user?.peerRating === null}
                 max={10}
+                step={0.1}
                 value={criteria.peerRating}
                 onChange={handleChangePeerRating}
                 valueLabelDisplay='auto'
@@ -299,6 +303,7 @@ function JoinGroup(props: JoinGroupFormProps) {
                 name='hostileRating'
                 disabled={user?.hostileRating === null}
                 max={10}
+                step={0.1}
                 value={criteria.hostileRating}
                 onChange={handleChangeHostileRating}
                 valueLabelDisplay='auto'
@@ -327,7 +332,11 @@ function JoinGroup(props: JoinGroupFormProps) {
           </Grid>
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleSubmit} variant='contained' data-testid='group-search-button'>
+          <Button
+            onClick={handleSubmit}
+            variant='contained'
+            data-testid='group-search-button'
+          >
             Search
           </Button>
           <Button onClick={props.handleClose} variant='contained'>

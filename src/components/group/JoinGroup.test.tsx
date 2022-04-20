@@ -15,6 +15,9 @@ const newUser: UserData = {
   levelOfExperience: 3,
   peerRating: 4,
   interests: ['test'],
+  totalPosts: 0,
+  totalProfanities: 0,
+  performances: {},
   groups: [],
 };
 
@@ -99,5 +102,4 @@ describe('<JoinGroup />', () => {
     )[0];
     expect(experienceRange).toBeInTheDocument();
   });
-
 });

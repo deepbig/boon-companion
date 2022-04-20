@@ -1,8 +1,9 @@
 export enum PageName {
     LANDING = '',
     SIGIN = '',
-    DASHBOARD = 'Dashboard',  
-    GROUP = 'Group Dashboard', 
+    DASHBOARD = 'Dashboard',
+    GROUP = 'Group Dashboard',
+    PROFILE = "Profile",
 }
 
 export type UserData = {
@@ -15,23 +16,49 @@ export type UserData = {
     levelOfExperience: number;
     peerRating: number;
     interests: string[];
+    totalPosts: number;
+    totalProfanities: number;
+    performances: InterestData;
     groups: string[];
 } | null;
 
 export type CreateGroupFormData = {
-  name: string;
-  title: string;
-  gender: string;
-  interest: string;
-  age: number[];
-  peerRating: number[];
-  hostileRating: number[];
-  levelOfExperience: number[];
-  description: string;
-  };
+    name: string;
+    title: string;
+    description: string;
+    gender: string;
+    interest: string;
+    age: number[];
+    peerRating: number[];
+    hostileRating: number[];
+    levelOfExperience: number[];
+};
+
+export interface GroupSearchFormData {
+    gender: 'male' | 'female' | 'other' | 'both' | null;
+    interest: string;
+    age: number[];
+    peerRating: number[];
+    hostileRating: number[];
+    levelOfExperience: number[];
+}
+
+export interface InterestData {
+    [key: string]: {
+        totalPractices: number;
+        totalDurations: number;
+    }
+}
+
+export interface PeerRatingData {
+    id: string;
+    assignedFrom: string;
+    assignedTo: string;
+    rating: number;
+}
 
 export interface ActivityData {
-    id?: string;
+    id: string;
     interest: string; // category
     description: string; // note
     date: any;
@@ -48,14 +75,6 @@ export interface ActivityAddFormData {
     uid: string;
 }
 
-export interface GroupSearchFormData {
-    interest: string;
-    age: number[];
-    peerRating: number[];
-    gender: 'male' | 'female' | 'other' | 'both' | null;
-    hostileRating: number[];
-    levelOfExperience: number[];
-}
 
 export interface MemberData {
     uid: string;
@@ -73,7 +92,7 @@ export interface GroupData {
     maxAge: number;
     gender: string;
     owner: string;
-    interest: string;  
+    interest: string;
     peerRatingMin: number;
     peerRatingMax: number;
     hostileRatingMin: number;
@@ -81,6 +100,15 @@ export interface GroupData {
     levelOfExperienceMin: number;
     levelOfExperienceMax: number;
     members: MemberData[];
+    notes: SharedTipsData[];
+}
+
+export interface SharedTipsData {
+    uid: string;
+    displayName: string;
+    note: string;
+    date: any;
+    photoURL: string;
 }
 
 

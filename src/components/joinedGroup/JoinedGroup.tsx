@@ -15,13 +15,16 @@ import { useNavigate } from 'react-router-dom';
 import CreateGroup from 'components/group/CreateGroup';
 import JoinGroup from 'components/group/JoinGroup';
 import { useAppDispatch, useAppSelector } from 'hooks';
-import { getJoinedGroup, getUser, setJoinedGroup } from 'modules/user';
+import { getJoinedGroup, getUser, setJoinedGroup, setUser } from 'modules/user';
 import { grey } from '@mui/material/colors';
-import { getUserJoinedGroup } from 'db/repository/group';
+import { exitGroupByUserId, getUserJoinedGroup } from 'db/repository/group';
+import { delUserGroup, getUserFromDB } from 'db/repository/user';
+import { auth } from 'db';
 
 function JoinedGroup() {
   const navigate = useNavigate();
   const user = useAppSelector(getUser);
+  const currentUser = auth.currentUser;
   const joinedGroup = useAppSelector(getJoinedGroup);
   const dispatch = useAppDispatch();
   const [open, setOpen] = useState(false);
@@ -41,7 +44,37 @@ function JoinedGroup() {
   const updateJoinedGroup = async (groups: string[]) => {
     const value = await getUserJoinedGroup(groups);
 
-    if (value) {
+    if (value && user && currentUser) {
+      let deletedMsg =
+        'You are expelled from the following group due to miss the conditions: \n';
+      let deletedIds: string[] = [];
+      let checkedValue = value.filter((group) => {
+        if (
+          group.minAge > user.age ||
+          group.maxAge < user.age ||
+          group.peerRatingMin > user.peerRating ||
+          group.hostileRatingMax < user.hostileRating ||
+          group.levelOfExperienceMin > user.levelOfExperience
+        ) {
+          deletedMsg += `${group.title}\n`;
+          deletedIds.push(group.id as string);
+          return false;
+        } else {
+          return true;
+        }
+      });
+      if (checkedValue.length !== value.length) {
+        for (let id of deletedIds) {
+          await exitGroupByUserId(currentUser.uid, id as string);
+          await delUserGroup(currentUser.uid, id as string);
+        }
+        const newUser = await getUserFromDB(currentUser.uid);
+        if (newUser) {
+          dispatch(setUser(newUser));
+        }
+        alert(deletedMsg);
+      }
+
       dispatch(setJoinedGroup(value));
     }
   };

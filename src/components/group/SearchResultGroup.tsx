@@ -58,26 +58,44 @@ function SearchResultGroup(props: SearchResultGroupFormProps) {
 
   const handleSubmit = async () => {
     // update group information (userid, User name, email, photoURL).
-    if (currentUser && selected) {
-      dispatch(setBackdrop(true));
-      const member = {
-        uid: currentUser.uid,
-        displayName: `${user?.displayName}`,
-        email: `${user?.email}`,
-        photoURL: `${user?.photoURL}`,
-      };
-      await joinGroupAsMember(member, selected);
-      //@ts-ignore
-      await addUserGroup(currentUser.uid, selected.id);
-      const newUser = await getUserFromDB(currentUser.uid);
-      if (newUser) {
-        dispatch(setUser(newUser));
+    if (currentUser && user && selected) {
+      if (selected.minAge > user.age || selected.maxAge < user.age) {
+        setMessage('Your age is not in the range to join this group.');
+        setOpenMessage(true);
+      } else if (selected.peerRatingMin > user.peerRating) {
+        setMessage('Your peer rating is not in the range to join this group.');
+        setOpenMessage(true);
+      } else if (selected.hostileRatingMax < user.hostileRating) {
+        setMessage(
+          'Your hostile rating is not in the range to join this group.'
+        );
+        setOpenMessage(true);
+      } else if (selected.levelOfExperienceMin > user.levelOfExperience) {
+        setMessage(
+          'Your level of Expereince is not in the range to join this group.'
+        );
+        setOpenMessage(true);
+      } else {
+        dispatch(setBackdrop(true));
+        const member = {
+          uid: currentUser.uid,
+          displayName: `${user?.displayName}`,
+          email: `${user?.email}`,
+          photoURL: `${user?.photoURL}`,
+        };
+        await joinGroupAsMember(member, selected);
+        //@ts-ignore
+        await addUserGroup(currentUser.uid, selected.id);
+        const newUser = await getUserFromDB(currentUser.uid);
+        if (newUser) {
+          dispatch(setUser(newUser));
+        }
+        // update user profile.
+        setMessage('You are successfully joined the group!');
+        setOpenMessage(true);
+        dispatch(setBackdrop(false));
+        props.handleClose(true);
       }
-      // update user profile.
-      setMessage('You are successfully joined the group!');
-      setOpenMessage(true);
-      dispatch(setBackdrop(false));
-      props.handleClose(true);
     } else {
       alert('You need to select a group to join.');
     }
@@ -102,7 +120,7 @@ function SearchResultGroup(props: SearchResultGroupFormProps) {
                   onClick={(e) => handleClickCard(e, group)}
                   sx={{
                     backgroundColor:
-                      selected && selected.name === group.name
+                      selected && selected.id === group.id
                         ? grey[300]
                         : grey[100],
                   }}
@@ -121,7 +139,11 @@ function SearchResultGroup(props: SearchResultGroupFormProps) {
                         : 'No members yet'}
                     </Typography>
                     {group.members && group.members.length > 0 ? (
-                      <Box display='flex' justifyContent='left' data-testid='group-members-avatar-search-result'>
+                      <Box
+                        display='flex'
+                        justifyContent='left'
+                        data-testid='group-members-avatar-search-result'
+                      >
                         <AvatarGroup max={4}>
                           {group.members.map((group, i) => (
                             <Tooltip key={i} title={group.displayName}>

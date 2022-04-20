@@ -1,5 +1,5 @@
 import db, { auth } from "..";
-import { collection, addDoc, query, getDocs, where, orderBy, Timestamp, doc, getDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, where, orderBy, Timestamp, doc, getDoc, deleteDoc, limit } from 'firebase/firestore';
 import { ActivityAddFormData, ActivityData } from "types";
 const COLLECTION_NAME = "user_interest_activity";
 
@@ -29,7 +29,6 @@ export const current = async (selectedInterest: string): Promise<Array<ActivityD
 }
 
 export const saveActivity = async (values: ActivityAddFormData): Promise<ActivityData | null> => {
-
   const docRef = await addDoc(collection(db, COLLECTION_NAME), {
     interest: values.interest,
     date: Timestamp.fromDate(new Date(values.date)),
@@ -41,24 +40,45 @@ export const saveActivity = async (values: ActivityAddFormData): Promise<Activit
   const newDocRef = doc(db, COLLECTION_NAME, docRef.id);
   const docSnap = await getDoc(newDocRef);
   if (docSnap.exists()) {
-    console.log(docSnap.id);
-    return docSnap.data() as ActivityData;
+    return { id: docSnap.id, ...docSnap.data() } as ActivityData;
   } else {
     return null;
   }
 }
+
 // deleting activities by using user activity collection id
-export const deleteActivities = async (uid: any) => {
-  const docRef = doc(db, COLLECTION_NAME, uid);
+export const deleteActivity = async (id: string) => {
+  const docRef = doc(db, COLLECTION_NAME, id);
   await deleteDoc(docRef);
+
 }
 // retriving all activites of current user
-export const getCurrentUserActivityId = async (uid: any) => {
-  const q = query(collection(db, COLLECTION_NAME), where("uid", "==", uid));
-  const activitiesSnapshot = await getDocs(q);
-  const data: Array<any> = [];
-   activitiesSnapshot.docs.forEach((_data) => {
-      data.push({ id: _data.id });
-      deleteActivities(_data.id);
+export const deleteAllActivitiesByUserId = async (uid: any): Promise<boolean> => {
+
+  try {
+
+    const q = query(collection(db, COLLECTION_NAME), where("uid", "==", uid));
+    const activitiesSnapshot = await getDocs(q);
+    activitiesSnapshot.docs.forEach(async (_data) => {
+      await deleteActivity(_data.id);
     });
+    return true;
+  } catch (e) {
+    alert("failed to delete all activities from user. Please try again.");
+    return false;
+  }
+}
+
+export const getActivityListByUserIds = async (interest: string, memberIds: string[]): Promise<ActivityData[]> => {
+  const q = query(collection(db, COLLECTION_NAME), where('interest', '==', interest), where('uid', 'in', memberIds), limit(10));
+  const activitiesSnapshot = await getDocs(q);
+
+  const data: Array<any> = [];
+
+  activitiesSnapshot.docs.forEach((_data) => {
+    data.push({ id: _data.id, ..._data.data() });
+  });
+
+
+  return activitiesSnapshot.docs.length > 0 ? data as Array<ActivityData> : [];
 }

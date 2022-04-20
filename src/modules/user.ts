@@ -21,11 +21,12 @@ export const userSlice = createSlice({
         },
         setJoinedGroup: (state, action: PayloadAction<GroupData[]>) => {
             state.joinedGroup = action.payload;
-        }
+        },
+        reset: () => initialState
     }
 })
 
-export const { setUser, setJoinedGroup } = userSlice.actions;
+export const { setUser, setJoinedGroup, reset } = userSlice.actions;
 export const getUser = (state: RootState) => state.user.user;
 export const getJoinedGroup = (state: RootState) => state.user.joinedGroup;
 export default userSlice.reducer;
