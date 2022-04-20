@@ -53,12 +53,20 @@ export const deleteActivity = async (id: string) => {
 
 }
 // retriving all activites of current user
-export const deleteAllActivitiesByUserId = async (uid: any) => {
-  const q = query(collection(db, COLLECTION_NAME), where("uid", "==", uid));
-  const activitiesSnapshot = await getDocs(q);
-  activitiesSnapshot.docs.forEach(async (_data) => {
-    await deleteActivity(_data.id);
-  });
+export const deleteAllActivitiesByUserId = async (uid: any): Promise<boolean> => {
+
+  try {
+
+    const q = query(collection(db, COLLECTION_NAME), where("uid", "==", uid));
+    const activitiesSnapshot = await getDocs(q);
+    activitiesSnapshot.docs.forEach(async (_data) => {
+      await deleteActivity(_data.id);
+    });
+    return true;
+  } catch (e) {
+    alert("failed to delete all activities from user. Please try again.");
+    return false;
+  }
 }
 
 export const getActivityListByUserIds = async (interest: string, memberIds: string[]): Promise<ActivityData[]> => {

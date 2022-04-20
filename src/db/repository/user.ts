@@ -96,9 +96,15 @@ export const delUserGroup = async (uid: string, group: string) => {
     })
 }
 
-export const deleteUser = async (uid: any) => {
-    const docRef = doc(db, COLLECTION_NAME, uid);
-    await deleteDoc(docRef);
+export const deleteUser = async (uid: any): Promise<boolean> => {
+    try {
+        const docRef = doc(db, COLLECTION_NAME, uid);
+        await deleteDoc(docRef);
+        return true;
+    } catch (e) {
+        alert('failed to delete user by database error. Please try again.');
+        return false;
+    }
 }
 
 
@@ -127,7 +133,6 @@ export const updateUserHostileRating = async (uid: string, totalPosts: number, t
 
 export const updateUserPeerRating = async (uid: string, peerRating: number) => {
     const docRef = doc(db, COLLECTION_NAME, uid);
-    console.log("peer rating", peerRating);
     await updateDoc(docRef, {
         peerRating: peerRating
     });

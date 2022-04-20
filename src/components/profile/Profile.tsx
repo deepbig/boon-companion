@@ -23,7 +23,6 @@ import { setBackdrop } from 'modules/backdrop';
 import { getUser, setUser } from 'modules/user';
 import React, { useEffect, useState } from 'react';
 import CloseIcon from '@mui/icons-material/Close';
-import { setSelectedInterest } from 'modules/interests';
 import { exitAllGroupsByUserId } from 'db/repository/group';
 
 function Profile() {
@@ -128,12 +127,20 @@ function Profile() {
           'Are you sure you want to delete account and all histories?'
         )
       ) {
-        await deleteUser(currentUser.uid);
-        await deleteAllActivitiesByUserId(currentUser.uid);
+        dispatch(setBackdrop(true));
+        let result = await deleteAllActivitiesByUserId(currentUser.uid);
+        if (!result) {
+          dispatch(setBackdrop(false));
+          return;
+        }
+        result = await deleteUser(currentUser.uid);
+        if (!result) {
+          dispatch(setBackdrop(false));
+          return;
+        }
         if (user?.groups) {
           await exitAllGroupsByUserId(currentUser.uid, user.groups);
         }
-        dispatch(setSelectedInterest(''));
         signOutUser();
         setMessage('User account is successfully deleted.');
         setOpenMessage(true);
