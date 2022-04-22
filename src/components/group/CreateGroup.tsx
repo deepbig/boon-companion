@@ -17,6 +17,8 @@ import {
   DialogTitle,
   Slider,
   Typography,
+  Snackbar,
+  IconButton,
 } from '@mui/material';
 import { useForm, Controller } from 'react-hook-form';
 import db from '../../db';
@@ -27,6 +29,7 @@ import { useState, useEffect } from 'react';
 import { CreateGroupFormData, GroupData } from 'types';
 import { useAppSelector } from 'hooks';
 import { getUser } from 'modules/user';
+import CloseIcon from '@mui/icons-material/Close';
 // import { checkProfanityWords } from 'lib/common';
 // import { getProfanityList } from 'modules/profanity';
 
@@ -41,6 +44,8 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
   const [levelOfExperience, setLevelOfExperience] = useState<number[]>([0, 10]);
   const [hostileRating, setHostileRating] = useState<number[]>([0, 10]);
   const user = useAppSelector(getUser);
+  const [openMessage, setOpenMessage] = useState(false);
+  const [message, setMessage] = useState('');
   // const currentUser = auth.currentUser;
   // const profanityList = useAppSelector(getProfanityList);
 
@@ -119,6 +124,22 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
     }
   };
 
+  const handleCloseMessage = () => {
+    setOpenMessage(false);
+    setMessage('');
+  };
+
+  const actionMessage = (
+    <IconButton
+      size='small'
+      aria-label='close'
+      color='inherit'
+      onClick={handleCloseMessage}
+    >
+      <CloseIcon fontSize='small' />
+    </IconButton>
+  );
+
   const onSubmit = handleSubmit(async (data) => {
     const newGroupData: GroupData = {
       name: data.name,
@@ -144,9 +165,18 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
       members: [],
       notes: [],
     };
-    resetData();
-    onClose(null, null);
-    await addDoc(groupsRef, newGroupData);
+
+    try {
+      await addDoc(groupsRef, newGroupData);
+      onClose(null, null);
+      resetData();
+      alert(`Group is successfully created!`);
+    } catch (e) {
+      setMessage(
+        `Failed to create group due to an internal database error. Please try again.`
+      );
+      setOpenMessage(true);
+    }
 
     // if (user && currentUser) {
     //   let totalProfanities = user.totalProfanities ? user.totalProfanities : 0;
@@ -473,6 +503,13 @@ function CreateGroup({ open, onClose }: CreatGroupProps) {
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          open={openMessage}
+          autoHideDuration={5000}
+          onClose={handleCloseMessage}
+          message={message}
+          action={actionMessage}
+        />
       </div>
     </>
   );

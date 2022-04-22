@@ -4,7 +4,7 @@ import { auth } from 'db';
 import { signOutUser } from 'db/repository/auth';
 import { useNavigate } from 'react-router-dom';
 
-function Profile() {
+function UserMenu() {
   const currentUser = auth.currentUser;
   const [photoURL, setPhotoURL] = useState('/anonymous_user_avatar.png');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -59,4 +59,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default UserMenu;

@@ -56,7 +56,7 @@ function Group() {
         const groupData = await getGroupById(id as string);
         if (groupData) {
           groupData.notes &&
-            groupData.notes.sort((a, b) => (a.date > b.date ? 1 : -1));
+            groupData.notes.sort((a, b) => (a.date < b.date ? 1 : -1));
           groupData.notes = groupData.notes && groupData.notes.slice(0, 10);
           setGroup(groupData);
 
