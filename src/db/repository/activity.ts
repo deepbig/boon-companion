@@ -70,7 +70,8 @@ export const deleteAllActivitiesByUserId = async (uid: any): Promise<boolean> =>
 }
 
 export const getActivityListByUserIds = async (interest: string, memberIds: string[]): Promise<ActivityData[]> => {
-  const q = query(collection(db, COLLECTION_NAME), where('interest', '==', interest), where('uid', 'in', memberIds), limit(10));
+  const q = query(collection(db, COLLECTION_NAME), where('interest', '==', interest), where('uid', 'in', memberIds),
+    orderBy("date", "desc"), limit(10));
   const activitiesSnapshot = await getDocs(q);
 
   const data: Array<any> = [];
