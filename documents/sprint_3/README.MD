@@ -20,7 +20,7 @@ Sai Krupa Bariki Vidura<br/>
 Aparna Sykam<br/>
 Hongsuk Ryu<br/>
 
-# Sprint 2
+# Sprint 3
 
 ## Story Point: Forecast and Rationale
 
@@ -76,7 +76,7 @@ Create a form to add a tip in the group dashboard.
 
 ## Sprint Board
 
-#### [Sprint2 Board in Trello](https://trello.com/b/x1RlD6q8/sprint-3-programming-project)
+#### [Sprint3 Board in Trello](https://trello.com/b/x1RlD6q8/sprint-3-programming-project)
 
 ## Burndown Chart
 
