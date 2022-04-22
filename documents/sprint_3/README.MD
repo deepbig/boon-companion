@@ -80,6 +80,8 @@ Create a form to add a tip in the group dashboard.
 
 ## Burndown Chart
 
+![burndown](https://user-images.githubusercontent.com/99055144/164597805-2b87fa39-60ca-4c2b-9d97-b8191c29260f.png)
+
 
 ## Daily Scrums
 
