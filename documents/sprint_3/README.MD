@@ -49,21 +49,25 @@ In this sprint, we completely focused on allowing users to update and delete use
 
 #### Completed tasks: 
 
-To update the hostile rating to the user's db.
+Create a component and service to make a rest call with given request
 
-Create Group Enhancements.
+Verify Everywhere user enters a bad in the app.
 
-As a user, I want to delete accounts and activities.
+Display the tips in reverse chronological order and also display user name for each tip in the group dashboard
 
-Allow the user to edit or add to their profile including their list of interests/activities.
+Create query to fetch the data based on mentioned conditions.
 
-Allow users to join a group using the searching and filtering group feature.
+Create component for rating save into db using service. Fetch rates respective to each user to display on board
 
-#### Moved Tasks:
+Write select query to fetch list of profiles with similar activity/interest
 
-Build a group dashboard to display current group members and group activities.
+Create component for rating save into db using service. Fetch rates respective to each user to display on board
 
-As a user, I want to rate my peer user.
+Display and update the activity performance section when a user adds an activity.
+
+Display tips shared by the group members in group dashboard.
+
+Create a form to add a tip in the group dashboard.
 
 
 ## Kanban Board: Product Backlog
