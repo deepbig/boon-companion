@@ -61,8 +61,6 @@ Create component for rating save into db using service. Fetch rates respective t
 
 Write select query to fetch list of profiles with similar activity/interest
 
-Create component for rating save into db using service. Fetch rates respective to each user to display on board
-
 Display and update the activity performance section when a user adds an activity.
 
 Display tips shared by the group members in group dashboard.
