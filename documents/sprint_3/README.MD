@@ -67,6 +67,8 @@ Display tips shared by the group members in group dashboard.
 
 Create a form to add a tip in the group dashboard.
 
+Unit Testing
+
 Integrationn Testing
 
 ## Kanban Board: Product Backlog
@@ -92,7 +94,15 @@ Integrationn Testing
 
 
 
+https://user-images.githubusercontent.com/99055144/164845134-1df73e96-f66e-4f42-ba5b-11dab5b3f1eb.mp4
+
+
+
 ## Sprint Review Video
+
+
+
+https://user-images.githubusercontent.com/99055144/164845137-0e56f2c3-4509-4b8d-9ca9-5078ab848add.mp4
 
 
 
@@ -101,14 +111,14 @@ Team developed CI and CD using Github Actions. When user create pull request, th
 https://github.com/deepbig/boon-companion/blob/main/.github/workflows/firebase-hosting-pull-request.yml
 
 Evidence:
-![Screenshot (4)](https://user-images.githubusercontent.com/99055144/163829816-ed2fe12f-aa5f-477c-a69a-a1fad06ce5dd.png)
+
+![Screenshot (9)](https://user-images.githubusercontent.com/99055144/164845467-4d584650-a758-47a3-aee8-2102f641db7f.png)
+
 
 
 Also, when a team member merges his/her code to the main branch, the system will test all changes and deploy to the hosting server automatically. The following link shows the CD script:
 https://github.com/deepbig/boon-companion/blob/main/.github/workflows/firebase-hosting-merge.yml
 
 Evidence:
-![Screenshot (3)](https://user-images.githubusercontent.com/99055144/163829778-890b0d1e-5bb1-494a-bdef-16f37e51a43c.png)
 
-
-
+![Screenshot (8)](https://user-images.githubusercontent.com/99055144/164845424-ae06e09c-a941-48d3-a93c-d3bfdc0f6c87.png)
