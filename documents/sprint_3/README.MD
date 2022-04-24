@@ -98,6 +98,17 @@ Integrationn Testing
 [Sprint 3- Web Service Engineering Daily Scrum(1-38).xlsx](https://github.com/deepbig/boon-companion/files/8549777/Sprint.3-.Web.Service.Engineering.Daily.Scrum.1-38.xlsx)
 
 ## Tests
+5 test suites with total 35 tests:
+- **[NEW]** ActivityPerformance (4 unit tests: https://github.com/deepbig/boon-companion/blob/main/src/components/activityPerformance/ActivityPerformance.test.tsx)
+- **[NEW]** Profile (9 unit tests: https://github.com/deepbig/boon-companion/blob/main/src/components/profile/Profile.test.tsx)
+- JoinedGroup (8 unit tests: https://github.com/deepbig/boon-companion/blob/main/src/components/joinedGroup/JoinedGroup.test.tsx)
+- JoinGroup (8 unit tests: https://github.com/deepbig/boon-companion/blob/main/src/components/group/JoinGroup.test.tsx)
+- SearchResultGroup (6 unit tests: https://github.com/deepbig/boon-companion/blob/main/src/components/group/SearchResultGroup.test.tsx)
+
+
+![Test Passes activity_performance screenshot](./test_activity_performance.png)
+![Test Passes profile screenshot](./test_profile.png)
+![Test Passes Total screenshot](./test_overall.png) 
 
 
 ## Mob Programming Video
@@ -117,8 +128,10 @@ Team developed CI and CD using Github Actions. When user create pull request, th
 https://github.com/deepbig/boon-companion/blob/main/.github/workflows/firebase-hosting-pull-request.yml
 
 Evidence:
+You can find all evidences in here: https://github.com/deepbig/boon-companion/actions
 
 ![Screenshot (9)](https://user-images.githubusercontent.com/99055144/164845467-4d584650-a758-47a3-aee8-2102f641db7f.png)
+![ci_evidence screenshot](./ci_evidence.png) 
 
 
 
@@ -126,5 +139,7 @@ Also, when a team member merges his/her code to the main branch, the system will
 https://github.com/deepbig/boon-companion/blob/main/.github/workflows/firebase-hosting-merge.yml
 
 Evidence:
+You can find all evidences in here: https://github.com/deepbig/boon-companion/actions
 
 ![Screenshot (8)](https://user-images.githubusercontent.com/99055144/164845424-ae06e09c-a941-48d3-a93c-d3bfdc0f6c87.png)
+![cd_evidence screenshot](./cd_evidence.png) 
