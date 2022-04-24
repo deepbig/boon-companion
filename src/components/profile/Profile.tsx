@@ -224,6 +224,7 @@ function Profile() {
                     margin='dense'
                     id='interest'
                     name='interest'
+                    inputProps={{ 'data-testid': 'interest-input' }}
                     fullWidth
                     variant='outlined'
                     onChange={handleChangeText}
@@ -236,6 +237,7 @@ function Profile() {
                     fullWidth
                     disabled={!interest}
                     component='label'
+                    data-testid='test-interest-add-button'
                   >
                     Add
                   </Button>
