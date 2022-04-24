@@ -31,22 +31,31 @@ Total Forecasted : 27
 Total Points Completed : 27
 
 ### Rationale
-**Story:** To update the hostile rating to the user's db.<br/>
-**Rationale:** In this story, we implemented a small hostile algorithm to detect unfriendly or aggressive words whenever a user uses them. In the application, the user's hostile rating will be incremented under the hostileRating column in the database. To indicate that the higher the rating, the more unfriendly or aggressive the user is.<br/>
-**Story:** Create Group Enhancements (Range Sliders, Logged-in User's Data)<br/>
-**Rationale:** By implementing this story, a user can create a group by utilizing the following parameters: list of activities, age, gender, peer rating, hostile rating, and level of experience. Along with these parameters to filter to find the most appropriate matches, the user is allowed to give their own name and title to the group created.<br/>
-**Story:** As a user, I want to delete accounts and activities.<br/>
-**Rationale:** By implementing this story, users can delete their profiles when they are no longer interested in the application or for any other reason. When a user clicks on the "Delete Account" button, the complete user information will be deleted, including activities.<br/>
-**Story:** Allow the user to edit or add to their profile including their list of interests/activities.<br/>
-**Rationale:** By implementing this story, users can be allowed to update or add new activities to their user profile data. This makes the application gather more recent information, helps form groups and keeps connecting users.<br/>
-**Story:** Allow users to join a group using the searching and filtering group feature.<br/>
-**Rationale:** By implementing this story, users can join a group by utilizing the following parameters: list of activities, age, gender, peer rating, hostile rating, and level of experience. These parameters allow the user to filter and find the most appropriate group match.<br/>
 
-In this sprint, we completely focused on allowing users to update and delete user profiles. Along with these, we concentrated on executing some key functionalities like allowing users to create groups using certain criteria and allowing users to join groups based on selected criteria.
+**Story:** Verify everywhere user enters a bad in the app.<br/>
+**Rationale:** This story is a part of hostile rating, where we count aggressive or unfriendly words and store them in a database to calculate the count of words and display them on the UI under the user profile.<br/>
+**Story:** Display the tips in reverse chronological order and also display user name for each tip in the group dashboard.<br/>
+**Rationale:** This story is to make the UI more user-friendly by allowing users to see some comments, tips, or suggestions with respective usernames when any user posts them in a group.<br/>
+**Story:** Create query to fetch the data based on mentioned conditions.<br/>
+**Rationale:** This story is part of finding users by applying filters or criteria to form groups.<br/>
+**Story:** Debug on Peer Rating, Hostile Rating, Join & Create Group, Shared Tip, Account Deletion features.<br/>
+**Rationale:** This story involves some patchwork or slight changes in code to make the application features more effective and robust.<br/>
+**Story:** Write select query to fetch list of profiles with similar activity/interest.<br/>
+**Rationale:** This story is part of displaying user activities like by applying some conditions and fetching matched users' activities or interests. The query is written using firestore database rules.<br/>
+**Story:** Display and update the activity performance section when a user adds an activity.<br/>
+**Rationale:** This story is part of the user edit/update feature, in which the user can add his/her activities to the activity card on the UI, which will then be updated.<br/>
+**Story:** Display tips shared by the group members in group dashboard.<br/>
+**Rationale:** This story is part of creating group functionality, where users in the group share some comments, tips, suggestions, or even their experience regarding any activity they have performed recently.<br/>
+**Story:** Integration Testing.<br/>
+**Rationale:** We as team tested the application end to end by creating 4 to 5 accounts/users.<br/>
+**Story:** Create component for rating save into db using service. Fetch rates respective to each user to display on board.<br/>
+**Rationale:** This story is part of the peer rating of group members. A user is allowed to rate his or her groupmates on a scale of 1 to 10. The logic of peer rating always takes the total average of the given rating and displays it under the respective user profiles.<br/>
+**Story:** Unit Testing.<br/>
+**Rationale:** Implemented react test cases by using react test-library.<br/>
+
+We plan to deliver a full-fledged real-time application as described in our proposal meeting during this final sprint. 
+
  
-
-
-
 #### Completed tasks: 
 
 Create a component and service to make a rest call with given request
