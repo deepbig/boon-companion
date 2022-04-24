@@ -86,21 +86,18 @@ Integrationn Testing
 
 ## Daily Scrums
 
+[Sprint 3- Web Service Engineering Daily Scrum(1-38).xlsx](https://github.com/deepbig/boon-companion/files/8549777/Sprint.3-.Web.Service.Engineering.Daily.Scrum.1-38.xlsx)
 
 ## Tests
 
 
 ## Mob Programming Video
 
-
-
 https://user-images.githubusercontent.com/99055144/164845134-1df73e96-f66e-4f42-ba5b-11dab5b3f1eb.mp4
 
 
 
 ## Sprint Review Video
-
-
 
 https://user-images.githubusercontent.com/99055144/164845137-0e56f2c3-4509-4b8d-9ca9-5078ab848add.mp4
 
